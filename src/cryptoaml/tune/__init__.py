@@ -1,10 +1,9 @@
 """
-Top level API for datasets reader.
+Top level API for hyperparameter tuning methods.
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### exposed functionality ##############################################
-from .data import (get_data)
+from .tuning import (tune_model)
 ###########################################################################
-

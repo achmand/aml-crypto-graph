@@ -1,10 +1,10 @@
 """
-Top level API for datasets reader.
+Top level API for models used in experiments.
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### exposed functionality ##############################################
-from .data import (get_data)
+from .boost_models import (XgbBoostAlgo)
 ###########################################################################
 

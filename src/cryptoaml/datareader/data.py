@@ -1,5 +1,7 @@
 """
 A script which exposes all the datasets used in the experiments. 
+The following models are included;
+- Elliptic Dataset (https://www.kaggle.com/ellipticco/elliptic-data-set)
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
@@ -8,8 +10,8 @@ A script which exposes all the datasets used in the experiments.
 import yaml
 from .. import utils as u 
 from .elliptic_dr import Elliptic_Dataset
-
-###### datareader functions ###############################################
+    
+###### Datareader functions ###############################################
 def get_data(source, config_file="data_config.yaml", **kwargs):
     
     # available sources 
@@ -17,7 +19,7 @@ def get_data(source, config_file="data_config.yaml", **kwargs):
 
     # check if source passed is valid 
     if source not in sources:
-        error = "source=%r is not implemented" % source
+        error = "'source'=%r is not implemented" % source
         raise NotImplementedError(error)
     
     # load dataset config file .yaml (includes paths to files for a specific dataset)
