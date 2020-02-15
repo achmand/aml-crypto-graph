@@ -1,4 +1,4 @@
-# config file to load data, change paths if data is located in a different dir 
+# Config file to load data, change paths if data is located in a different dir 
 elliptic_dataset:
   folder: data/elliptic/
   classes_file: elliptic_txs_classes.csv

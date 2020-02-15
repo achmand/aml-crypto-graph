@@ -7,7 +7,7 @@
 # ###### importing dependencies #############################################
 # from sklearn.ensemble import RandomForestClassifier
 
-Socrates123
+#Socrates123
 # ###### AML Random Forest ##################################################
 # class CryptoRandomForest():
 #     def __init__(self, **kwargs):
