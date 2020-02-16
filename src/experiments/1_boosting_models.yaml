@@ -1,6 +1,22 @@
-# Config file for first experiment (Boosting models)
+##########################################################################
+# Experiment 1 
+##########################################################################
+#
+# Hypothesis: 'Wheter boosting algorithms can improve on 
+#              the results obtained by the benchmark model'
+#
+# Dataset: Elliptic dataset (BTC Transaction Graph) [Classification]
+#
+# Benchmark model: RandomForest '(Anti-Money Laundering in Bitcoin: Experimenting 
+#                                with Graph Convolutional Networks for Financial Forensics)'
+#
+# Models: AdaBoost, LogitBoost, GradientBoosting, XGBoost, LightGBM, CatBoost
+#
+# Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-# Dataset configuration
+##########################################################################
+# Dataset/s configuration (utilised during experiment)
+##########################################################################
 data: elliptic 
 elliptic_args: 
   folder: data/elliptic/
@@ -10,6 +26,7 @@ elliptic_args:
   inc_unknown: false 
   encode_classes: true 
   feat_sets: [LF, AF]
+  train_split: 0.7
 
 # Models to be tested  
 models: [AdaBoost, LogitBoost, GradientBoost, Xgboost, LightGBM, CatBoost]

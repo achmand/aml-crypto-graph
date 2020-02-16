@@ -5,15 +5,33 @@ Class which reads the elliptic dataset (node classification).
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 # TODO -> include verbose 
-# TODO -> include validation split 
+# TODO -> allow to inc_meta cols in get_data_split
 
-###### importing dependencies #############################################
+###### Importing dependencies #############################################
 import pandas as pd 
 from .. import utils as u 
+from collections import OrderedDict
 
 ###### Elliptic data set class ############################################
 class Elliptic_Dataset:
-    def __init__(self, data_args, encode_classes=False):
+    
+    # Constants -----------------------------------------------------------
+    # Columns 
+    COL_TXID  = "txId"  # TX ID 
+    COL_TS    = "ts"    # TX time step 
+    COL_CLASS = "class" # Class/Label of the TX
+
+    # Feature sets 
+    FEATS_LF = "LF" # Local features
+    FEATS_AF = "AF" # Local features + Aggregated Features
+   
+    # Labels
+    LABEL_UNKNOWN = "unknown" # Unknown label 
+    LABEL_LICIT   = "licit"   # TX created by a licit node (exchanges, miners, etc...)
+    LABEL_ILLICIT = "illicit" # TX created by an illicit node (scams, terrorist, etc...)
+
+    # Constructor ---------------------------------------------------------
+    def __init__(self, data_args, encode_classes=True):
 
         # set encode classes attribute
         self.encode_classes = encode_classes
@@ -33,9 +51,16 @@ class Elliptic_Dataset:
         # 4. concatenate labels with features dataframe     
         self.node_feats = pd.merge(self.node_feats, 
                                     self.node_labels, 
-                                    left_on="txId", 
-                                    right_on="txId", 
+                                    left_on=self.COL_TXID, 
+                                    right_on=self.COL_TXID, 
                                     how="left")
+
+    # Properties ----------------------------------------------------------
+    @property
+    def labels(self):
+        return {self.LABEL_LICIT:   self._label_licit, 
+                self.LABEL_ILLICIT: self._label_illicit,
+                self.LABEL_UNKNOWN: self._label_unknown}
 
     def _load_node_labels(self, path, encode_classes):
 
@@ -52,7 +77,15 @@ class Elliptic_Dataset:
         # labelled as "1" = illicit 
         # labelled as "-1" = unknown label 
         if encode_classes:
-            node_labels["class"] = node_labels["class"].apply(lambda x: -1 if x == "unknown" else 1 if x == "1" else 0)
+            self._label_licit = 0
+            self._label_illicit = 1
+            self._label_unknown = -1
+            node_labels[self.COL_CLASS] = node_labels[self.COL_CLASS].apply(
+                lambda x: -1 if x == self.LABEL_UNKNOWN else 1 if x == "1" else 0)
+        else:
+            self._label_licit = 2
+            self._label_illicit = 1
+            self._label_unknown = self.LABEL_UNKNOWN
 
         # returns node id and labels 
         return node_labels
@@ -71,54 +104,71 @@ class Elliptic_Dataset:
         node_feats = pd.read_csv(path, header=None)
         
         # rename column names 
-        self._meta_cols = ["txId" , "ts"]
+        self._cols_meta = [self.COL_TXID, self.COL_TS]
         
         # the first 94 features represent local information about the tx 
         # we skip the first one hence range(93), since that column indicates time step 
-        self._lf_cols = [f"LF_{i}" for i in range(93)]
+        self._cols_lf = [f"LF_{i}" for i in range(93)]
 
         # the ramaining 72 features represent aggregated features
-        self._agg_cols = [f"AGG_{i}" for i in range(72)]
+        self._cols_agg = [f"AGG_{i}" for i in range(72)]
 
         # rename dataframe's columns 
-        node_feats.columns = self._meta_cols + self._lf_cols + self._agg_cols
+        node_feats.columns = self._cols_meta + self._cols_lf + self._cols_agg
 
         # returns node features 
         return node_feats
 
-    def get_data_split(self, train_perc, input_feats, inc_unknown=False):
+    def train_test_split(self, train_size, feat_set, inc_unknown=False):
         
         # first we check if we include data points with unknown label 
         if inc_unknown == False:
-            unknown_label = -1 if self.encode_classes else "unknown"
-            data = self.node_feats[(self.node_feats["class"] != unknown_label)].copy()
+            data = self.node_feats[(self.node_feats[self.COL_CLASS] != self._label_unknown)].copy()
         else: 
             data = self.node_feats.copy()
 
         # now we make sure that the dataset is ordered by ts column 
-        data.sort_values(by=["ts"], ascending=True, inplace=True)
+        data.sort_values(by=[self.COL_TS], ascending=True, inplace=True)
         
-        # we need to find out the timestamp we are splitting with given train_perc
-        last_ts = data.tail(1)["ts"]
-        split_ts = int(last_ts * train_perc)
+        # we need to find out the timestamp we are splitting with given train_size
+        last_ts = data.tail(1)[self.COL_TS]
+        split_ts = int(last_ts * train_size)
 
         # split training and test by timestamp
-        data_train = data[data["ts"] <= split_ts]
-        data_test = data[data["ts"] > split_ts]
+        data_train = data[data[self.COL_TS] <= split_ts]
+        data_test = data[data[self.COL_TS] > split_ts]
+
+        # ordered dict as a list of str was passed as 'feat_set'
+        if type(feat_set) is list:
+            data = OrderedDict()
+            for features in feat_set:
+                data[features] = self._get_feat_set(features,
+                                                    data_train,
+                                                    data_test)
+            return data 
+            
+        # one data split as a str was passed as 'feat_set'
+        else:
+            datasplit = self._get_feat_set(feat_set, 
+                                           data_train, 
+                                           data_test)
+            return datasplit                
+
+    def _get_feat_set(self, feat_set, data_train, data_test):
 
         # filter by input feats and create input splits   
-        if input_feats == "LF": # local features (LF)
-            data_train_X = data_train[self._lf_cols]
-            data_test_X = data_test[self._lf_cols]
-        elif input_feats == "AF": # local + aggregated features (AF)
-            data_train_X = data_train[self._lf_cols + self._agg_cols]
-            data_test_X = data_test[self._lf_cols + self._agg_cols]
+        if feat_set == self.FEATS_LF: 
+            data_train_X = data_train[self._cols_lf]
+            data_test_X = data_test[self._cols_lf]
+        elif feat_set == self.FEATS_AF: 
+            data_train_X = data_train[self._cols_lf + self._cols_agg]
+            data_test_X = data_test[self._cols_lf + self._cols_agg]
         else:
-            raise NotImplementedError("input_feats passed not yet implemented.")
+            raise NotImplementedError("'input_feats' passed not yet implemented.")
 
         # create output split 
-        data_train_y = data_train["class"]
-        data_test_y = data_test["class"]
+        data_train_y = data_train[self.COL_CLASS]
+        data_test_y = data_test[self.COL_CLASS]
 
         # create dictionary to hold dataset 
         datasplit = {}
@@ -129,6 +179,4 @@ class Elliptic_Dataset:
 
         # make as object
         datasplit = u.Namespace(datasplit) 
-
-        # return data splits
         return datasplit
