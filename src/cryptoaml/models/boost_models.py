@@ -15,7 +15,7 @@ from .. import tune as tu
 from .. import metrics as ev 
 from abc import ABC, abstractmethod
 
-# Boosting Models 
+# Boosting models 
 import xgboost as xgb
 import lightgbm as lgb
 from logitboost import LogitBoost

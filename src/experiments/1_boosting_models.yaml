@@ -1,0 +1,24 @@
+# Config file for first experiment (Boosting models)
+
+# Dataset configuration
+data: elliptic 
+elliptic_args: 
+  folder: data/elliptic/
+  classes_file: elliptic_txs_classes.csv
+  edges_file: elliptic_txs_edgelist.csv
+  feats_file: elliptic_txs_features.csv
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [LF, AF]
+
+# Models to be tested  
+models: [AdaBoost, LogitBoost, GradientBoost, Xgboost, LightGBM, CatBoost]
+
+# Configuration for AdaBoost 
+adaboost_args:
+  hyperparam_tune: random_grid
+
+# Evaluation configuration 
+evaluation_args:
+  metrics: [precision, recall, f1, f1_micro]
+

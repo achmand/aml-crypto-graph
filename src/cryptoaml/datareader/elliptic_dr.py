@@ -78,7 +78,7 @@ class Elliptic_Dataset:
         self._lf_cols = [f"LF_{i}" for i in range(93)]
 
         # the ramaining 72 features represent aggregated features
-        self._agg_cols = [f'AGG_{i}' for i in range(72)]
+        self._agg_cols = [f"AGG_{i}" for i in range(72)]
 
         # rename dataframe's columns 
         node_feats.columns = self._meta_cols + self._lf_cols + self._agg_cols

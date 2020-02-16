@@ -1,0 +1,37 @@
+# Template for experiment configuration
+
+# Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
+
+##########################################################################
+# Dataset/s configuration (utilised during experiment)
+##########################################################################
+
+# Available datasets : [elliptic]
+# - pass an array to test on multiple datasets (must be one of the available)
+# - if dataset is not available make sure to add the required functions in datareader 
+data: elliptic  
+
+elliptic_args: 
+  folder: data/elliptic/
+  classes_file: elliptic_txs_classes.csv
+  edges_file: elliptic_txs_edgelist.csv
+  feats_file: elliptic_txs_features.csv
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [LF, AF]
+
+##########################################################################
+# Models configuration (model tested during experiment)
+##########################################################################
+models: [AdaBoost, LogitBoost, GradientBoost, Xgboost, LightGBM, CatBoost]
+
+# Configuration for AdaBoost 
+adaboost_args:
+  hyperparam_tune: random_grid # [false, random grid] 
+
+##########################################################################
+# Evaluation configuration (evaluation procedure used during experiment)
+##########################################################################
+evaluation_args:
+  metrics: [precision, recall, f1, f1_micro]
+
