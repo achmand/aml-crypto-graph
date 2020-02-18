@@ -119,7 +119,7 @@ class Elliptic_Dataset:
         # returns node features 
         return node_feats
 
-    def train_test_split(self, train_size, feat_set, inc_unknown=False):
+    def train_test_split(self, train_size, feat_set, inc_meta=False, inc_unknown=False):
         
         # first we check if we include data points with unknown label 
         if inc_unknown == False:
@@ -144,25 +144,30 @@ class Elliptic_Dataset:
             for features in feat_set:
                 data[features] = self._get_feat_set(features,
                                                     data_train,
-                                                    data_test)
+                                                    data_test,
+                                                    inc_meta)
             return data 
             
         # one data split as a str was passed as 'feat_set'
         else:
             datasplit = self._get_feat_set(feat_set, 
                                            data_train, 
-                                           data_test)
+                                           data_test,
+                                           inc_meta)
             return datasplit                
 
-    def _get_feat_set(self, feat_set, data_train, data_test):
+    def _get_feat_set(self, feat_set, data_train, data_test, inc_meta):
 
         # filter by input feats and create input splits   
+        feat_set_cols = self._cols_meta.copy() if inc_meta else []
         if feat_set == self.FEATS_LF: 
-            data_train_X = data_train[self._cols_lf]
-            data_test_X = data_test[self._cols_lf]
+            feat_set_cols.extend(self._cols_lf)
+            data_train_X = data_train[feat_set_cols]
+            data_test_X = data_test[feat_set_cols]
         elif feat_set == self.FEATS_AF: 
-            data_train_X = data_train[self._cols_lf + self._cols_agg]
-            data_test_X = data_test[self._cols_lf + self._cols_agg]
+            feat_set_cols.extend(self._cols_lf + self._cols_agg)
+            data_train_X = data_train[feat_set_cols]
+            data_test_X = data_test[feat_set_cols]
         else:
             raise NotImplementedError("'input_feats' passed not yet implemented.")
 
