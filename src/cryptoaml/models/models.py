@@ -21,7 +21,10 @@ import lightgbm as lgb
 from logitboost import LogitBoost
 from catboost import CatBoostClassifier
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+
+# TODO -> Model fitted check 
 
 ###### Base classifier  ###################################################
 class _BaseAlgo(ABC):
@@ -97,6 +100,19 @@ class _BaseAlgo(ABC):
 
         # Load column names 
         self._column_names = np.loadtxt(model_file + ".cols", delimiter=",", dtype="str")
+
+###### Random Forest classifier  ##########################################
+class RandomForestAlgo(_BaseAlgo):
+    
+    def __init__(self, **kwargs):
+
+        # Call base constructor 
+        super().__init__(**kwargs)
+
+    def _init_model(self, **kwargs):
+        
+        # New instance of RandomForest classifier with the specified args
+        self._model = RandomForestClassifier(**kwargs)
 
 ###### AdaBoost classifier  ###############################################
 class AdaBoostAlgo(_BaseAlgo):
