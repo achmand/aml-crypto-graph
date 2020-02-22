@@ -9,7 +9,7 @@ from .models import (RandomForestAlgo,
                      AdaBoostAlgo,
                      LogitBoostAlgo,
                      GradientBoostAlgo,                           
-                     XgbBoostAlgo, 
+                     XgboostAlgo, 
                      LightGbmAlgo, 
                      CatBoostAlgo)
 ###########################################################################

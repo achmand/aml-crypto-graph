@@ -3,6 +3,10 @@ A script which exposes all the evaluation methods used in the experiments.
 The following models are included;
 """
 
+# TODO -> Pass labels as they may be needed in the future
+# this happens when there is a case that there is only one label in both y_true and y_pred
+# so just to be sure we must add labels as an argument (this is highly unlikelywdq)
+
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### importing dependencies #############################################

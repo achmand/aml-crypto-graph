@@ -1,7 +1,6 @@
 """
 Boosting classifiers tested in the experiments.
 The following models are included; 
-- Extreme Gradient Boosting (XGBoost)
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
@@ -26,15 +25,29 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 # TODO -> Model fitted check 
 
-###### Base classifier  ###################################################
+###### Constants #########################################################
+MODEL_RF    = "random_forest"
+MODEL_ADA   = "ada_boost"
+MODEL_LOGIT = "logit_boost"
+MODEL_GB    = "gradient_boost"
+MODEL_XGB   = "xg_boost"
+MODEL_LIGHT = "light_boost"
+MODEL_CAT   = "cat_boost"
+
+###### Base classifier ###################################################
 class _BaseAlgo(ABC):
 
     # Constructor ---------------------------------------------------------
     def __init__(self, **kwargs):
         self._model = None
+        self._model_name = "BASE"
         self._init_model(**kwargs)
 
     # Properties ----------------------------------------------------------
+    @property
+    def model_name(self):
+        return self._model_name
+
     @property
     def params(self):
         return self._model.get_params()
@@ -101,7 +114,7 @@ class _BaseAlgo(ABC):
         # Load column names 
         self._column_names = np.loadtxt(model_file + ".cols", delimiter=",", dtype="str")
 
-###### Random Forest classifier  ##########################################
+###### Random Forest classifier ##########################################
 class RandomForestAlgo(_BaseAlgo):
     
     def __init__(self, **kwargs):
@@ -112,9 +125,10 @@ class RandomForestAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of RandomForest classifier with the specified args
+        self._model_name = MODEL_RF
         self._model = RandomForestClassifier(**kwargs)
 
-###### AdaBoost classifier  ###############################################
+###### AdaBoost classifier ###############################################
 class AdaBoostAlgo(_BaseAlgo):
     
     def __init__(self, **kwargs):
@@ -125,9 +139,10 @@ class AdaBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of AdaBoost classifier with the specified args
+        self._model_name = MODEL_ADA
         self._model = AdaBoostClassifier(**kwargs)
 
-###### LogitBoost classifier  #############################################
+###### LogitBoost classifier #############################################
 class LogitBoostAlgo(_BaseAlgo):
 
     def __init__(self, **kwargs):
@@ -138,9 +153,10 @@ class LogitBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of LogitBoost classifier with the specified args
+        self._model_name = MODEL_LOGIT
         self._model = LogitBoost(**kwargs)
 
-###### Gradient Boosting classifier  ######################################
+###### Gradient Boosting classifier ######################################
 class GradientBoostAlgo(_BaseAlgo):
     
     def __init__(self, **kwargs):
@@ -151,10 +167,11 @@ class GradientBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of Gradient Boosting classifier with the specified args
+        self._model_name = MODEL_GB
         self._model = GradientBoostingClassifier(**kwargs)
 
-###### XGBoost classifier  ################################################    
-class XgbBoostAlgo(_BaseAlgo): 
+###### XGBoost classifier ################################################    
+class XgboostAlgo(_BaseAlgo): 
     
     def __init__(self, **kwargs):
 
@@ -164,9 +181,10 @@ class XgbBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of Xgboost classifier with the specified args
+        self._model_name = MODEL_XGB
         self._model = xgb.XGBClassifier(**kwargs)
 
-###### LightGBM classifier  ###############################################
+###### LightGBM classifier ###############################################
 class LightGbmAlgo(_BaseAlgo):
     
     def __init__(self, **kwargs):
@@ -177,9 +195,10 @@ class LightGbmAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of LightGBM classifier with the specified args
+        self._model_name = MODEL_LIGHT
         self._model = lgb.LGBMClassifier(**kwargs)
 
-###### CatBoost classifier  ###############################################
+###### CatBoost classifier ###############################################
 class CatBoostAlgo(_BaseAlgo):
     
     def __init__(self, **kwargs):
@@ -190,4 +209,5 @@ class CatBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         
         # New instance of CatBoost classifier with the specified args
+        self._model_name = MODEL_CAT
         self._model = CatBoostClassifier(**kwargs)
