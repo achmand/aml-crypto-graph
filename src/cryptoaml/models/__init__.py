@@ -11,6 +11,7 @@ from .models import (RandomForestAlgo,
                      GradientBoostAlgo,                           
                      XgboostAlgo, 
                      LightGbmAlgo, 
-                     CatBoostAlgo)
+                     CatBoostAlgo, 
+                     get_models)
 ###########################################################################
 
