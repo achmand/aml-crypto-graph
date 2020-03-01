@@ -4,6 +4,10 @@ Top level API for hyperparameter tuning methods.
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
+###### importing dependencies #############################################
+from ._tuning import tune_model
+from ._tuning import EvolutionarySearchTuner
+
 ###### exposed functionality ##############################################
-from .tuning import (tune_model)
+__all__ = ["tune_model", "EvolutionarySearchTuner"]
 ###########################################################################

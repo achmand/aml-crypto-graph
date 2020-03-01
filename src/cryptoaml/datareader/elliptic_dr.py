@@ -62,6 +62,10 @@ class Elliptic_Dataset:
                 self.LABEL_ILLICIT: self._label_illicit,
                 self.LABEL_UNKNOWN: self._label_unknown}
 
+    @property 
+    def label_count(self):
+        return self.node_labels[self.COL_CLASS].value_counts()
+
     def _load_node_labels(self, path, encode_classes):
 
         # reads from csv file 

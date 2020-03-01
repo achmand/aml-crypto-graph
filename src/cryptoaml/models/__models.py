@@ -14,45 +14,42 @@ from .. import tune as tu
 from .. import metrics as ev 
 from abc import ABC, abstractmethod
 from collections import OrderedDict
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 # Boosting models 
 import xgboost as xgb
 import lightgbm as lgb
-from logitboost import LogitBoost
 from catboost import CatBoostClassifier
-from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
 
 # TODO -> Model fitted check 
 # TODO -> Validation where neeeded  
+# TODO -> Refactor this shit 
 
 ###### Constants #########################################################
 MODEL_RF    = "random_forest"
-MODEL_ADA   = "ada_boost"
-MODEL_LOGIT = "logit_boost"
-MODEL_GB    = "gradient_boost"
 MODEL_XGB   = "xg_boost"
 MODEL_LIGHT = "light_boost"
 MODEL_CAT   = "cat_boost"
 
 ###### Base classifier ###################################################
-class _BaseAlgo(ABC):
+class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
 
     # Constructor ---------------------------------------------------------
-    def __init__(self, **kwargs):
+    def __init__(self, 
+                 tune_props=None, 
+                 **kwargs):
+        self._tune_props = tune_props
+        
         self._model = None
-        self._model_name = "BASE"
+        self._model_name = MODEL_BASE
         self._init_model(**kwargs)
 
     # Properties ----------------------------------------------------------
     @property
     def model_name(self):
         return self._model_name
-
-    @property
-    def params(self):
-        return self._model.get_params()
 
     @property
     def feature_importance(self):
@@ -62,10 +59,18 @@ class _BaseAlgo(ABC):
                             index = self._column_names,
                             columns=["importance"]).sort_values("importance", ascending=False)
 
+
+    # Abstract/Params functions -------------------------------------------
     @abstractmethod 
     def _init_model(self, **kwargs):
         pass
+
+    def get_params(self, deep=True):
+        return self._model.get_params(deep)
     
+    def set_params(self, **params):
+        return self._model.set_params(**params)
+
     # Train/Tune/Evaluate functions ---------------------------------------
     def fit(self, X_train, y_train, tune_props=None):
         
@@ -130,56 +135,9 @@ class RandomForestAlgo(_BaseAlgo):
         self._model_name = MODEL_RF
         self._model = RandomForestClassifier(**kwargs)
 
-###### AdaBoost classifier ###############################################
-class AdaBoostAlgo(_BaseAlgo):
-    
-    def __init__(self, **kwargs):
-
-        # Call base constructor 
-        super().__init__(**kwargs)
-
-    def _init_model(self, **kwargs):
-        
-        # New instance of AdaBoost classifier with the specified args
-        self._model_name = MODEL_ADA
-        self._model = AdaBoostClassifier(**kwargs)
-
-###### LogitBoost classifier #############################################
-class LogitBoostAlgo(_BaseAlgo):
-
-    def __init__(self, **kwargs):
-
-        # Call base constructor 
-        super().__init__(**kwargs)
-
-    def _init_model(self, **kwargs):
-        
-        # New instance of LogitBoost classifier with the specified args
-        self._model_name = MODEL_LOGIT
-        self._model = LogitBoost(**kwargs)
-
-###### Gradient Boosting classifier ######################################
-class GradientBoostAlgo(_BaseAlgo):
-    
-    def __init__(self, **kwargs):
-
-        # Call base constructor 
-        super().__init__(**kwargs)
-
-    def _init_model(self, **kwargs):
-        
-        # New instance of Gradient Boosting classifier with the specified args
-        self._model_name = MODEL_GB
-        self._model = GradientBoostingClassifier(**kwargs)
-
 ###### XGBoost classifier ################################################    
 class XgboostAlgo(_BaseAlgo): 
     
-    def __init__(self, **kwargs):
-
-        # Call base constructor 
-        super().__init__(**kwargs)
-
     def _init_model(self, **kwargs):
         
         # New instance of Xgboost classifier with the specified args
@@ -214,6 +172,9 @@ class CatBoostAlgo(_BaseAlgo):
         self._model_name = MODEL_CAT
         self._model = CatBoostClassifier(**kwargs)
 
+###### StackedBoosters classifier ########################################
+
+
 ###### Models functions ##################################################
 def get_models(models):
     models_collection = OrderedDict()
@@ -229,12 +190,6 @@ def get_models(models):
 
         if tmp_model_name == MODEL_RF:
             tmp_model = RandomForestAlgo(**tmp_model_kwagrs) 
-        elif tmp_model_name == MODEL_ADA:
-            tmp_model = AdaBoostAlgo(**tmp_model_kwagrs) 
-        elif tmp_model_name == MODEL_LOGIT:
-            tmp_model = LogitBoostAlgo(**tmp_model_kwagrs) 
-        elif tmp_model_name == MODEL_GB:
-            tmp_model = GradientBoostAlgo(**tmp_model_kwagrs)
         elif tmp_model_name == MODEL_XGB:
             tmp_model = XgboostAlgo(**tmp_model_kwagrs)
         elif tmp_model_name == MODEL_LIGHT:
