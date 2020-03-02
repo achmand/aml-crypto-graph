@@ -133,6 +133,8 @@ def tune_model(estimator, X, y, tune_props):
         properties.scoring = "f1"
     if "n_jobs" not in tune_props: 
         properties.n_jobs = 1
+    if "verbose" not in tune_props: 
+        properties.verbose = 1
 
     # Evolutionary Search 
     if properties.method == TUNE_EVOLUTIONARY_SEARCH:
@@ -160,7 +162,8 @@ def tune_model(estimator, X, y, tune_props):
                                         gene_crossover_prob=properties.gene_crossover_prob,
                                         tournament_size=properties.tournament_size, 
                                         generations_number=properties.generations_number,
-                                        n_jobs=properties.n_jobs)        
+                                        n_jobs=properties.n_jobs,
+                                        verbose=properties.verbose)        
 
         # Random Grid Search 
         # TODO -> Not yet implemented 
@@ -172,7 +175,7 @@ def tune_model(estimator, X, y, tune_props):
 
     # Tune hyperparameters
     tuner.fit(X, y)
-    return tuner
+    return tuner, properties.__dict__            
 
 
 

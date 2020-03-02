@@ -33,9 +33,8 @@ MODEL_XGB   = "xg_boost"
 MODEL_LIGHT = "light_boost"
 MODEL_CAT   = "cat_boost"
 
-PERSIST_SAVE      = "save"
-PERSIST_LOAD      = "load"
-PERSIST_LOAD_SAVE = "load_save" # TODO -> Not yet implemented 
+PERSIST_SAVE = "save"
+PERSIST_LOAD = "load"
 
 ###### Base classifier ###################################################
 class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
@@ -64,7 +63,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
 
             # Load model
             if self._persist_props.method == PERSIST_LOAD:
-                self._load(self._persist_props.load_path)                       
+                self.load(self._persist_props.load_path)                       
             
     # Properties ----------------------------------------------------------
     @property
@@ -78,6 +77,11 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
                             columns=["importance"]).sort_values(
                                 "importance", 
                                 ascending=False)
+    @property
+    def tune_props_(self):
+        if self._tune_props is None:
+            raise TypeError("'tune_props not passed'")
+        return self._tune_props
 
     @property
     def tune_results_(self):
@@ -85,7 +89,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
             raise TypeError("'tune_props not passed'")
         check_is_fitted(self._model, ["feature_importances_"])
         return (self._tuner.meta_results_, self._tuner.results_)
-
+        
     # Init/Parameters functions -------------------------------------------
     @abstractmethod 
     def _init_model(self, **kwargs):
@@ -98,6 +102,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         return self._model.get_params(deep)
 
     # Train/Tune/Evaluate functions ---------------------------------------
+    # TODO-> Add the ability to not tune even if the tune_props are passed 
     def fit(self, X, y):
         
         # Keep a reference of features 
@@ -109,12 +114,12 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
             self._model.fit(X, y)
         # Hyperparameter tuning 
         else:                        
-            self._tuner = tu.tune_model(self._model, X, y, self._tune_props)
+            self._tuner, self._tune_props = tu.tune_model(self._model, X, y, self._tune_props)
             self._model = self._tuner.best_estimator_
         
         # Persist model after training 
         if self._persist_props != None and self._persist_props.method == PERSIST_SAVE:
-            self._save(self._persist_props.save_path)
+            self.save(self._persist_props.save_path)
 
     def predict(self, X):
         return self._model.predict(X)
@@ -124,7 +129,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         return ev.evaluate(metrics, y, y_pred)
 
     # Persistence functions -----------------------------------------------
-    def _save(self, path):
+    def save(self, path):
         
         # Make sure model is fitted before saving 
         check_is_fitted(self._model, ["feature_importances_"])
@@ -138,10 +143,11 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         # Save meta data
         meta_data = {}
         meta_data["features"] = self._features
+        meta_data["tune_props"] = self._tune_props
         with open(source_path + "/" + self._model_name + "_meta.pkl", "wb") as meta_file:
             pickle.dump(meta_data, meta_file, pickle.HIGHEST_PROTOCOL)
 
-    def _load(self, path):
+    def load(self, path):
         # Load model
         with open(path + "/" +  path.split("/")[-1] + ".pkl", "rb") as model_file:
             tmp_model = pickle.load(model_file)
@@ -153,6 +159,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         with open(path + "/" +  path.split("/")[-1] + "_meta.pkl", "rb") as meta_file:
             meta_data = pickle.load(meta_file)
             self._features = meta_data["features"]
+            self._tune_props = meta_data["tune_props"] 
 
 ###### Random Forest classifier ##########################################
 class RandomForestAlgo(_BaseAlgo): 
