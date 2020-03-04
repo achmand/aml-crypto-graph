@@ -147,6 +147,11 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         with open(source_path + "/" + self._model_name + "_meta.pkl", "wb") as meta_file:
             pickle.dump(meta_data, meta_file, pickle.HIGHEST_PROTOCOL)
 
+        # Save tuner if set 
+        if self._tune_props != None: 
+            with open(source_path + "/" + self._model_name + "_tuner.pkl", "wb") as tuner_file:
+                pickle.dump(self._tuner, tuner_file)
+
     def load(self, path):
         # Load model
         with open(path + "/" +  path.split("/")[-1] + ".pkl", "rb") as model_file:
@@ -160,6 +165,11 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
             meta_data = pickle.load(meta_file)
             self._features = meta_data["features"]
             self._tune_props = meta_data["tune_props"] 
+
+        # Load tuner if set 
+        if self._tune_props != None: 
+            with open(path + "/" +  path.split("/")[-1] + "_tuner.pkl", "rb") as tuner_file:
+                self._tuner = pickle.load(tuner_file)
 
 ###### Random Forest classifier ##########################################
 class RandomForestAlgo(_BaseAlgo): 

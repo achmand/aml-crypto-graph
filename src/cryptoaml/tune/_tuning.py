@@ -3,7 +3,7 @@
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-###### importing dependencies #############################################
+###### Importing dependencies #############################################
 import pandas as pd
 from .. import utils as u 
 from abc import ABC, abstractmethod
@@ -176,7 +176,6 @@ def tune_model(estimator, X, y, tune_props):
     # Tune hyperparameters
     tuner.fit(X, y)
     return tuner, properties.__dict__            
-
 
 
     # # Random Grid Search 

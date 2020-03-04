@@ -4,9 +4,6 @@ Class which reads the elliptic dataset (node classification).
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-# TODO -> include verbose 
-# TODO -> allow to inc_meta cols in get_data_split
-
 ###### Importing dependencies #############################################
 import pandas as pd 
 from .. import utils as u 
