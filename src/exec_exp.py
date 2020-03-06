@@ -1,14 +1,16 @@
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-###### Importing dependencies ############################################# 
+###### importing dependencies #############################################
+import sys 
 import yaml
 import argparse
+from logger import Logger
 from cryptoaml.utils import Namespace
 
-# Datasets
+# datasets
 import cryptoaml.datareader as cdr
 
-###### Load dataset #######################################################
+###### load dataset #######################################################
 def build_dataset(args):
     if args.data == "elliptic":
         elliptic_args = Namespace(args.elliptic_args)
@@ -23,17 +25,21 @@ def build_dataset(args):
     else:
         raise NotImplementedError("'{}' not yet implemented".format(args.data))
 
-###### Start experiment ###################################################
+###### build models #######################################################
+def build_models(args):
+    print("build models")
+
+###### start experiment ###################################################
 if __name__ == "__main__":
-    
-    # Create parser 
+
+    # create parser 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("--config_file", 
                         default="experiments/1_boosting_models.yaml", 
                         type=argparse.FileType(mode="r"),
                         help="optional, yaml file containing params for experiment")
 
-    # Parse arguments from config file 
+    # parse arguments from config file 
     args = parser.parse_args()
     if args.config_file:
         properties = yaml.load(args.config_file, Loader=yaml.FullLoader)
@@ -42,8 +48,18 @@ if __name__ == "__main__":
         for key, value in properties.items():
             arg_dict[key] = value
 
-    # Build dataset 
-    dataset = build_dataset(args)
-
-    # Build models 
+    # create logger 
+    logger = Logger(args.save_log, args.log_path)
+    logger.info("Start experiment")
+    logger.info("--- PROPERTIES ---")
+    logger.info (args.__dict__, pp=True) 
     
+    try:
+        # build dataset 
+        logger.info("Start building dataset")
+        dataset = build_dataset(args)
+        logger.info("Finish building dataset")
+    except:
+        e = sys.exc_info()
+        logger.exception(e)
+   

@@ -2,12 +2,13 @@
 ##########################################################################
 # Dataset configuration 
 ##########################################################################
-data: elliptic 
+data: elliptick
 data_config_file: "data_config.yaml"
 elliptic_args: 
   inc_unknown: false 
   encode_classes: true 
-  feat_sets: [LF, AF]
+  #feat_sets: [LF, AF]
+  feat_sets: [LF]
   train_size: 0.7
 
 ##########################################################################
@@ -129,3 +130,6 @@ cat_boost_args:
   n_jobs: 2
 
 evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
+
+save_log: true 
+log_path: "logs/"

@@ -13,7 +13,7 @@ from evolutionary_search import EvolutionaryAlgorithmSearchCV
 
 ###### Constants #########################################################
 TUNER_BASE               = "tuner_base"
-TUNE_RANDOM_GRID_SEARCH  = "random_grid_search"
+# TUNE_RANDOM_GRID_SEARCH  = "random_grid_search"
 TUNE_EVOLUTIONARY_SEARCH = "evolutionary_search"
 
 ###### Base Tuner ########################################################
@@ -164,49 +164,12 @@ def tune_model(estimator, X, y, tune_props):
                                         n_jobs=properties.n_jobs,
                                         verbose=properties.verbose)        
 
-        # Random Grid Search 
-        # TODO -> Not yet implemented 
-        if properties.method == TUNE_RANDOM_GRID_SEARCH:
-            raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(properties.name))
-        
     else:
         raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(properties.name))
 
     # Tune hyperparameters
     tuner.fit(X, y)
     return tuner, properties.__dict__            
-
-
-    # # Random Grid Search 
-    # if tune_params.name == "random_grid_search":
-
-    #     # Set defaults if not passed 
-    #     if "n_jobs" not in tune:
-    #         tune_params.n_jobs = -1 # using all processors
-    #     if "n_iter" not in tune:
-    #         tune_params.n_iter = 5 
-    #     if "cv" not in tune:
-    #         tune_params.cv = 5
-    #     if "refit" not in tune: 
-    #         tune_params.refit = True
-    #     if "scoring" not in tune: 
-    #         tune_params.scoring = "f1"
-        
-    #     # Initialize Random Grid Search 
-    #     random_grid_search = RandomizedSearchCV(estimator=model,
-    #                                             scoring=tune_params.scoring,
-    #                                             cv=tune_params.cv,
-    #                                             refit=tune_params.refit,
-    #                                             n_jobs=tune_params.n_jobs,
-    #                                             n_iter=tune_params.n_iter,
-    #                                             param_distributions=tune_params.param_grid)
-        
-    #     # Tune hyperparameters
-    #     random_grid_search.fit(X, y)
-
-    #     # Return tuned method  
-    #     return random_grid_search
-        
 
 def get_tuner(method, **kwargs):
     if method == TUNE_EVOLUTIONARY_SEARCH:

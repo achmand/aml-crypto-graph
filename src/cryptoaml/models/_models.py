@@ -250,32 +250,3 @@ class CatBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         self._model_name = MODEL_CAT
         self._model = CatBoostClassifier(**kwargs)
-
-# ###### Models functions ##################################################
-# def get_models(models):
-#     models_collection = OrderedDict()
-#     for model in models:
-#         tmp_model = None 
-#         tmp_model_name = model
-#         tmp_model_kwagrs = {}
-
-#         pass_params = type(model) == tuple 
-#         if pass_params:
-#             tmp_model_name = model[0]
-#             tmp_model_kwagrs = model[1]
-
-#         if tmp_model_name == MODEL_RF:
-#             tmp_model = RandomForestAlgo(**tmp_model_kwagrs) 
-#         elif tmp_model_name == MODEL_XGB:
-#             tmp_model = XgboostAlgo(**tmp_model_kwagrs)
-#         elif tmp_model_name == MODEL_LIGHT:
-#             tmp_model = LightGbmAlgo(**tmp_model_kwagrs) 
-#         elif tmp_model_name == MODEL_CAT:
-#             tmp_model = CatBoostAlgo(**tmp_model_kwagrs) 
-#         else:
-#             error = "'model'=%r is not implemented" % tmp_model_name
-#             raise NotImplementedError(error)
-            
-#         models_collection[tmp_model_name] = tmp_model
-
-#     return models_collection
