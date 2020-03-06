@@ -153,7 +153,8 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
                 pickle.dump(self._tuner, tuner_file)
 
     def load(self, path):
-        # Load model
+        
+        # loads model
         with open(path + "/" +  path.split("/")[-1] + ".pkl", "rb") as model_file:
             tmp_model = pickle.load(model_file)
             if type(tmp_model) != type(self._model):
@@ -166,8 +167,15 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
             self._features = meta_data["features"]
             self._tune_props = meta_data["tune_props"] 
 
-        # Load tuner if set 
+        # load tuner if set 
         if self._tune_props != None: 
+
+            # fix to solve issue with DEAP import when unpickling tuner 
+            method = self._tune_props["method"]
+            del self._tune_props["method"]
+            self._tune_props["estimator"] = self._model
+            self._tuner = tu.get_tuner(method, **self._tune_props)
+
             with open(path + "/" +  path.split("/")[-1] + "_tuner.pkl", "rb") as tuner_file:
                 self._tuner = pickle.load(tuner_file)
 

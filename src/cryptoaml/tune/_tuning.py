@@ -25,7 +25,6 @@ class _BaseTuner(ABC):
     """
 
     # Constructor ---------------------------------------------------------
-    @abstractmethod
     def __init__(self, 
                  estimator, 
                  param_grid, 
@@ -208,5 +207,9 @@ def tune_model(estimator, X, y, tune_props):
     #     # Return tuned method  
     #     return random_grid_search
         
-   
 
+def get_tuner(method, **kwargs):
+    if method == TUNE_EVOLUTIONARY_SEARCH:
+        return EvolutionarySearchTuner(**kwargs)
+    else:
+        raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(method))
