@@ -44,7 +44,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
     instead.
     """
 
-    # Constructor ---------------------------------------------------------
+    # constructor ---------------------------------------------------------
     @abstractmethod
     def __init__(self, 
                  tune_props=None, 
@@ -56,16 +56,16 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         self._tune_props = tune_props
         self._init_model(**kwargs)
 
-        # Convert persistence properties to Namespace
+        # convert persistence properties to Namespace
         self._persist_props = persist_props
         if persist_props != None:
             self._persist_props = u.Namespace(persist_props)
 
-            # Load model
+            # load model
             if self._persist_props.method == PERSIST_LOAD:
                 self.load(self._persist_props.load_path)                       
             
-    # Properties ----------------------------------------------------------
+    # properties ----------------------------------------------------------
     @property
     def model_name_(self):
         return self._model_name
@@ -86,11 +86,11 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
     @property
     def tune_results_(self):
         if self._tune_props is None:
-            raise TypeError("'tune_props not passed'")
+            raise TypeError("'tune_props' not passed'")
         check_is_fitted(self._model, ["feature_importances_"])
         return (self._tuner.meta_results_, self._tuner.results_)
         
-    # Init/Parameters functions -------------------------------------------
+    # init/Parameters functions -------------------------------------------
     @abstractmethod 
     def _init_model(self, **kwargs):
         pass
@@ -101,7 +101,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
     def get_params(self, deep=True):
         return self._model.get_params(deep)
 
-    # Train/Tune/Evaluate functions ---------------------------------------
+    # train/tune/evaluate functions ---------------------------------------
     # TODO-> Add the ability to not tune even if the tune_props are passed 
     def fit(self, X, y):
         
@@ -128,7 +128,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         y_pred = self.predict(X)
         return ev.evaluate(metrics, y, y_pred)
 
-    # Persistence functions -----------------------------------------------
+    # persistence functions -----------------------------------------------
     def save(self, path):
         
         # Make sure model is fitted before saving 
@@ -189,7 +189,8 @@ class RandomForestAlgo(_BaseAlgo):
                  **kwargs): 
         super ().__init__(
             tune_props = tune_props, 
-            persist_props = persist_props
+            persist_props = persist_props,
+            **kwargs
         )
         
     # Init/Parameters functions -------------------------------------------
@@ -207,7 +208,8 @@ class XgboostAlgo(_BaseAlgo):
                  **kwargs): 
         super ().__init__(
             tune_props = tune_props,
-            persist_props = persist_props
+            persist_props = persist_props,
+            **kwargs
         )
 
     # Init/Parameters functions -------------------------------------------
@@ -225,7 +227,8 @@ class LightGbmAlgo(_BaseAlgo):
                  **kwargs): 
         super ().__init__(
             tune_props = tune_props,
-            persist_props = persist_props
+            persist_props = persist_props,
+            **kwargs
         )
 
     # Init/Parameters functions -------------------------------------------
@@ -243,7 +246,8 @@ class CatBoostAlgo(_BaseAlgo):
                  **kwargs): 
         super ().__init__(
             tune_props = tune_props,
-            persist_props = persist_props
+            persist_props = persist_props,
+            **kwargs
         )
     
     # Init/Parameters functions -------------------------------------------

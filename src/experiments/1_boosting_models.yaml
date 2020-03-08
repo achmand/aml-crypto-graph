@@ -2,13 +2,14 @@
 ##########################################################################
 # Dataset configuration 
 ##########################################################################
-data: elliptick
+data: elliptic
 data_config_file: "data_config.yaml"
 elliptic_args: 
   inc_unknown: false 
   encode_classes: true 
-  #feat_sets: [LF, AF]
-  feat_sets: [LF]
+  # feat_sets: [LF, AF]
+  feat_sets: [AF, LF]
+
   train_size: 0.7
 
 ##########################################################################
@@ -17,43 +18,43 @@ elliptic_args:
 # models: [random_forest, xg_boost, light_boost, cat_boost]
 models: [xg_boost]
 
-random_forest_args:
-  persist_props: 
-    method: "save"
-    save_path: "saved_models/experiment_1"
-  tune_props:
-    method: "evolutionary_search"
-    k_folds: 5
-    scoring: "f1"
-    n_jobs: 2
-    verbose: 1
-    population_size: 3
-    generations_number: 2
-    gene_mutation_prob: 0.10
-    gene_crossover_prob: 0.5
-    # param_grid:
-    #   booster: ["gbtree"]
-    #   learning_rate: [0.05, 0.1, 0.2, 0.3] 
-    #   gamma: [0.0, 0.2, 0.4]
-    #   max_depth: [3, 6, 9]
-    #   min_child_weight: [1, 6, 12]
-    #   subsample: [0.6, 0.7, 0.8]
-    #   colsample_bytree: [0.5, 0.7, 0.9]
-    #   reg_alpha: [0, 0.5, 1]
-    #   reg_lambda: [0.001, 0.05, 0.1, 1]
-    #   n_estimators: [100, 300, 400]
-    #   scale_pos_weight: [1, 9.25]
-  n_jobs: 2
+# random_forest_args:
+#   persist_props: 
+#     method: "save"
+#     save_path: "saved_models/experiment_1"
+#   tune_props:
+#     method: "evolutionary_search"
+#     k_folds: 5
+#     scoring: "f1"
+#     n_jobs: 2
+#     verbose: 1
+#     population_size: 3
+#     generations_number: 2
+#     gene_mutation_prob: 0.10
+#     gene_crossover_prob: 0.5
+#     param_grid:
+#       booster: ["gbtree"]
+#       learning_rate: [0.05, 0.1, 0.2, 0.3] 
+#       gamma: [0.0, 0.2, 0.4]
+#       max_depth: [3, 6, 9]
+#       min_child_weight: [1, 6, 12]
+#       subsample: [0.6, 0.7, 0.8]
+#       colsample_bytree: [0.5, 0.7, 0.9]
+#       reg_alpha: [0, 0.5, 1]
+#       reg_lambda: [0.001, 0.05, 0.1, 1]
+#       n_estimators: [100, 300, 400]
+#       scale_pos_weight: [1, 9.25]
+#   n_jobs: 2
 
 xg_boost_args: 
   persist_props:
     method: "save"
-    save_path: "saved_models/experiment_1"
+    save_path: "saved_models/experiment_1/tuned"
   tune_props:
     method: "evolutionary_search"
-    k_folds: 5
+    k_folds: 2
     scoring: "f1"
-    n_jobs: 2
+    n_jobs: 4
     verbose: 1
     population_size: 3
     generations_number: 2
@@ -70,64 +71,66 @@ xg_boost_args:
       reg_alpha: [0, 0.5, 1]
       reg_lambda: [0.001, 0.05, 0.1, 1]
       n_estimators: [100, 300, 400]
-      scale_pos_weight: [1, 9.25]
-  n_jobs: 2
+      scale_pos_weight: [1, 3, 6, 9.25]
+  arguments: 
+    verbosity: 0
+    n_jobs: 1
 
-light_boost_args:
-  persist_props:
-    method: "save"
-    save_path: "saved_models/experiment_1"
-  tune_props:
-    method: "evolutionary_search"
-    k_folds: 5
-    scoring: "f1"
-    n_jobs: 2
-    verbose: 1
-    population_size: 3
-    generations_number: 2
-    gene_mutation_prob: 0.10
-    gene_crossover_prob: 0.5
-    # param_grid:
-    #   booster: ["gbtree"]
-    #   learning_rate: [0.05, 0.1, 0.2, 0.3] 
-    #   gamma: [0.0, 0.2, 0.4]
-    #   max_depth: [3, 6, 9]
-    #   min_child_weight: [1, 6, 12]
-    #   subsample: [0.6, 0.7, 0.8]
-    #   colsample_bytree: [0.5, 0.7, 0.9]
-    #   reg_alpha: [0, 0.5, 1]
-    #   reg_lambda: [0.001, 0.05, 0.1, 1]
-    #   n_estimators: [100, 300, 400]
-    #   scale_pos_weight: [1, 9.25]
-  n_jobs: 2
+# light_boost_args:
+#   persist_props:
+#     method: "save"
+#     save_path: "saved_models/experiment_1"
+#   tune_props:
+#     method: "evolutionary_search"
+#     k_folds: 5
+#     scoring: "f1"
+#     n_jobs: 2
+#     verbose: 1
+#     population_size: 3
+#     generations_number: 2
+#     gene_mutation_prob: 0.10
+#     gene_crossover_prob: 0.5
+#     param_grid:
+#       booster: ["gbtree"]
+#       learning_rate: [0.05, 0.1, 0.2, 0.3] 
+#       gamma: [0.0, 0.2, 0.4]
+#       max_depth: [3, 6, 9]
+#       min_child_weight: [1, 6, 12]
+#       subsample: [0.6, 0.7, 0.8]
+#       colsample_bytree: [0.5, 0.7, 0.9]
+#       reg_alpha: [0, 0.5, 1]
+#       reg_lambda: [0.001, 0.05, 0.1, 1]
+#       n_estimators: [100, 300, 400]
+#       scale_pos_weight: [1, 9.25]
+#   n_jobs: 2
 
-cat_boost_args:
-  persist_props:
-    method: "save"
-    save_path: "saved_models/experiment_1"
-  tune_props:
-    method: "evolutionary_search"
-    k_folds: 5
-    scoring: "f1"
-    n_jobs: 2
-    verbose: 1
-    population_size: 3
-    generations_number: 2
-    gene_mutation_prob: 0.10
-    gene_crossover_prob: 0.5
-    # param_grid:
-    #   booster: ["gbtree"]
-    #   learning_rate: [0.05, 0.1, 0.2, 0.3] 
-    #   gamma: [0.0, 0.2, 0.4]
-    #   max_depth: [3, 6, 9]
-    #   min_child_weight: [1, 6, 12]
-    #   subsample: [0.6, 0.7, 0.8]
-    #   colsample_bytree: [0.5, 0.7, 0.9]
-    #   reg_alpha: [0, 0.5, 1]
-    #   reg_lambda: [0.001, 0.05, 0.1, 1]
-    #   n_estimators: [100, 300, 400]
-    #   scale_pos_weight: [1, 9.25]
-  n_jobs: 2
+# cat_boost_args:
+#   persist_props:
+#     method: "save"
+#     save_path: "saved_models/experiment_1"
+#   tune_props:
+#     method: "evolutionary_search"
+#     k_folds: 5
+#     scoring: "f1"
+#     n_jobs: 2
+#     verbose: 1
+#     population_size: 3
+#     generations_number: 2
+#     gene_mutation_prob: 0.10
+#     gene_crossover_prob: 0.5
+#     param_grid:
+#       booster: ["gbtree"]
+#       learning_rate: [0.05, 0.1, 0.2, 0.3] 
+#       gamma: [0.0, 0.2, 0.4]
+#       max_depth: [3, 6, 9]
+#       min_child_weight: [1, 6, 12]
+#       subsample: [0.6, 0.7, 0.8]
+#       colsample_bytree: [0.5, 0.7, 0.9]
+#       reg_alpha: [0, 0.5, 1]
+#       reg_lambda: [0.001, 0.05, 0.1, 1]
+#       n_estimators: [100, 300, 400]
+#       scale_pos_weight: [1, 9.25]
+#   n_jobs: 2
 
 evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
 
