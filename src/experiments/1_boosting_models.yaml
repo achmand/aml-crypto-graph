@@ -8,7 +8,7 @@ elliptic_args:
   inc_unknown: false 
   encode_classes: true 
   # feat_sets: [LF, AF]
-  feat_sets: [LF]
+  feat_sets: [LF, AF]
   train_size: 0.7
 
 ##########################################################################
