@@ -45,7 +45,6 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
     """
 
     # constructor ---------------------------------------------------------
-    @abstractmethod
     def __init__(self, 
                  tune_props=None, 
                  persist_props=None,

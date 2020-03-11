@@ -77,18 +77,18 @@ models: [light_boost]
 
 # https://towardsdatascience.com/automated-machine-learning-hyperparameter-tuning-in-python-dfda59b72f8a
 light_boost_args:
-  persist_props:
-    method: "save"
-    save_path: "saved_models/experiment_1"
+  # persist_props:
+  #   method: "save"
+  #   save_path: "saved_models/experiment_1"
   tune_props:
     method: "evolutionary_search"
-    k_folds: 5
+    k_folds: 3
     scoring: "f1"
     n_jobs: 4
     verbose: 1
-    population_size: 20
-    generations_number: 50
-    gene_mutation_prob: 0.10
+    population_size: 50
+    generations_number: 3
+    gene_mutation_prob: 0.30
     gene_crossover_prob: 0.5
     param_grid:
       boosting_type: ["gbdt", "dart"]

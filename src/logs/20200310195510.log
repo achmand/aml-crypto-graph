@@ -1,0 +1,164 @@
+INFO: 2020-03-10 19:55:10 
+-------- START EXPERIMENT --------
+INFO: 2020-03-10 19:55:10 
+- PROPERTIES -
+INFO: 2020-03-10 19:55:10 
+{'data': 'elliptic',
+ 'data_config_file': 'data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'light_boost_args': {'arguments': {'n_jobs': 1},
+                      'tune_props': {'gene_crossover_prob': 0.5,
+                                     'gene_mutation_prob': 0.3,
+                                     'generations_number': 3,
+                                     'k_folds': 3,
+                                     'method': 'evolutionary_search',
+                                     'n_jobs': 4,
+                                     'param_grid': {'boosting_type': ['gbdt',
+                                                                      'dart'],
+                                                    'colsample_bytree': [0.5,
+                                                                         0.7,
+                                                                         0.9],
+                                                    'learning_rate': [0.05,
+                                                                      0.1,
+                                                                      0.2,
+                                                                      0.3],
+                                                    'min_child_samples': [500,
+                                                                          300,
+                                                                          100,
+                                                                          20],
+                                                    'n_estimators': [100,
+                                                                     300,
+                                                                     400],
+                                                    'num_leaves': [30, 90, 150],
+                                                    'reg_alpha': [0.0,
+                                                                  0.5,
+                                                                  1.0],
+                                                    'reg_lambda': [0.0,
+                                                                   0.05,
+                                                                   0.1,
+                                                                   1.0],
+                                                    'subsample': [1.0,
+                                                                  0.75,
+                                                                  0.5],
+                                                    'subsample_for_bin': [200000,
+                                                                          100000,
+                                                                          20000]},
+                                     'population_size': 50,
+                                     'scoring': 'f1',
+                                     'verbose': 1}},
+ 'log_path': 'logs/',
+ 'models': ['light_boost'],
+ 'save_log': True}
+INFO: 2020-03-10 19:55:10 
+--- START BUILDING DATASET ---
+INFO: 2020-03-10 19:55:10 
+- DATASET -
+INFO: 2020-03-10 19:55:10 
+elliptic
+INFO: 2020-03-10 19:55:10 
+- CONFIG -
+INFO: 2020-03-10 19:55:10 
+'data_config.yaml'
+INFO: 2020-03-10 19:55:17 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-03-10 19:55:17 
+--- START BUILDING MODELS ---
+INFO: 2020-03-10 19:55:17 
+- MODELS -
+INFO: 2020-03-10 19:55:17 
+['light_boost']
+INFO: 2020-03-10 19:55:17 
+[START BUILDING MODEL 'light_boost']
+INFO: 2020-03-10 19:55:17 
+- ARGUMENTS -
+INFO: 2020-03-10 19:55:17 
+{'arguments': {'n_jobs': 1},
+ 'tune_props': {'gene_crossover_prob': 0.5,
+                'gene_mutation_prob': 0.3,
+                'generations_number': 3,
+                'k_folds': 3,
+                'method': 'evolutionary_search',
+                'n_jobs': 4,
+                'param_grid': {'boosting_type': ['gbdt', 'dart'],
+                               'colsample_bytree': [0.5, 0.7, 0.9],
+                               'learning_rate': [0.05, 0.1, 0.2, 0.3],
+                               'min_child_samples': [500, 300, 100, 20],
+                               'n_estimators': [100, 300, 400],
+                               'num_leaves': [30, 90, 150],
+                               'reg_alpha': [0.0, 0.5, 1.0],
+                               'reg_lambda': [0.0, 0.05, 0.1, 1.0],
+                               'subsample': [1.0, 0.75, 0.5],
+                               'subsample_for_bin': [200000, 100000, 20000]},
+                'population_size': 50,
+                'scoring': 'f1',
+                'verbose': 1}}
+INFO: 2020-03-10 19:55:17 
+----> [START BUILDING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-03-10 19:55:17 
+----> [FINISH BUILDING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-03-10 19:55:17 
+[FINISH BUILDING MODEL 'light_boost']
+INFO: 2020-03-10 19:55:17 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-03-10 19:55:17 
+--- START TRAINING ---
+INFO: 2020-03-10 19:55:17 
+[START TRAINING MODEL 'light_boost']
+INFO: 2020-03-10 19:55:17 
+----> [START TRAINING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-03-10 20:23:26 
+- MODEL PARAMS -
+INFO: 2020-03-10 20:23:26 
+{'boosting_type': 'dart',
+ 'class_weight': None,
+ 'colsample_bytree': 0.5,
+ 'importance_type': 'split',
+ 'learning_rate': 0.05,
+ 'max_depth': -1,
+ 'min_child_samples': 500,
+ 'min_child_weight': 0.001,
+ 'min_split_gain': 0.0,
+ 'n_estimators': 100,
+ 'n_jobs': 1,
+ 'num_leaves': 90,
+ 'objective': None,
+ 'random_state': None,
+ 'reg_alpha': 1.0,
+ 'reg_lambda': 1.0,
+ 'silent': True,
+ 'subsample': 0.75,
+ 'subsample_for_bin': 20000,
+ 'subsample_freq': 0}
+INFO: 2020-03-10 20:23:26 
+----> [FINISH TRAINING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-03-10 20:23:26 
+[FINISH TRAINING MODEL 'light_boost']
+INFO: 2020-03-10 20:23:26 
+--- FINISH TRAINING ---
+INFO: 2020-03-10 20:23:26 
+--- START EVALUATION ---
+INFO: 2020-03-10 20:23:26 
+[START EVALUATING MODEL 'light_boost']
+INFO: 2020-03-10 20:23:26 
+----> [START EVALUATING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-03-10 20:23:26 
+- RESULTS -
+INFO: 2020-03-10 20:23:26 
+{'confusion': array([[15466,   121],
+       [  314,   769]]),
+ 'f1': 0.779523568170299,
+ 'f1_micro': 0.9739052189562087,
+ 'precision': 0.8640449438202247,
+ 'recall': 0.7100646352723915}
+INFO: 2020-03-10 20:23:26 
+----> [FINISH EVALUATING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-03-10 20:23:26 
+[FINISH EVALUATING MODEL 'light_boost']
+INFO: 2020-03-10 20:23:26 
+--- FINISH EVALUATION ---
+INFO: 2020-03-10 20:23:26 
+-------- FINISH EXPERIMENT --------
