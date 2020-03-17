@@ -96,7 +96,7 @@ class _BaseTuner(ABC):
 class HyperOptTuner(_BaseTuner):
     
     _algo_options = {
-        TUNE_TPE:           tpe.suggest,   # Tree of Parzen Esitmators 
+        TUNE_TPE:           tpe.suggest,   # Tree of Parzen Estimators 
         TUNE_ATPE:          atpe.suggest,  # Adaptive Tree of Parzen Estimators 
         TUNE_RANDOM_SEARCH: rand.suggest   # Random Search 
     }
@@ -148,7 +148,9 @@ class HyperOptTuner(_BaseTuner):
 
     @property
     def results_(self):
-        return self._results
+        return self._results.sort_values(
+            "score", 
+            ascending=False)
 
     # Train/Tune functions -----------------------------------------------
     def objective(self, params):
@@ -190,8 +192,8 @@ class HyperOptTuner(_BaseTuner):
     def fit(self, X, y):
         self._X = X
         self._y = y
-        trials = Trials()
 
+        trials = Trials()
         self._current_iteration = 0
         best_params = fmin(fn=self.objective,           # Objective function to minimize 
                           space=self._param_grid,       # Parameter grid
@@ -206,12 +208,13 @@ class HyperOptTuner(_BaseTuner):
         # Gets and sets best score from trials. 
         self._best_score = max([x["score"] for x in trials.results])
 
+        # Set results from trials
+        self._results = pd.DataFrame(trials.results) 
+
         # Train a model with best params and set as best estimator.
         estimator = self._estimator_class(**params)
         estimator.fit(self._X, self._y)
         self._best_estimator = estimator
-
-        self._results = pd.DataFrame(trials.results) 
 
 ###### Evolutionary Search ###############################################
 class EvolutionarySearchTuner(_BaseTuner):
