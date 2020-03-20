@@ -164,7 +164,16 @@ def eval_models(args, dataset, models):
 
     logger_exp.info("--- FINISH EVALUATION ---")
 
-###### start experiment ###################################################
+
+###### extract results from models ########################################
+def extract_results(args):
+    logger_exp.info("--- START EXTRACTING RESULTS ---")
+
+    logger_exp.info("--- FINISH EXTRACTING RESULTS ---")
+
+    print("TEST")
+
+###### start experiment (tuning) ##########################################
 if __name__ == "__main__":
 
     # create parser 
@@ -190,14 +199,23 @@ if __name__ == "__main__":
     logger_exp.info (args.__dict__, pp=True) 
     
     try:
-        # build dataset 
-        dataset = build_dataset(args)
-        # build models 
-        models = build_models(args, dataset)
-        # train models
-        train_models(dataset, models) 
-        # evaluate model 
-        eval_models(args, dataset, models)
+        print(args.extract_results)
+        print(type(args))        
+        # # build dataset 
+        # dataset = build_dataset(args)
+        
+        # # build models 
+        # models = build_models(args, dataset)
+        
+        # # train models
+        # train_models(dataset, models) 
+        
+        # # evaluate model 
+        # eval_models(args, dataset, models)
+
+        # # extract results 
+        # extract_results(args)
+
         logger_exp.info("-------- FINISH EXPERIMENT --------")
     except:
         e = sys.exc_info()

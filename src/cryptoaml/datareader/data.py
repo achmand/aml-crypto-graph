@@ -1,7 +1,8 @@
 """
 A script which exposes all the datasets used in the experiments. 
-The following models are included;
+The following datasets are included;
 - Elliptic Dataset (https://www.kaggle.com/ellipticco/elliptic-data-set)
+- Ethereum Fraud Detection (https://github.com/sfarrugia15/Ethereum_Fraud_Detection) 
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
@@ -10,12 +11,13 @@ The following models are included;
 import yaml
 from .. import utils as u 
 from .elliptic_dr import Elliptic_Dataset
-    
+from .elliptic_dr import Eth_Accounts_Dataset   
+
 ###### Datareader functions ###############################################
-def get_data(source, config_file="data_config.yaml", **kwargs):
+def get_data(source, config_file="configuration/data/data_config.yaml", **kwargs):
     
     # available sources 
-    sources = ["elliptic"]
+    sources = ["elliptic", "eth_fraud"]
 
     # check if source passed is valid 
     if source not in sources:
@@ -23,7 +25,7 @@ def get_data(source, config_file="data_config.yaml", **kwargs):
         raise NotImplementedError(error)
     
     # load dataset config file .yaml (includes paths to files for a specific dataset)
-    with open(config_file, 'r') as stream:
+    with open(config_file, "r") as stream:
         try:
             config = yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.YAMLError as exc:
@@ -33,6 +35,11 @@ def get_data(source, config_file="data_config.yaml", **kwargs):
     if source == "elliptic":
         elliptic_data_args = u.Namespace(config["elliptic_dataset"])
         return Elliptic_Dataset(elliptic_data_args, **kwargs)
+
+    # eth fraud accounts dataset (downloadable from: https://github.com/sfarrugia15/Ethereum_Fraud_Detection/blob/master/Account_Stats/Complete.csv)
+    elif source == "eth_fraud":
+        eth_fraud_args = u.Namespace(config["eth_fraud_dataset"])
+        return Eth_Accounts_Dataset(eth_fraud_args, **kwargs)
 
     # source passed is invalid 
     else:

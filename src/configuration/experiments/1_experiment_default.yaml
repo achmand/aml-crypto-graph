@@ -1,0 +1,36 @@
+
+##########################################################################
+# Dataset configuration 
+##########################################################################
+data: elliptic
+data_config_file: "configuration/data/data_config.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [LF]
+  train_size: 0.7
+  indexed_by_time: true 
+
+##########################################################################
+# Models to be tested 
+##########################################################################  
+models: [xg_boost]
+
+# Using the default values for XGBoost Classifier will obtain reproducable results 
+# => 'gblinear' booster with shotgun updater is nondeterministic as it uses Hogwild algorithm [Default='gbtree']
+# =>  parameters such as subsample and colsample_by_* are set to 1, meaning no random sampling will be used  
+xg_boost_args: 
+  extract_results: 
+    result_type: "deterministic"
+    evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion", feature_importance]
+  persist_props:
+    method: "save"
+    save_path: "saved_models/experiment_1/tuned"
+  arguments: 
+    verbosity: 1
+    n_jobs: 4
+
+evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
+
+save_log: true 
+log_path: "logs/"

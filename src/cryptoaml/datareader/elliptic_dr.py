@@ -4,6 +4,14 @@ Class which reads the elliptic dataset (node classification).
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
+# https://www.elliptic.co/
+# https://arxiv.org/abs/1908.02591
+# https://www.kaggle.com/ellipticco/elliptic-data-set
+# https://www.elliptic.co/our-thinking/elliptic-dataset-cryptocurrency-financial-crime
+# https://medium.com/elliptic/the-elliptic-data-set-opening-up-machine-learning-on-the-blockchain-e0a343d99a14
+# https://mitibmwatsonailab.mit.edu/research/projects/scalable-graph-learning-for-anti-money-laundering/
+# https://www.markrweber.com/graph-deep-learning
+
 ###### Importing dependencies #############################################
 import pandas as pd 
 from .. import utils as u 
