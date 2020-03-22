@@ -4,7 +4,7 @@
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-###### Importing dependencies #############################################
+###### importing dependencies #############################################
 import json
 import pickle
 import numpy as np 
@@ -36,12 +36,11 @@ MODEL_CAT   = "cat_boost"
 PERSIST_SAVE = "save"
 PERSIST_LOAD = "load"
 
-###### Base classifier ###################################################
+###### base classifier ###################################################
 class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
     """
     Base class for models.
-    Warning: This class should not be used directly. Use derived classes
-    instead.
+    Warning: This class should not be used directly. Use derived classes instead.
     """
 
     # constructor ---------------------------------------------------------
@@ -89,7 +88,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         check_is_fitted(self._model, ["feature_importances_"])
         return (self._tuner.meta_results_, self._tuner.results_)
         
-    # init/Parameters functions -------------------------------------------
+    # init/parameters functions -------------------------------------------
     @abstractmethod 
     def _init_model(self, **kwargs):
         pass
@@ -186,9 +185,9 @@ class RandomForestAlgo(_BaseAlgo):
                  tune_props=None, 
                  persist_props=None,
                  **kwargs): 
-        super ().__init__(
-            tune_props = tune_props, 
-            persist_props = persist_props,
+        super().__init__(
+            tune_props=tune_props, 
+            persist_props=persist_props,
             **kwargs
         )
         

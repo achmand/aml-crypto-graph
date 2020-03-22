@@ -4,6 +4,8 @@ Class which reads the elliptic dataset (node classification).
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
+# TODO -> Refactor to make use of base class 
+
 # https://www.elliptic.co/
 # https://arxiv.org/abs/1908.02591
 # https://www.kaggle.com/ellipticco/elliptic-data-set
@@ -12,25 +14,25 @@ Class which reads the elliptic dataset (node classification).
 # https://mitibmwatsonailab.mit.edu/research/projects/scalable-graph-learning-for-anti-money-laundering/
 # https://www.markrweber.com/graph-deep-learning
 
-###### Importing dependencies #############################################
+###### importing dependencies #############################################
 import pandas as pd 
 from .. import utils as u 
 from collections import OrderedDict
 
-###### Elliptic data set class ############################################
+###### elliptic dataset ###################################################
 class Elliptic_Dataset:
     
-    # Constants -----------------------------------------------------------
-    # Columns 
+    # constants -----------------------------------------------------------
+    # columns 
     COL_TXID  = "txId"  # TX ID 
     COL_TS    = "ts"    # TX time step 
-    COL_CLASS = "class" # Class/Label of the TX
+    COL_CLASS = "class" # Class/label of the TX
 
-    # Feature sets 
+    # feature sets 
     FEATS_LF = "LF" # Local features
     FEATS_AF = "AF" # Local features + Aggregated Features
    
-    # Labels
+    # labels
     LABEL_UNKNOWN = "unknown" # Unknown label 
     LABEL_LICIT   = "licit"   # TX created by a licit node (exchanges, miners, etc...)
     LABEL_ILLICIT = "illicit" # TX created by an illicit node (scams, terrorist, etc...)
@@ -62,13 +64,13 @@ class Elliptic_Dataset:
 
     # Properties ----------------------------------------------------------
     @property
-    def labels(self):
+    def labels_(self):
         return {self.LABEL_LICIT:   self._label_licit, 
                 self.LABEL_ILLICIT: self._label_illicit,
                 self.LABEL_UNKNOWN: self._label_unknown}
 
     @property 
-    def label_count(self):
+    def label_count_(self):
         return self.node_labels[self.COL_CLASS].value_counts()
 
     def _load_node_labels(self, path, encode_classes):

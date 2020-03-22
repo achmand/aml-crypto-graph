@@ -12,15 +12,20 @@ The following models are included;
 ###### importing dependencies #############################################
 from sklearn.metrics import f1_score
 from sklearn.metrics import recall_score
+from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import confusion_matrix
 
 ###### Evaluation functions ###############################################
+ACCURARCY        = "accuracy"
 F1_BINARY        = "f1"
 F1_MICRO         = "f1_micro"
 RECALL_BINARY    = "recall"
 PRECISION_BINARY = "precision"
 CONFUSION_MATRIX = "confusion"
+
+def compute_accuracy(y_true, y_pred):
+    return accuracy_score(y_true, y_pred, normalize=True)
 
 def compute_f1_binary(y_true, y_pred):
     return f1_score(y_true, y_pred, average="binary")

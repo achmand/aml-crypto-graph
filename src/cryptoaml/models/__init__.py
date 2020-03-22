@@ -2,7 +2,9 @@
 Top level API for models used in experiments.
 """
 
-# Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
+# author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
+
+###### importing dependencies #############################################
 from ._models import RandomForestAlgo 
 from ._models import XgboostAlgo 
 from ._models import LightGbmAlgo 

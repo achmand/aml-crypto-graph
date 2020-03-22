@@ -10,8 +10,8 @@ The following datasets are included;
 ###### importing dependencies #############################################
 import yaml
 from .. import utils as u 
-from .elliptic_dr import Elliptic_Dataset
-from .elliptic_dr import Eth_Accounts_Dataset   
+from ._elliptic_dr import Elliptic_Dataset
+from ._eth_fraud_dr import Eth_Fraud_Dataset   
 
 ###### Datareader functions ###############################################
 def get_data(source, config_file="configuration/data/data_config.yaml", **kwargs):
@@ -39,7 +39,7 @@ def get_data(source, config_file="configuration/data/data_config.yaml", **kwargs
     # eth fraud accounts dataset (downloadable from: https://github.com/sfarrugia15/Ethereum_Fraud_Detection/blob/master/Account_Stats/Complete.csv)
     elif source == "eth_fraud":
         eth_fraud_args = u.Namespace(config["eth_fraud_dataset"])
-        return Eth_Accounts_Dataset(eth_fraud_args, **kwargs)
+        return Eth_Fraud_Dataset(eth_fraud_args, **kwargs)
 
     # source passed is invalid 
     else:
