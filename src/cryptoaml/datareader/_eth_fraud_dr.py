@@ -21,13 +21,10 @@ class Eth_Fraud_Dataset(_BaseDatareader):
     COL_ADDRESS = "address"
     
     # constructor ---------------------------------------------------------
-    def __init__(self, 
-                 data_args, 
-                 **kwargs):
-        super().__init__(
-            data_args=data_args,
-            **kwargs
-        )
+    def __init__(self, data_args):
+        
+        # call parent constructor 
+        super().__init__(data_args=data_args)
 
     # properties ----------------------------------------------------------
     @property

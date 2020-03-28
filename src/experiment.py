@@ -171,7 +171,6 @@ def extract_results(args):
 
     logger_exp.info("--- FINISH EXTRACTING RESULTS ---")
 
-    print("TEST")
 
 ###### start experiment (tuning) ##########################################
 if __name__ == "__main__":
@@ -199,22 +198,20 @@ if __name__ == "__main__":
     logger_exp.info (args.__dict__, pp=True) 
     
     try:
-        print(args.extract_results)
-        print(type(args))        
-        # # build dataset 
-        # dataset = build_dataset(args)
+        # build dataset 
+        dataset = build_dataset(args)
         
-        # # build models 
-        # models = build_models(args, dataset)
+        # build models 
+        models = build_models(args, dataset)
         
-        # # train models
-        # train_models(dataset, models) 
+        # train models
+        train_models(dataset, models) 
         
-        # # evaluate model 
-        # eval_models(args, dataset, models)
+        # evaluate model 
+        eval_models(args, dataset, models)
 
-        # # extract results 
-        # extract_results(args)
+        # extract results 
+        extract_results(args)
 
         logger_exp.info("-------- FINISH EXPERIMENT --------")
     except:

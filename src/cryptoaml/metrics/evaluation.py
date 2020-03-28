@@ -10,19 +10,24 @@ The following models are included;
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### importing dependencies #############################################
+import pandas as pd 
+from collections import OrderedDict
 from sklearn.metrics import f1_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import confusion_matrix
 
-###### Evaluation functions ###############################################
+###### evaluation functions ###############################################
 ACCURARCY        = "accuracy"
 F1_BINARY        = "f1"
 F1_MICRO         = "f1_micro"
 RECALL_BINARY    = "recall"
 PRECISION_BINARY = "precision"
 CONFUSION_MATRIX = "confusion"
+
+# metrics which can be displayed in a table 
+TABLE_METRICS = {ACCURARCY, F1_BINARY, F1_MICRO, RECALL_BINARY, PRECISION_BINARY}
 
 def compute_accuracy(y_true, y_pred):
     return accuracy_score(y_true, y_pred, normalize=True)
@@ -42,7 +47,7 @@ def compute_precision_binary(y_true, y_pred):
 def compute_confusion_matrix(y_true, y_pred):
     return confusion_matrix(y_true, y_pred)
 
-# Map different metric constants to metric function
+# map different metric constants to metric function
 eval_options = {
     F1_BINARY:        compute_f1_binary,
     F1_MICRO:         compute_f1_micro,
@@ -53,7 +58,7 @@ eval_options = {
 
 def evaluate(metrics, y_true, y_pred):
     
-    # Validate metrics argument
+    # validate metrics argument
     m = []
     if isinstance(metrics, str):
         m.append(metrics)
@@ -62,8 +67,8 @@ def evaluate(metrics, y_true, y_pred):
     else:
         raise ValueError("'metrics' must be of type str or list<str>")
 
-    # Compute results for the specified metrics 
-    results = {}
+    # compute results for the specified metrics 
+    results = OrderedDict()
     for metric in m: 
         if metric not in eval_options:
             error = "'metric'=%r is not implemented" % metric
@@ -71,5 +76,36 @@ def evaluate(metrics, y_true, y_pred):
         else:
             results[metric] = eval_options[metric](y_true, y_pred)
 
-    # Return results 
+    # return results 
     return results
+
+def results_table(results_dict):
+    
+    # create list to hold results 
+    df_results = []
+    
+    # loop in models 
+    for model, model_results in results_dict.items():
+      
+        # loop in feature set 
+        for feature_set, set_results in model_results.items():
+            
+            # extract results for model per feature set 
+            tmp_result = {
+                "model": model + "_" + feature_set
+            }
+            
+            # extract result for each metric
+            for metric, result in set_results.items():
+                
+                # check whether the current metric can be displayed in a table 
+                if metric not in TABLE_METRICS:
+                    continue 
+                tmp_result[metric] = result
+            
+            # add to results
+            df_results.append(tmp_result)
+    
+    # create and return results dataframe
+    df = pd.DataFrame(df_results) 
+    return df 

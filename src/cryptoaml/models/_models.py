@@ -252,3 +252,7 @@ class CatBoostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         self._model_name = MODEL_CAT
         self._model = CatBoostClassifier(**kwargs)
+
+    # init/parameters functions -------------------------------------------
+    def get_params(self):
+        return self._model.get_all_params()

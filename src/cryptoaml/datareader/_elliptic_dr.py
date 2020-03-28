@@ -18,34 +18,56 @@ Class which reads the elliptic dataset (node classification).
 import pandas as pd 
 from .. import utils as u 
 from collections import OrderedDict
+from ._datareader import _BaseDatareader
 
 ###### elliptic dataset ###################################################
-class Elliptic_Dataset:
+class Elliptic_Dataset(_BaseDatareader):
     
     # constants -----------------------------------------------------------
-    # columns 
+    # columns - meta 
     COL_TXID  = "txId"  # TX ID 
     COL_TS    = "ts"    # TX time step 
-    COL_CLASS = "class" # Class/label of the TX
 
-    # feature sets 
+    # columns - feature sets 
     FEATS_LF = "LF" # Local features
     FEATS_AF = "AF" # Local features + Aggregated Features
    
     # labels
     LABEL_UNKNOWN = "unknown" # Unknown label 
-    LABEL_LICIT   = "licit"   # TX created by a licit node (exchanges, miners, etc...)
-    LABEL_ILLICIT = "illicit" # TX created by an illicit node (scams, terrorist, etc...)
 
-    # Constructor ---------------------------------------------------------
-    def __init__(self, data_args, encode_classes=True):
+    # constructor ---------------------------------------------------------
+    def __init__(self, 
+                 data_args, 
+                 encode_classes=True):
+        
+        # call parent constructor 
+        super().__init__(data_args=data_args, 
+                         encode_classes=encode_classes)
 
-        # set encode classes attribute
-        self.encode_classes = encode_classes
+    # properties ----------------------------------------------------------
+    @property
+    def labels_(self):
+        """Gets the label and it's respective encoding."""
+        return {self.LABEL_LICIT:   self._label_licit, 
+                self.LABEL_ILLICIT: self._label_illicit,
+                self.LABEL_UNKNOWN: self._label_unknown}
+
+    @property
+    def feature_cols_LF(self):
+        """Get the feature names for the Local Features set (LF)."""
+        return self._cols_lf      
+
+    @property
+    def feature_cols_AF(self):
+        """Get the feature names for the All Features set (AF)."""
+        return self.feature_cols_      
+
+    # load data functions -------------------------------------------------
+    def _load_dataset(self, data_args, encode_classes):
 
         # 1. load node labels as df
         labels_path = "{}{}".format(data_args.folder, data_args.classes_file) 
-        self.node_labels = self._load_node_labels(labels_path, encode_classes)
+        node_labels = self._load_node_labels(labels_path, encode_classes)
 
         # 2. load node edges as df
         edges_path = "{}{}".format(data_args.folder, data_args.edges_file) 
@@ -53,25 +75,16 @@ class Elliptic_Dataset:
 
         # 3. load node features as df
         feats_path = "{}{}".format(data_args.folder, data_args.feats_file)
-        self.node_feats = self._load_node_feats(feats_path)
+        node_feats = self._load_node_feats(feats_path)
 
         # 4. concatenate labels with features dataframe     
-        self.node_feats = pd.merge(self.node_feats, 
-                                    self.node_labels, 
-                                    left_on=self.COL_TXID, 
-                                    right_on=self.COL_TXID, 
-                                    how="left")
+        dataset = pd.merge(node_feats, 
+                           node_labels, 
+                           left_on=self.COL_TXID, 
+                           right_on=self.COL_TXID, 
+                           how="left")
 
-    # Properties ----------------------------------------------------------
-    @property
-    def labels_(self):
-        return {self.LABEL_LICIT:   self._label_licit, 
-                self.LABEL_ILLICIT: self._label_illicit,
-                self.LABEL_UNKNOWN: self._label_unknown}
-
-    @property 
-    def label_count_(self):
-        return self.node_labels[self.COL_CLASS].value_counts()
+        return dataset
 
     def _load_node_labels(self, path, encode_classes):
 
@@ -115,17 +128,20 @@ class Elliptic_Dataset:
         node_feats = pd.read_csv(path, header=None)
         
         # rename column names 
-        self._cols_meta = [self.COL_TXID, self.COL_TS]
+        self._cols_meta = [self.COL_TXID]
         
         # the first 94 features represent local information about the tx 
         # we skip the first one hence range(93), since that column indicates time step 
-        self._cols_lf = [f"LF_{i}" for i in range(93)]
+        self._cols_lf = [self.COL_TS] + [f"LF_{i}" for i in range(93)]
 
         # the ramaining 72 features represent aggregated features
         self._cols_agg = [f"AGG_{i}" for i in range(72)]
 
         # rename dataframe's columns 
         node_feats.columns = self._cols_meta + self._cols_lf + self._cols_agg
+
+        # take reference of feature set columns 
+        self._cols_features = self._cols_lf + self._cols_agg
 
         # returns node features 
         return node_feats
@@ -134,9 +150,9 @@ class Elliptic_Dataset:
         
         # first we check if we include data points with unknown label 
         if inc_unknown == False:
-            data = self.node_feats[(self.node_feats[self.COL_CLASS] != self._label_unknown)].copy()
+            data = self._dataset[(self._dataset[self.COL_CLASS] != self._label_unknown)].copy()
         else: 
-            data = self.node_feats.copy()
+            data = self._dataset.copy()
 
         # now we make sure that the dataset is ordered by ts column 
         data.sort_values(by=[self.COL_TS], ascending=True, inplace=True)
