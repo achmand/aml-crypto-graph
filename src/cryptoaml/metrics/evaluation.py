@@ -79,7 +79,7 @@ def evaluate(metrics, y_true, y_pred):
     # return results 
     return results
 
-def results_table(results_dict):
+def results_table(results_dict, num_of_decimals=3):
     
     # create list to hold results 
     df_results = []
@@ -101,7 +101,7 @@ def results_table(results_dict):
                 # check whether the current metric can be displayed in a table 
                 if metric not in TABLE_METRICS:
                     continue 
-                tmp_result[metric] = result
+                tmp_result[metric] = round(result, num_of_decimals)
             
             # add to results
             df_results.append(tmp_result)
