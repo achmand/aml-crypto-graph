@@ -176,12 +176,11 @@ class Elliptic_Dataset(_BaseDatareader):
             return data 
             
         # one data split as a str was passed as 'feat_set'
-        else:
-            datasplit = self._get_feat_set(feat_set, 
-                                           data_train, 
-                                           data_test,
-                                           inc_meta)
-            return datasplit                
+        datasplit = self._get_feat_set(feat_set, 
+                                       data_train, 
+                                       data_test,
+                                       inc_meta)
+        return datasplit                
 
     def _get_feat_set(self, feat_set, data_train, data_test, inc_meta):
 
