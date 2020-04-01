@@ -46,6 +46,10 @@ class Elliptic_Dataset(_BaseDatareader):
 
     # properties ----------------------------------------------------------
     @property
+    def edges_(self):
+        return self.node_edges
+
+    @property
     def labels_(self):
         """Gets the label and it's respective encoding."""
         return {self.LABEL_LICIT:   self._label_licit, 
@@ -53,12 +57,12 @@ class Elliptic_Dataset(_BaseDatareader):
                 self.LABEL_UNKNOWN: self._label_unknown}
 
     @property
-    def feature_cols_LF(self):
+    def feature_cols_LF_(self):
         """Get the feature names for the Local Features set (LF)."""
         return self._cols_lf      
 
     @property
-    def feature_cols_AF(self):
+    def feature_cols_AF_(self):
         """Get the feature names for the All Features set (AF)."""
         return self.feature_cols_      
 
