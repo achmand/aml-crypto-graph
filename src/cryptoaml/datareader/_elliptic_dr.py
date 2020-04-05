@@ -4,8 +4,6 @@ Class which reads the elliptic dataset (node classification).
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-# TODO -> Refactor to make use of base class 
-
 # https://www.elliptic.co/
 # https://arxiv.org/abs/1908.02591
 # https://www.kaggle.com/ellipticco/elliptic-data-set
@@ -29,9 +27,11 @@ class Elliptic_Dataset(_BaseDatareader):
     COL_TS    = "ts"    # TX time step 
 
     # columns - feature sets 
-    FEATS_LF = "LF" # Local features
-    FEATS_AF = "AF" # Local features + Aggregated Features
-   
+    FEATS_LF = "LF"       # Local features
+    FEATS_AF = "AF"       # Local features + Aggregated Features
+    FEATS_LF_NE = "LF_NE" # Local features and Node Embeddings from GCN 
+    FEATS_AF_NE = "AF_NE" # Local features + Aggregated Features and Node Embedding from GCN 
+
     # labels
     LABEL_UNKNOWN = "unknown" # Unknown label 
 
@@ -47,7 +47,11 @@ class Elliptic_Dataset(_BaseDatareader):
     # properties ----------------------------------------------------------
     @property
     def edges_(self):
-        return self.node_edges
+        return self._node_edges
+
+    @property 
+    def node_embs_(self):
+        return self._node_embs
 
     @property
     def labels_(self):
@@ -58,31 +62,57 @@ class Elliptic_Dataset(_BaseDatareader):
 
     @property
     def feature_cols_LF_(self):
-        """Get the feature names for the Local Features set (LF)."""
+        """Get the feature names for the Local feature set (LF)."""
         return self._cols_lf      
 
     @property
     def feature_cols_AF_(self):
-        """Get the feature names for the All Features set (AF)."""
+        """Get the feature names for the All feature set (AF)."""
         return self.feature_cols_      
+
+    @property
+    def feature_cols_NE_(self):
+        """Get the feature names for the node embeddings feature set (NE)."""
+        return self._cols_ne      
+
+    @property
+    def feature_cols_LF_NE_(self):
+        """Get the feature names for the Local feature set + node embeddings (LF_NE)."""
+        return self._cols_lf + self._cols_ne     
+
+    @property
+    def feature_cols_AF_NE_(self):
+        """Get the feature names for the All feature set + node embeddings (AF_NE)."""
+        return  self.feature_cols_ + self._cols_ne     
 
     # load data functions -------------------------------------------------
     def _load_dataset(self, data_args, encode_classes):
 
-        # 1. load node labels as df
+        # 1. load node labels as dataframe
         labels_path = "{}{}".format(data_args.folder, data_args.classes_file) 
         node_labels = self._load_node_labels(labels_path, encode_classes)
 
-        # 2. load node edges as df
+        # 2. load node edges as dataframe
         edges_path = "{}{}".format(data_args.folder, data_args.edges_file) 
-        self.node_edges = self._load_node_edges(edges_path)
+        self._node_edges = self._load_node_edges(edges_path)
 
-        # 3. load node features as df
+        # 3. load node features as dataframe
         feats_path = "{}{}".format(data_args.folder, data_args.feats_file)
         node_feats = self._load_node_feats(feats_path)
 
-        # 4. concatenate labels with features dataframe     
+        # 4. load node embeddings extracted from GCN as dataframe 
+        embs_paths = "{}{}".format(data_args.folder, data_args.embs_file)
+        self._node_embs = self._load_node_embs(embs_paths)
+
+        # 5. concatenate labels with features dataframe
         dataset = pd.merge(node_feats, 
+                           self._node_embs, 
+                           left_on=self.COL_TXID, 
+                           right_on=self.COL_TXID, 
+                           how="left")
+
+        # 6. concatenate labels with features dataframe     
+        dataset = pd.merge(dataset, 
                            node_labels, 
                            left_on=self.COL_TXID, 
                            right_on=self.COL_TXID, 
@@ -150,7 +180,21 @@ class Elliptic_Dataset(_BaseDatareader):
         # returns node features 
         return node_feats
 
+    def _load_node_embs(self, path):
+
+        # reads from csv file 
+        node_embs = pd.read_csv(path)
+
+        # take reference for node embedding columns 
+        self._cols_ne = node_embs.columns[1:].values.tolist()
+        
+        # returns the node embeddings extracted from GCN 
+        return node_embs 
+
     def train_test_split(self, train_size, feat_set, inc_meta=False, inc_unknown=False):
+        
+        # feat set check if list 
+        feat_set_list_type = type(feat_set) is list
         
         # first we check if we include data points with unknown label 
         if inc_unknown == False:
@@ -170,7 +214,7 @@ class Elliptic_Dataset(_BaseDatareader):
         data_test = data[data[self.COL_TS] > split_ts]
 
         # ordered dict as a list of str was passed as 'feat_set'
-        if type(feat_set) is list:
+        if feat_set_list_type == True:
             data = OrderedDict()
             for features in feat_set:
                 data[features] = self._get_feat_set(features,
@@ -190,16 +234,25 @@ class Elliptic_Dataset(_BaseDatareader):
 
         # filter by input feats and create input splits   
         feat_set_cols = self._cols_meta.copy() if inc_meta else []
+        
+        # Local feature set (LF)
         if feat_set == self.FEATS_LF: 
             feat_set_cols.extend(self._cols_lf)
-            data_train_X = data_train[feat_set_cols]
-            data_test_X = data_test[feat_set_cols]
+        # All feature set (AF)
         elif feat_set == self.FEATS_AF: 
             feat_set_cols.extend(self._cols_lf + self._cols_agg)
-            data_train_X = data_train[feat_set_cols]
-            data_test_X = data_test[feat_set_cols]
+        # Local feature set + node embeddings (LF_NE)
+        elif feat_set == self.FEATS_LF_NE:
+            feat_set_cols.extend(self._cols_lf + self._cols_ne)
+        # All feature set + node embeddings (AF_NE)
+        elif feat_set == self.FEATS_AF_NE:
+            feat_set_cols.extend(self._cols_lf + self._cols_agg + self._cols_ne)
         else:
             raise NotImplementedError("'input_feats' passed not yet implemented.")
+
+        # create input split 
+        data_train_X = data_train[feat_set_cols]
+        data_test_X = data_test[feat_set_cols]
 
         # create output split 
         data_train_y = data_train[self.COL_CLASS]
