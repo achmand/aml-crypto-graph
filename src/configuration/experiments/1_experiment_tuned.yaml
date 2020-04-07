@@ -1,0 +1,25 @@
+##########################################################################
+# Dataset configuration 
+##########################################################################
+data: elliptic
+data_config_file: "data_config.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [LF, LF_NE, AF, AF_NE] 
+  train_size: 0.7
+
+##########################################################################
+# Models to be tested 
+##########################################################################  
+models: [random_forest, xg_boost, light_boost, cat_boost]
+
+
+# Parameter grid (searching domain) are based on settings/suggestions from previous studies 
+# Best 'n_estimators' from GridSearch: LF [400] 
+xg_boost_args:
+  tune_props:
+      method: "tpe"
+      scoreing: "f1"
+      k_folds: 5
+      param_grid: 

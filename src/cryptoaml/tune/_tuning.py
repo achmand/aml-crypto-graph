@@ -8,6 +8,7 @@ import pandas as pd
 from .. import utils as u 
 from abc import ABC, abstractmethod
 
+import optuna
 from hyperopt import fmin, tpe, atpe, rand, space_eval, Trials, STATUS_OK
 
 from sklearn.metrics import get_scorer
@@ -17,10 +18,11 @@ from evolutionary_search import EvolutionaryAlgorithmSearchCV
 
 ###### Constants #########################################################
 TUNE_BASE                = "tuner_base"           # Base tuner 
-TUNE_TPE                 = "tpe"                  # Tree of Parzen Esitmators 
-TUNE_ATPE                = "atpe"                 # Adaptive Tree of Parzen Esitmators 
+TUNE_TPE                 = "tpe"                  # Tree of Parzen Estimators 
+TUNE_ATPE                = "atpe"                 # Adaptive Tree of Parzen Estimators 
 TUNE_RANDOM_SEARCH       = "random_search"        # Random Search 
 TUNE_EVOLUTIONARY_SEARCH = "evolutionary_search"  # Genetic Algorithm 
+TUNE_CMA_ES              = "cma_es"               # Covariance Matrix Adaptation Evolution Strategy
 
 # TODO -> Validation where needed 
 
@@ -30,7 +32,7 @@ class _BaseTuner(ABC):
     Base class for hyper parameter tuners for models.
     Warning: This class should not be used directly. Use derived classes
     instead.
-    """
+    """ 
 
     # Constructor ---------------------------------------------------------
     def __init__(self, 
@@ -91,6 +93,28 @@ class _BaseTuner(ABC):
     @abstractmethod 
     def fit(self, X, y):
         pass 
+
+###### Optina tuner: TPE ##############################################
+class OptunaTuner(_BaseTuner):
+
+    # Constructor ---------------------------------------------------------
+    def __init__(self,
+                 estimator,
+                 param_grid,
+                 scoring, 
+                 k_folds, 
+                 n_iterations,
+                 verbose=1):
+        super().__init__(
+            estimator=estimator,
+            param_grid=param_grid, 
+            scoring=scoring,
+            k_folds=k_folds,
+            verbose=verbose
+        )
+
+        self._n_iterations = n_iterations
+        self._sampler = optuna.samplers.TPESampler
 
 ###### Hyperopt tuner: TPE, ATPE, Random Search ##########################
 class HyperOptTuner(_BaseTuner):
@@ -196,10 +220,10 @@ class HyperOptTuner(_BaseTuner):
         trials = Trials()
         self._current_iteration = 0
         best_params = fmin(fn=self.objective,           # Objective function to minimize 
-                          space=self._param_grid,       # Parameter grid
-                          algo=self._algo,              # Type of algorithm used for search
-                          max_evals=self._n_iterations, # Number of iterations 
-                          trials=trials)                # Keeps record of each trail/iteration
+                           space=self._param_grid,       # Parameter grid
+                           algo=self._algo,              # Type of algorithm used for search
+                           max_evals=self._n_iterations, # Number of iterations 
+                           trials=trials)                # Keeps record of each trail/iteration
         
         # Get best parameters and re-train model. 
         params = space_eval(self._param_grid, best_params)
@@ -330,7 +354,7 @@ def tune_model(estimator, X, y, tune_props):
                                         n_jobs=properties.n_jobs,
                                         verbose=properties.verbose)        
     
-    # HyperOpt (Tree of Parzen Esitmators, Adaptive Tree of Parzen Esitmators, Random Search).
+    # HyperOpt (Tree of Parzen Estimators, Adaptive Tree of Parzen Esitmators, Random Search).
     elif properties.method == TUNE_TPE or properties.method == TUNE_ATPE or properties.method == TUNE_RANDOM_SEARCH:
         
         # Set default if not passed. 

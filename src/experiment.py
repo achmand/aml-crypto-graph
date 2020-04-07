@@ -166,10 +166,10 @@ def eval_models(args, dataset, models):
 
 
 ###### extract results from models ########################################
-def extract_results(args):
-    logger_exp.info("--- START EXTRACTING RESULTS ---")
+# def extract_results(args):
+#     logger_exp.info("--- START EXTRACTING RESULTS ---")
 
-    logger_exp.info("--- FINISH EXTRACTING RESULTS ---")
+#     logger_exp.info("--- FINISH EXTRACTING RESULTS ---")
 
 
 ###### start experiment (tuning) ##########################################
@@ -211,7 +211,7 @@ if __name__ == "__main__":
         eval_models(args, dataset, models)
 
         # extract results 
-        extract_results(args)
+        # extract_results(args)
 
         logger_exp.info("-------- FINISH EXPERIMENT --------")
     except:

@@ -121,7 +121,10 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
 
     def predict(self, X):
         return self._model.predict(X)
-  
+    
+    def predict_proba(self, X):
+        return self._model.predict_proba(X)
+
     def evaluate(self, metrics, X, y):
         y_pred = self.predict(X)
         return ev.evaluate(metrics, y, y_pred)
