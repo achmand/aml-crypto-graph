@@ -1,0 +1,68 @@
+INFO: 2020-04-08 04:14:00 
+-------- START EXPERIMENT --------
+INFO: 2020-04-08 04:14:00 
+- PROPERTIES -
+INFO: 2020-04-08 04:14:00 
+{'data': 'elliptic',
+ 'data_config_file': 'data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['LF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'log_path': 'logs/',
+ 'models': ['random_forest', 'xg_boost', 'light_boost', 'cat_boost'],
+ 'save_log': True,
+ 'xg_boost_args': {'persist_props': {'method': 'save',
+                                     'save_path': 'saved_models/experiment_1/tuned'},
+                   'tune_props': {'k_folds': 3,
+                                  'method': 'tpe',
+                                  'n_iterations': 100,
+                                  'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                      'min': 0.9,
+                                                                      'type': 'suggest_uniform'},
+                                                 'gamma': {'max': 0.01,
+                                                           'min': 0.0,
+                                                           'step': 0.005,
+                                                           'type': 'suggest_discrete_uniform'},
+                                                 'learning_rate': {'type': 'fixed',
+                                                                   'value': '0,1'},
+                                                 'max_delta_step': {'max': 1,
+                                                                    'min': 0,
+                                                                    'type': 'suggest_int'},
+                                                 'max_depth': {'max': 12,
+                                                               'min': 1,
+                                                               'type': 'suggest_int'},
+                                                 'min_child_weight': {'max': 4,
+                                                                      'min': 0,
+                                                                      'type': 'suggest_int'},
+                                                 'n_estimators': {'type': 'fixed',
+                                                                  'value': 100},
+                                                 'predictor': {'type': 'throw',
+                                                               'value': 'gpu_predictor'},
+                                                 'subsample': {'max': 1.0,
+                                                               'min': 0.9,
+                                                               'type': 'suggest_uniform'},
+                                                 'tree_method': {'type': 'throw',
+                                                                 'value': 'gpu_hist'}},
+                                  'scoring': 'neg_log_loss'}}}
+INFO: 2020-04-08 04:14:00 
+--- START BUILDING DATASET ---
+INFO: 2020-04-08 04:14:00 
+- DATASET -
+INFO: 2020-04-08 04:14:00 
+elliptic
+INFO: 2020-04-08 04:14:00 
+- CONFIG -
+INFO: 2020-04-08 04:14:00 
+'data_config.yaml'
+ERROR: 2020-04-08 04:14:00 
+(<class 'FileNotFoundError'>, FileNotFoundError(2, 'No such file or directory'), <traceback object at 0x7f0a0406faf0>)
+Traceback (most recent call last):
+  File "experiment.py", line 197, in <module>
+    dataset = build_dataset(args)
+  File "experiment.py", line 36, in build_dataset
+    encode_classes=elliptic_args.encode_classes)
+  File "/home/delinvas/repos/aml-crypto-graph/src/cryptoaml/datareader/_data.py", line 28, in get_data
+    with open(config_file, "r") as stream:
+FileNotFoundError: [Errno 2] No such file or directory: 'data_config.yaml'

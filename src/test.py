@@ -26,10 +26,12 @@ def objective(trial):
     
     param = {
         # using RS
-        "learning_rate": trial.suggest_loguniform("learning_rate", 0.01, 1.0),       
-        "n_estimators": trial.suggest_int("n_estimators", 100, 800, 25),
-        "tree_method":"gpu_hist", 
-        "predictor":"gpu_predictor"
+        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.025)     
+#         "n_estimators": trial.suggest_int("n_estimators", 100, 800, 25),
+        
+        
+#         "tree_method":"gpu_hist", 
+#         "predictor":"gpu_predictor"
         
 #         "max_depth": trial.suggest_int("max_depth", 1, 12),
 #         "subsample": trial.suggest_uniform("subsample", 0.9, 1.0),
@@ -41,6 +43,12 @@ def objective(trial):
 #         "reg_alpha": trial.suggest_loguniform("reg_alpha", 1e-8, 1.0)
     }
 
+    if params["learning_rate"] < 0.1:
+        params["n_estimators"] = trial.suggest_int("n_estimators", 400, 800, 25),
+    else: 
+        params["n_estimators"] = trial.suggest_int("n_estimators", 100, 400, 25),
+
+    
     tmp_estimator.set_params(**param)
     scores = cross_val_score(tmp_estimator, 
                                  train_X, 

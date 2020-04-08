@@ -114,7 +114,79 @@ class OptunaTuner(_BaseTuner):
         )
 
         self._n_iterations = n_iterations
+        self._estimator_class = type(estimator)
+        self._scorer = get_scorer("neg_log_loss")
+
         self._sampler = optuna.samplers.TPESampler
+        self._study = optuna.create_study(sampler=optuna.samplers.RandomSampler(), 
+                            direction="maximize")
+        self._study.set_user_attr("k_folds", k_folds)
+        self._study.set_user_attr("cv_method", "StratifiedKFold")
+
+    # Properties ----------------------------------------------------------
+    @property
+    def best_estimator_(self):
+        return self._best_estimator
+
+    @property
+    def best_score_(self):
+        return self._best_score
+
+    @property
+    def best_params_(self):
+        return self._best_params
+
+    @property
+    def scorer_(self):
+        return self._scorer
+
+    @property
+    def results_(self):
+        return self._results.sort_values(
+            "value", 
+            ascending=False)
+
+    # Train/Tune functions -----------------------------------------------
+    def _objective(self, trial):
+        params = {}
+
+        tmp_estimator = self._estimator_class(**params)
+        scores = cross_val_score(tmp_estimator, 
+                                 self._X, 
+                                 self._y, 
+                                 scoring=self._scorer, 
+                                 cv=StratifiedKFold(n_splits=self._k_folds))
+
+        mean_score = scores.mean()
+        trial.set_user_attr("cv_mean", mean_score)    
+        std_score  = scores.std()
+        trial.set_user_attr("cv_std", std_score)
+        min_score  = scores.min()
+        trial.set_user_attr("cv_min", min_score)
+        max_score  = scores.max()
+        trial.set_user_attr("cv_max", max_score)
+
+        return mean_score
+    
+    def fit(self, X, y):
+        self._X = X
+        self._y = y
+
+        self._study.optimize(self._objective, n_trials= self._n_iterations) 
+
+        # gets and sets best score from trials
+        self._best_score = self._study.best_trial.value
+
+        # set results from trials
+        self._results = self._study.trials_dataframe() 
+
+        # train a model with best params and set as best estimator
+        params = self._study.best_trial.params # TODO ADD WITH DEFAULS PASSED 
+        self._best_params = params
+
+        estimator = self._estimator_class(**params)
+        estimator.fit(self._X, self._y)
+        self._best_estimator = estimator
 
 ###### Hyperopt tuner: TPE, ATPE, Random Search ##########################
 class HyperOptTuner(_BaseTuner):
@@ -177,7 +249,7 @@ class HyperOptTuner(_BaseTuner):
             ascending=False)
 
     # Train/Tune functions -----------------------------------------------
-    def objective(self, params):
+    def _objective(self, params):
         
         # TODO -> Do not allow every scoring passed 
 
@@ -219,7 +291,7 @@ class HyperOptTuner(_BaseTuner):
 
         trials = Trials()
         self._current_iteration = 0
-        best_params = fmin(fn=self.objective,           # Objective function to minimize 
+        best_params = fmin(fn=self._objective,            # Objective function to minimize 
                            space=self._param_grid,       # Parameter grid
                            algo=self._algo,              # Type of algorithm used for search
                            max_evals=self._n_iterations, # Number of iterations 
@@ -229,7 +301,7 @@ class HyperOptTuner(_BaseTuner):
         params = space_eval(self._param_grid, best_params)
         self._best_params = params
 
-        # Gets and sets best score from trials. 
+        # gets and sets best score from trials
         self._best_score = max([x["score"] for x in trials.results])
 
         # Set results from trials
@@ -341,7 +413,7 @@ def tune_model(estimator, X, y, tune_props):
         if "generations_number" not in tune_props:
             properties.generations_number = 3
                           
-        # Initialize evolutionary search.
+        # initialize evolutionary search
         tuner = EvolutionarySearchTuner(estimator=estimator,
                                         param_grid=properties.param_grid,
                                         scoring=properties.scoring, 
@@ -354,14 +426,14 @@ def tune_model(estimator, X, y, tune_props):
                                         n_jobs=properties.n_jobs,
                                         verbose=properties.verbose)        
     
-    # HyperOpt (Tree of Parzen Estimators, Adaptive Tree of Parzen Esitmators, Random Search).
-    elif properties.method == TUNE_TPE or properties.method == TUNE_ATPE or properties.method == TUNE_RANDOM_SEARCH:
+    # HyperOpt (Adaptive Tree of Parzen Estimators, Random Search)
+    elif properties.method == TUNE_ATPE or properties.method == TUNE_RANDOM_SEARCH:
         
         # Set default if not passed. 
         if "n_iterations" not in tune_props: 
             properties.n_iterations = 1000
 
-        # Initialize evolutionary search.
+        # initialize hyperopt tuner
         tuner = HyperOptTuner(estimator=estimator,
                               param_grid=properties.param_grid,
                               scoring=properties.scoring,
@@ -369,6 +441,21 @@ def tune_model(estimator, X, y, tune_props):
                               algo=properties.method, 
                               n_iterations=properties.n_iterations,
                               verbose=properties.verbose)
+    
+    # Optuna (Tree of Parzen Estimators)
+    elif properties.method == TUNE_TPE:
+
+        # set default if not passed. 
+        if "n_iterations" not in tune_props: 
+            properties.n_iterations = 100
+
+        # initialize optuna tuner
+        tuner = OptunaTuner(estimator=estimator,
+                            param_grid=properties.param_grid,
+                            scoring="neg_log_loss",
+                            k_folds=properties.k_folds,
+                            n_iterations=properties.n_iterations)
+
     else:
         raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(properties.method))
 

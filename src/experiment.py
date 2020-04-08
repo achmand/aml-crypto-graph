@@ -81,6 +81,8 @@ def build_models(args, dataset):
             persist_method_key = persist_method + "_path"
             persist_initial_path = persist_props[persist_method_key]
 
+        print(tune_props)
+
         models[model] = OrderedDict()
         for feature_set in dataset.keys():
         
@@ -165,13 +167,6 @@ def eval_models(args, dataset, models):
     logger_exp.info("--- FINISH EVALUATION ---")
 
 
-###### extract results from models ########################################
-# def extract_results(args):
-#     logger_exp.info("--- START EXTRACTING RESULTS ---")
-
-#     logger_exp.info("--- FINISH EXTRACTING RESULTS ---")
-
-
 ###### start experiment (tuning) ##########################################
 if __name__ == "__main__":
 
@@ -204,11 +199,11 @@ if __name__ == "__main__":
         # build models 
         models = build_models(args, dataset)
         
-        # train models
-        train_models(dataset, models) 
+        # # train models
+        # train_models(dataset, models) 
         
-        # evaluate model 
-        eval_models(args, dataset, models)
+        # # evaluate model 
+        # eval_models(args, dataset, models)
 
         # extract results 
         # extract_results(args)
