@@ -123,6 +123,23 @@ class OptunaTuner(_BaseTuner):
         self._study.set_user_attr("k_folds", k_folds)
         self._study.set_user_attr("cv_method", "StratifiedKFold")
 
+        # get reference to 'throw' and 'fixed' parameters
+        # => 'throw': only use in tuning process 
+        # => 'fixed': values is fixed 
+        # => any other will be used in search space 
+        throw_prop = {}
+        fixed_prop = {}
+        search_space = {}
+        
+        for prop_key in self._param_grid:
+            tmp_property = self._param_grid[prop_key]
+            tmp_property_value = tmp_property["value"]
+            tmp_property_type = tmp_property["type"]
+
+        self._throw_prop = throw_prop
+        self._fixed_prop = fixed_prop
+        self._search_space = search_space
+
     # Properties ----------------------------------------------------------
     @property
     def best_estimator_(self):
@@ -146,7 +163,16 @@ class OptunaTuner(_BaseTuner):
             "value", 
             ascending=False)
 
-    # Train/Tune functions -----------------------------------------------
+    # train/tune functions -----------------------------------------------
+    def _new_params(self, trial): 
+        print("new params")        
+        # # get a new search space 
+        # new_params = {}
+        # for key in self._param_grid:
+        #     tmp_property = self._param_grid[]
+        #     print(key)        
+
+
     def _objective(self, trial):
         params = {}
 
@@ -169,9 +195,10 @@ class OptunaTuner(_BaseTuner):
         return mean_score
     
     def fit(self, X, y):
+
+        # optimize on log loss 
         self._X = X
         self._y = y
-
         self._study.optimize(self._objective, n_trials= self._n_iterations) 
 
         # gets and sets best score from trials
@@ -181,9 +208,12 @@ class OptunaTuner(_BaseTuner):
         self._results = self._study.trials_dataframe() 
 
         # train a model with best params and set as best estimator
-        params = self._study.best_trial.params # TODO ADD WITH DEFAULS PASSED 
-        self._best_params = params
-
+        # 1. get best parameters found
+        params = self._study.best_trial.params  
+        # 2. concat best parameters with fixed ones as they are not returned        
+        best_params = {**self._fixed_prop, **params}       
+        self._best_params = best_params
+        # 3. train model with best parameters found  
         estimator = self._estimator_class(**params)
         estimator.fit(self._X, self._y)
         self._best_estimator = estimator

@@ -58,7 +58,7 @@ xg_boost_args:
         min_child_weight:
           min: 0
           max: 4 
-          type: "suggest_int"
+          type: "suggest_int" 
         max_delta_step:
           min: 0
           max: 1
