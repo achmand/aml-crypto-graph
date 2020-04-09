@@ -3,7 +3,7 @@
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
-###### Importing dependencies #############################################
+###### importing dependencies ############################################
 import pandas as pd
 from .. import utils as u 
 from abc import ABC, abstractmethod
@@ -16,7 +16,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
 from evolutionary_search import EvolutionaryAlgorithmSearchCV
 
-###### Constants #########################################################
+###### constants #########################################################
 TUNE_BASE                = "tuner_base"           # Base tuner 
 TUNE_TPE                 = "tpe"                  # Tree of Parzen Estimators 
 TUNE_ATPE                = "atpe"                 # Adaptive Tree of Parzen Estimators 
@@ -94,7 +94,7 @@ class _BaseTuner(ABC):
     def fit(self, X, y):
         pass 
 
-###### Optina tuner: TPE ##############################################
+###### Optina tuner: TPE #################################################
 class OptunaTuner(_BaseTuner):
 
     # Constructor ---------------------------------------------------------
