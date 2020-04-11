@@ -436,7 +436,6 @@ class EvolutionarySearchTuner(_BaseTuner):
         self._tuner.fit(X, y)
 
 ###### Hyperparameter tuning functions ###################################
-
 # TODO -> not in should be changed to dictionary.get(key, default_value)
 def tune_model(estimator, X, y, tune_props):
 
