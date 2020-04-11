@@ -101,14 +101,14 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
 
     # train/tune/evaluate functions ---------------------------------------
     # TODO-> Add the ability to not tune even if the tune_props are passed 
-    def fit(self, X, y):
+    def fit(self, X, y, tune=True):
         
         # Keep a reference of features 
         self._features = X.columns.values
 
         # Fit model 
         # No hyperparameter tuning 
-        if self._tune_props == None: 
+        if self._tune_props == None or tune==False: 
             self._model.fit(X, y)
         # Hyperparameter tuning 
         else:                        

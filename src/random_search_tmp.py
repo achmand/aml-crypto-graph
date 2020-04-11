@@ -1,0 +1,1 @@
+ssh -i <private key path> dvassallo@52.167.63.48

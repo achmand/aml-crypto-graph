@@ -4,6 +4,7 @@
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### importing dependencies ############################################
+import numpy as np
 import pandas as pd
 from .. import utils as u 
 from abc import ABC, abstractmethod
@@ -117,9 +118,8 @@ class OptunaTuner(_BaseTuner):
         self._estimator_class = type(estimator)
         self._scorer = get_scorer("neg_log_loss")
 
-        self._sampler = optuna.samplers.TPESampler
-        self._study = optuna.create_study(sampler=optuna.samplers.RandomSampler(), 
-                            direction="maximize")
+        self._sampler = optuna.samplers.TPESampler()
+        self._study = optuna.create_study(sampler=self._sampler, direction="maximize")
         self._study.set_user_attr("k_folds", k_folds)
         self._study.set_user_attr("cv_method", "StratifiedKFold")
 
@@ -135,9 +135,9 @@ class OptunaTuner(_BaseTuner):
             tmp_property = self._param_grid[prop_key]
             tmp_property_type = tmp_property["type"]
             if tmp_property_type == "throw":
-                throw_prop[prop_key] = tmp_property
+                throw_prop[prop_key] = tmp_property["value"]
             elif tmp_property_type == "fixed":
-                fixed_prop[prop_key] = tmp_property
+                fixed_prop[prop_key] = tmp_property["value"]
             else:
                 search_space[prop_key] = tmp_property 
 
@@ -176,11 +176,11 @@ class OptunaTuner(_BaseTuner):
 
         # 1. set 'throw' parameters 
         for throw_key in self._throw_prop:
-            new_params[throw_key] = self._throw_prop[throw_key]["value"]
+            new_params[throw_key] = self._throw_prop[throw_key]
         
         # 2. set 'fixed' parameters 
         for fixed_key in self._fixed_prop:
-            new_params[fixed_key] = self._fixed_prop[fixed_key]["value"]
+            new_params[fixed_key] = self._fixed_prop[fixed_key]
 
         # 3. set 'search' parameters
         for search_key in self._search_space:
@@ -202,14 +202,22 @@ class OptunaTuner(_BaseTuner):
         return new_params    
 
     def _objective(self, trial):
+        
+        # issue solved, log_loss returns nan 
+        # https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/48701
+        tmp_y = self._y.astype("float64")
         params = self._new_params(trial)
         tmp_estimator = self._estimator_class(**params)
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
-                                 self._y, 
+                                 tmp_y, 
                                  scoring=self._scorer, 
                                  cv=StratifiedKFold(n_splits=self._k_folds))
         
+
+        print(scores)
+        print(tmp_estimator.get_params())
+
         mean_score = scores.mean()
         trial.set_user_attr("cv_mean", mean_score)    
         std_score  = scores.std()
@@ -226,7 +234,7 @@ class OptunaTuner(_BaseTuner):
         # optimize on log loss 
         self._X = X
         self._y = y
-        self._study.optimize(self._objective, n_trials= self._n_iterations) 
+        self._study.optimize(self._objective, n_trials=self._n_iterations) 
 
         # gets and sets best score from trials
         self._best_score = self._study.best_trial.value
@@ -240,8 +248,11 @@ class OptunaTuner(_BaseTuner):
         # 2. concat best parameters with fixed ones as they are not returned        
         best_params = {**self._fixed_prop, **params}       
         self._best_params = best_params
+        
+        print(self._best_params)
+
         # 3. train model with best parameters found  
-        estimator = self._estimator_class(**params)
+        estimator = self._estimator_class(**best_params)
         estimator.fit(self._X, self._y)
         self._best_estimator = estimator
 
