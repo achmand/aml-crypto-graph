@@ -29,7 +29,7 @@ xg_boost_args:
       method: "tpe" 
       scoring: "neg_log_loss"
       k_folds: 3
-      n_iterations: 4
+      n_iterations: 100
       param_grid: 
         tree_method:
           value: "gpu_hist"
