@@ -203,14 +203,11 @@ class OptunaTuner(_BaseTuner):
 
     def _objective(self, trial):
         
-        # issue solved, log_loss returns nan 
-        # https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/48701
-        tmp_y = self._y.astype("float64")
         params = self._new_params(trial)
         tmp_estimator = self._estimator_class(**params)
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
-                                 tmp_y, 
+                                 self._y, 
                                  scoring=self._scorer, 
                                  cv=StratifiedKFold(n_splits=self._k_folds))
         
