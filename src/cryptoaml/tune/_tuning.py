@@ -24,7 +24,7 @@ TUNE_RANDOM_SEARCH       = "random_search"        # Random Search
 TUNE_EVOLUTIONARY_SEARCH = "evolutionary_search"  # Genetic Algorithm 
 TUNE_CMA_ES              = "cma_es"               # Covariance Matrix Adaptation Evolution Strategy
 
-# TODO -> Validation where needed 
+# TODO -> validation where needed 
 
 ###### Base Tuner ########################################################
 class _BaseTuner(ABC):
@@ -133,8 +133,13 @@ class OptunaTuner(_BaseTuner):
         
         for prop_key in self._param_grid:
             tmp_property = self._param_grid[prop_key]
-            tmp_property_value = tmp_property["value"]
             tmp_property_type = tmp_property["type"]
+            if tmp_property_type == "throw":
+                throw_prop[prop_key] = tmp_property
+            elif tmp_property_type == "fixed":
+                fixed_prop[prop_key] = tmp_property
+            else:
+                search_space[prop_key] = tmp_property 
 
         self._throw_prop = throw_prop
         self._fixed_prop = fixed_prop
@@ -165,24 +170,46 @@ class OptunaTuner(_BaseTuner):
 
     # train/tune functions -----------------------------------------------
     def _new_params(self, trial): 
-        print("new params")        
-        # # get a new search space 
-        # new_params = {}
-        # for key in self._param_grid:
-        #     tmp_property = self._param_grid[]
-        #     print(key)        
+        
+        # get new parameters to evaluate 
+        new_params = {}
 
+        # 1. set 'throw' parameters 
+        for throw_key in self._throw_prop:
+            new_params[throw_key] = self._throw_prop[throw_key]["value"]
+        
+        # 2. set 'fixed' parameters 
+        for fixed_key in self._fixed_prop:
+            new_params[fixed_key] = self._fixed_prop[fixed_key]["value"]
+
+        # 3. set 'search' parameters
+        for search_key in self._search_space:
+            tmp_prop = self._search_space[search_key]
+            tmp_prop_min = tmp_prop["min"]
+            tmp_prop_max = tmp_prop["max"]
+            tmp_prop_type = tmp_prop["type"]
+            if tmp_prop_type == "suggest_int":
+                step = tmp_prop.get("step", 1)
+                new_params[search_key] = trial.suggest_int(search_key, tmp_prop_min, tmp_prop_max, step)
+            elif tmp_prop_type == "suggest_uniform":
+                new_params[search_key] = trial.suggest_uniform(search_key, tmp_prop_min, tmp_prop_max)
+            elif tmp_prop_type == "suggest_discrete_uniform":
+                step = tmp_prop.get("step", 0.005)
+                new_params[search_key] = trial.suggest_discrete_uniform(search_key, tmp_prop_min, tmp_prop_max, step)
+            else:
+                raise NotImplementedError("The type '{}' for parameter is not yet implemented".format(tmp_prop_type))
+
+        return new_params    
 
     def _objective(self, trial):
-        params = {}
-
+        params = self._new_params(trial)
         tmp_estimator = self._estimator_class(**params)
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
                                  self._y, 
                                  scoring=self._scorer, 
                                  cv=StratifiedKFold(n_splits=self._k_folds))
-
+        
         mean_score = scores.mean()
         trial.set_user_attr("cv_mean", mean_score)    
         std_score  = scores.std()
@@ -409,6 +436,8 @@ class EvolutionarySearchTuner(_BaseTuner):
         self._tuner.fit(X, y)
 
 ###### Hyperparameter tuning functions ###################################
+
+# TODO -> not in should be changed to dictionary.get(key, default_value)
 def tune_model(estimator, X, y, tune_props):
 
     # Validate tune arguments.
@@ -426,7 +455,7 @@ def tune_model(estimator, X, y, tune_props):
     if "verbose" not in tune_props: 
         properties.verbose = 1
 
-    # Evolutionary Search (Genetic Algorithm).
+    # Evolutionary Search (Genetic Algorithm)
     if properties.method == TUNE_EVOLUTIONARY_SEARCH:
 
         # Set defaults if not passed, taken from example: https://github.com/rsteca/sklearn-deap . 
@@ -489,12 +518,14 @@ def tune_model(estimator, X, y, tune_props):
     else:
         raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(properties.method))
 
-    # Tune hyperparameters.
+    # tune hyperparameters
     tuner.fit(X, y)
     return tuner, properties.__dict__            
 
 def get_tuner(method, **kwargs):
     if method == TUNE_EVOLUTIONARY_SEARCH:
         return EvolutionarySearchTuner(**kwargs)
+    elif method == TUNE_TPE:
+        return OptunaTuner(**kwargs)
     else:
         raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(method))

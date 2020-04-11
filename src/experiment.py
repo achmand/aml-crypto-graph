@@ -199,14 +199,11 @@ if __name__ == "__main__":
         # build models 
         models = build_models(args, dataset)
         
-        # # train models
-        # train_models(dataset, models) 
+        # train models
+        train_models(dataset, models) 
         
-        # # evaluate model 
-        # eval_models(args, dataset, models)
-
-        # extract results 
-        # extract_results(args)
+        # evaluate model 
+        eval_models(args, dataset, models)
 
         logger_exp.info("-------- FINISH EXPERIMENT --------")
     except:
