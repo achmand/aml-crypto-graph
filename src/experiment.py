@@ -130,6 +130,9 @@ def train_models(dataset, models):
             
             # train model
             X = dataset[feature_set].train_X
+            
+            print(X.shape)
+
             y = dataset[feature_set].train_y
             model.fit(X, y)
 
