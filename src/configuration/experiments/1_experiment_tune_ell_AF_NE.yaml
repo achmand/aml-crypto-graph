@@ -6,7 +6,7 @@ data_config_file: "configuration/data/data_config.yaml"
 elliptic_args: 
   inc_unknown: false 
   encode_classes: true 
-  feat_sets: [AF_NE] # All Features + Node Embeddings from GCN
+  feat_sets: [AF_NE] # All Features (Local + Aggregated Features) + Node Embeddings from GCN
   train_size: 0.7
 
 ##########################################################################
@@ -20,7 +20,7 @@ models: [xg_boost]
 evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
-# fixed parameters obtained from Random Search: 'learning_rate': N/A, 'n_estimators': N/A
+# fixed parameters obtained from Random Search: 'learning_rate': 0.225, 'n_estimators': 275
 xg_boost_args:
   persist_props:
     method: "save"
@@ -38,10 +38,10 @@ xg_boost_args:
           value: "gpu_predictor"
           type: "throw"
         learning_rate:
-          value: N/A
+          value: 0.225
           type: "fixed"
         n_estimators: 
-          value: N/A 
+          value: 275
           type: "fixed"
         max_depth:
           min: 1
