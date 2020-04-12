@@ -18,10 +18,8 @@ print(data.train_X.shape)
 
 train_X = data.train_X
 train_y = data.train_y
-
 test_X = data.test_X
 test_y = data.test_y
-
 
 scorer = make_scorer(log_loss, greater_is_better=False, needs_proba=True, eps=1e-7)
 tmp_estimator = XgboostAlgo()
@@ -29,8 +27,8 @@ def objective(trial):
     
     param = {
         "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.025),
-         "tree_method":"gpu_hist", 
-         "predictor":"gpu_predictor"
+        "tree_method":"gpu_hist", 
+        "predictor":"gpu_predictor"
     }
 
     if param["learning_rate"] < 0.1:
