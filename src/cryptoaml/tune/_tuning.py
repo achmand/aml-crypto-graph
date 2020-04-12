@@ -13,9 +13,11 @@ import optuna
 from hyperopt import fmin, tpe, atpe, rand, space_eval, Trials, STATUS_OK
 
 from sklearn.metrics import get_scorer
+from sklearn.metrics import log_loss, make_scorer
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
 from evolutionary_search import EvolutionaryAlgorithmSearchCV
+
 
 ###### constants #########################################################
 TUNE_BASE                = "tuner_base"           # Base tuner 
@@ -116,7 +118,12 @@ class OptunaTuner(_BaseTuner):
 
         self._n_iterations = n_iterations
         self._estimator_class = type(estimator)
-        self._scorer = get_scorer("neg_log_loss")
+        
+        #self._scorer = get_scorer("neg_log_loss")
+
+        # to fix divide by zero error 
+        # https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/48701
+        self._scorer = make_scorer(log_loss, greater_is_better=False, needs_proba=True, eps=1e-7)
 
         self._sampler = optuna.samplers.TPESampler()
         self._study = optuna.create_study(sampler=self._sampler, direction="maximize")
