@@ -1,0 +1,176 @@
+INFO: 2020-04-11 23:16:35 
+-------- START EXPERIMENT --------
+INFO: 2020-04-11 23:16:35 
+- PROPERTIES -
+INFO: 2020-04-11 23:16:35 
+{'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'log_path': 'logs/',
+ 'models': ['xg_boost'],
+ 'save_log': True,
+ 'xg_boost_args': {'persist_props': {'method': 'save',
+                                     'save_path': 'persistence/experiment_1/tuned_models'},
+                   'tune_props': {'k_folds': 3,
+                                  'method': 'tpe',
+                                  'n_iterations': 100,
+                                  'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                      'min': 0.9,
+                                                                      'type': 'suggest_uniform'},
+                                                 'gamma': {'max': 0.01,
+                                                           'min': 0.0,
+                                                           'step': 0.005,
+                                                           'type': 'suggest_discrete_uniform'},
+                                                 'learning_rate': {'type': 'fixed',
+                                                                   'value': 0.075},
+                                                 'max_delta_step': {'max': 1,
+                                                                    'min': 0,
+                                                                    'type': 'suggest_int'},
+                                                 'max_depth': {'max': 12,
+                                                               'min': 1,
+                                                               'type': 'suggest_int'},
+                                                 'min_child_weight': {'max': 4,
+                                                                      'min': 0,
+                                                                      'type': 'suggest_int'},
+                                                 'n_estimators': {'type': 'fixed',
+                                                                  'value': 1000},
+                                                 'predictor': {'type': 'throw',
+                                                               'value': 'gpu_predictor'},
+                                                 'subsample': {'max': 1.0,
+                                                               'min': 0.9,
+                                                               'type': 'suggest_uniform'},
+                                                 'tree_method': {'type': 'throw',
+                                                                 'value': 'gpu_hist'}},
+                                  'scoring': 'neg_log_loss'}}}
+INFO: 2020-04-11 23:16:35 
+--- START BUILDING DATASET ---
+INFO: 2020-04-11 23:16:35 
+- DATASET -
+INFO: 2020-04-11 23:16:35 
+elliptic
+INFO: 2020-04-11 23:16:35 
+- CONFIG -
+INFO: 2020-04-11 23:16:35 
+'configuration/data/data_config.yaml'
+INFO: 2020-04-11 23:16:43 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-04-11 23:16:43 
+--- START BUILDING MODELS ---
+INFO: 2020-04-11 23:16:43 
+- MODELS -
+INFO: 2020-04-11 23:16:43 
+['xg_boost']
+INFO: 2020-04-11 23:16:43 
+[START BUILDING MODEL 'xg_boost']
+INFO: 2020-04-11 23:16:43 
+- ARGUMENTS -
+INFO: 2020-04-11 23:16:43 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_1/tuned_models'},
+ 'tune_props': {'k_folds': 3,
+                'method': 'tpe',
+                'n_iterations': 100,
+                'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.9,
+                                                    'type': 'suggest_uniform'},
+                               'gamma': {'max': 0.01,
+                                         'min': 0.0,
+                                         'step': 0.005,
+                                         'type': 'suggest_discrete_uniform'},
+                               'learning_rate': {'type': 'fixed',
+                                                 'value': 0.075},
+                               'max_delta_step': {'max': 1,
+                                                  'min': 0,
+                                                  'type': 'suggest_int'},
+                               'max_depth': {'max': 12,
+                                             'min': 1,
+                                             'type': 'suggest_int'},
+                               'min_child_weight': {'max': 4,
+                                                    'min': 0,
+                                                    'type': 'suggest_int'},
+                               'n_estimators': {'type': 'fixed', 'value': 1000},
+                               'predictor': {'type': 'throw',
+                                             'value': 'gpu_predictor'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.9,
+                                             'type': 'suggest_uniform'},
+                               'tree_method': {'type': 'throw',
+                                               'value': 'gpu_hist'}},
+                'scoring': 'neg_log_loss'}}
+INFO: 2020-04-11 23:16:43 
+----> [START BUILDING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-11 23:16:43 
+----> [FINISH BUILDING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-11 23:16:43 
+[FINISH BUILDING MODEL 'xg_boost']
+INFO: 2020-04-11 23:16:43 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-04-11 23:16:43 
+--- START TRAINING ---
+INFO: 2020-04-11 23:16:43 
+[START TRAINING MODEL 'xg_boost']
+INFO: 2020-04-11 23:16:43 
+----> [START TRAINING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-12 01:07:40 
+- MODEL PARAMS -
+INFO: 2020-04-12 01:07:40 
+{'base_score': 0.5,
+ 'booster': None,
+ 'colsample_bylevel': 1,
+ 'colsample_bynode': 1,
+ 'colsample_bytree': 0.9843132947984061,
+ 'gamma': 0.005,
+ 'gpu_id': -1,
+ 'importance_type': 'gain',
+ 'interaction_constraints': None,
+ 'learning_rate': 0.075,
+ 'max_delta_step': 1,
+ 'max_depth': 10,
+ 'min_child_weight': 4,
+ 'missing': nan,
+ 'monotone_constraints': None,
+ 'n_estimators': 1000,
+ 'n_jobs': 0,
+ 'num_parallel_tree': 1,
+ 'objective': 'binary:logistic',
+ 'random_state': 0,
+ 'reg_alpha': 0,
+ 'reg_lambda': 1,
+ 'scale_pos_weight': 1,
+ 'subsample': 0.9963629261210425,
+ 'tree_method': None,
+ 'validate_parameters': False,
+ 'verbosity': None}
+INFO: 2020-04-12 01:07:40 
+----> [FINISH TRAINING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-12 01:07:40 
+[FINISH TRAINING MODEL 'xg_boost']
+INFO: 2020-04-12 01:07:40 
+--- FINISH TRAINING ---
+INFO: 2020-04-12 01:07:40 
+--- START EVALUATION ---
+INFO: 2020-04-12 01:07:40 
+[START EVALUATING MODEL 'xg_boost']
+INFO: 2020-04-12 01:07:40 
+----> [START EVALUATING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-12 01:07:40 
+- RESULTS -
+INFO: 2020-04-12 01:07:40 
+OrderedDict([('precision', 0.9096176129779838),
+             ('recall', 0.7248384118190212),
+             ('f1', 0.8067831449126412),
+             ('f1_micro', 0.9774445110977804),
+             ('confusion', array([[15509,    78],
+       [  298,   785]]))])
+INFO: 2020-04-12 01:07:40 
+----> [FINISH EVALUATING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-12 01:07:40 
+[FINISH EVALUATING MODEL 'xg_boost']
+INFO: 2020-04-12 01:07:40 
+--- FINISH EVALUATION ---
+INFO: 2020-04-12 01:07:40 
+-------- FINISH EXPERIMENT --------
