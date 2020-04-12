@@ -81,8 +81,6 @@ def build_models(args, dataset):
             persist_method_key = persist_method + "_path"
             persist_initial_path = persist_props[persist_method_key]
 
-        print(tune_props)
-
         models[model] = OrderedDict()
         for feature_set in dataset.keys():
         
@@ -130,7 +128,7 @@ def train_models(dataset, models):
             
             # train model
             X = dataset[feature_set].train_X
-            
+    
             print(X.shape)
 
             y = dataset[feature_set].train_y
