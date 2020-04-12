@@ -12,7 +12,7 @@ import cryptoaml.datareader as cdr
 from cryptoaml.models import XgboostAlgo
 
 elliptic = cdr.get_data("elliptic")
-data = elliptic.train_test_split(train_size=0.7, feat_set="LF_NE")
+data = elliptic.train_test_split(train_size=0.7, feat_set="AF")
 
 print(data.train_X.shape)
 
@@ -64,5 +64,5 @@ study.set_user_attr("k_folds", 3)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("gs_xgboost_LF_NE.pkl", "wb") as model_file:
+with open("gs_xgboost_AF.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
