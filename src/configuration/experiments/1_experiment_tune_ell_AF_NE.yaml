@@ -41,7 +41,7 @@ xg_boost_args:
           value: 0.225
           type: "fixed"
         n_estimators: 
-          value: 275
+          value: 475
           type: "fixed"
         max_depth:
           min: 1
