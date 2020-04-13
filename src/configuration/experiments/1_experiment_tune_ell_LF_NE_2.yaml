@@ -45,7 +45,7 @@ xg_boost_args:
           type: "fixed"
         max_depth:
           min: 1
-          max: 30
+          max: 12
           type: "suggest_int"
         subsample: 
           min: 0.9
