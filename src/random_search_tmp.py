@@ -45,6 +45,7 @@ def objective(trial):
                              train_X, 
                              train_y, 
                              scoring=scorer, 
+                             verbose=3,
                              cv=StratifiedKFold(n_splits=10),
                              n_jobs=1)
     
