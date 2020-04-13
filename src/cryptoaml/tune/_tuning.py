@@ -199,6 +199,8 @@ class OptunaTuner(_BaseTuner):
             elif tmp_prop_type == "suggest_discrete_uniform":
                 step = tmp_prop.get("step", 0.005)
                 new_params[search_key] = trial.suggest_discrete_uniform(search_key, tmp_prop_min, tmp_prop_max, step)
+            elif tmp_prop_type == "suggest_loguniform":
+                new_params[search_key] = trial.suggest_loguniform(search_key, tmp_prop_min, tmp_prop_max)
             else:
                 raise NotImplementedError("The type '{}' for parameter is not yet implemented".format(tmp_prop_type))
 
