@@ -14,7 +14,7 @@ from cryptoaml.models import LightGbmAlgo
 
 
 elliptic = cdr.get_data("elliptic")
-data = elliptic.train_test_split(train_size=0.7, feat_set="LF")
+data = elliptic.train_test_split(train_size=0.7, feat_set="AF_NE")
 
 print(data.train_X.shape)
 
@@ -24,7 +24,8 @@ test_X = data.test_X
 test_y = data.test_y
 
 scorer = make_scorer(log_loss, greater_is_better=False, needs_proba=True, eps=1e-7)
-tmp_estimator = LightGbmAlgo()
+#tmp_estimator = LightGbmAlgo()
+tmp_estimator = XgboostAlgo()
 def objective(trial):
     
     param = {
@@ -44,7 +45,7 @@ def objective(trial):
                              train_X, 
                              train_y, 
                              scoring=scorer, 
-                             cv=StratifiedKFold(n_splits=3),
+                             cv=StratifiedKFold(n_splits=10),
                              n_jobs=1)
     
     print(tmp_estimator.get_params())
@@ -62,9 +63,9 @@ def objective(trial):
 study = optuna.create_study(sampler=optuna.samplers.RandomSampler(), 
                             direction="maximize")
 
-study.set_user_attr("k_folds", 3)
+study.set_user_attr("k_folds", 10)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("gs_lightgbm_LF.pkl", "wb") as model_file:
+with open("gs_xgboost_AF_NE.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
