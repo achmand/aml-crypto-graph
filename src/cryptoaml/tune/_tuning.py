@@ -214,7 +214,7 @@ class OptunaTuner(_BaseTuner):
                                  self._X, 
                                  self._y, 
                                  verbose=3,
-                                 scoring=self._scorer, 
+                                 scoring="f1", 
                                  cv=StratifiedKFold(n_splits=self._k_folds))
                                  
         print(scores)
