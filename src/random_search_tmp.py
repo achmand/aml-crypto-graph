@@ -46,7 +46,7 @@ def objective(trial):
                              scoring="f1", 
                              verbose=3,
                              cv=StratifiedKFold(n_splits=10),
-                             n_jobs=1)
+                             n_jobs=-1)
     
     print(tmp_estimator.get_params())
     mean_score = scores.mean()
