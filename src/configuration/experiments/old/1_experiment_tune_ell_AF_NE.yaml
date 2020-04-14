@@ -20,7 +20,7 @@ models: [xg_boost]
 evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
-# fixed parameters obtained from Random Search: 'learning_rate': 0.17, 'n_estimators': 100
+# fixed parameters obtained from Random Search: 'learning_rate': 0.225, 'n_estimators': 275
 xg_boost_args:
   persist_props:
     method: "save"
@@ -28,7 +28,7 @@ xg_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "neg_log_loss"
-      k_folds: 10
+      k_folds: 3
       n_iterations: 100
       param_grid: 
         tree_method:
@@ -38,10 +38,10 @@ xg_boost_args:
           value: "gpu_predictor"
           type: "throw"
         learning_rate:
-          value: 0.17
+          value: 0.225
           type: "fixed"
         n_estimators: 
-          value: 100
+          value: 475
           type: "fixed"
         max_depth:
           min: 1

@@ -5,13 +5,14 @@ The following models are included;
 
 # TODO -> Pass labels as they may be needed in the future
 # this happens when there is a case that there is only one label in both y_true and y_pred
-# so just to be sure we must add labels as an argument (this is highly unlikelywdq)
+# so just to be sure we must add labels as an argument (this is highly unlikely)
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### importing dependencies #############################################
 import pandas as pd 
 from collections import OrderedDict
+from sklearn.metrics import log_loss
 from sklearn.metrics import f1_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import accuracy_score
@@ -20,6 +21,7 @@ from sklearn.metrics import confusion_matrix
 
 ###### evaluation functions ###############################################
 ACCURARCY        = "accuracy"
+LOG_LOSS         = "log_loss"
 F1_BINARY        = "f1"
 F1_MICRO         = "f1_micro"
 RECALL_BINARY    = "recall"
@@ -31,6 +33,9 @@ TABLE_METRICS = {ACCURARCY, F1_BINARY, F1_MICRO, RECALL_BINARY, PRECISION_BINARY
 
 def compute_accuracy(y_true, y_pred):
     return accuracy_score(y_true, y_pred, normalize=True)
+
+def compute_log_loss(y_true, y_pred):
+    return log_loss(y_true, y_pred)
 
 def compute_f1_binary(y_true, y_pred):
     return f1_score(y_true, y_pred, average="binary")

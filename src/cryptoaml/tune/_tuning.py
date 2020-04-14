@@ -213,10 +213,10 @@ class OptunaTuner(_BaseTuner):
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
                                  self._y, 
+                                 verbose=3,
                                  scoring=self._scorer, 
                                  cv=StratifiedKFold(n_splits=self._k_folds))
-        
-
+                                 
         print(scores)
         print(tmp_estimator.get_params())
 
