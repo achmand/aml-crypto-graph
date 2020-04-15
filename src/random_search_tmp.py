@@ -13,7 +13,7 @@ from cryptoaml.models import XgboostAlgo
 from cryptoaml.models import LightGbmAlgo
 
 elliptic = cdr.get_data("elliptic")
-data = elliptic.train_test_split(train_size=0.7, feat_set="LF_NE")
+data = elliptic.train_test_split(train_size=0.7, feat_set="AF_NE")
 
 print(data.train_X.shape)
 
@@ -46,7 +46,7 @@ def objective(trial):
                              scoring="f1", 
                              verbose=3,
                              cv=StratifiedKFold(n_splits=10),
-                             n_jobs=-1)
+                             n_jobs=1)
     
     print(tmp_estimator.get_params())
     mean_score = scores.mean()
@@ -67,5 +67,5 @@ study.set_user_attr("k_folds", 10)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("gs_xgboost_LF_NE.pkl", "wb") as model_file:
+with open("gs_xgboost_AF_NE.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
