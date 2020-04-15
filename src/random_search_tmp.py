@@ -28,9 +28,9 @@ tmp_estimator = XgboostAlgo()
 def objective(trial):
     
     param = {
-        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025),
-        "tree_method":"gpu_hist", 
-        "predictor":"gpu_predictor"
+        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
+        # "tree_method":"gpu_hist", 
+        # "predictor":"gpu_predictor"
     }
 
     if param["learning_rate"] < 0.1:

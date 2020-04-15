@@ -1,0 +1,165 @@
+INFO: 2020-04-14 13:23:52 
+-------- START EXPERIMENT --------
+INFO: 2020-04-14 13:23:52 
+- PROPERTIES -
+INFO: 2020-04-14 13:23:52 
+{'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF_NE'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'light_boost_args': {'persist_props': {'method': 'save',
+                                        'save_path': 'persistence/experiment_1/tuned_models'},
+                      'tune_props': {'k_folds': 10,
+                                     'method': 'tpe',
+                                     'n_iterations': 100,
+                                     'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                         'min': 0.4,
+                                                                         'type': 'suggest_uniform'},
+                                                    'learning_rate': {'type': 'fixed',
+                                                                      'value': 0.0575},
+                                                    'min_child_samples': {'max': 100,
+                                                                          'min': 5,
+                                                                          'type': 'suggest_int'},
+                                                    'n_estimators': {'type': 'fixed',
+                                                                     'value': 850},
+                                                    'num_leaves': {'max': 256,
+                                                                   'min': 2,
+                                                                   'type': 'suggest_int'},
+                                                    'reg_alpha': {'max': 10.0,
+                                                                  'min': 1e-08,
+                                                                  'type': 'suggest_loguniform'},
+                                                    'reg_lambda': {'max': 10.0,
+                                                                   'min': 1e-08,
+                                                                   'type': 'suggest_loguniform'},
+                                                    'subsample': {'max': 1.0,
+                                                                  'min': 0.4,
+                                                                  'type': 'suggest_uniform'},
+                                                    'subsample_freq': {'max': 7,
+                                                                       'min': 0,
+                                                                       'type': 'suggest_int'}},
+                                     'scoring': 'neg_log_loss'}},
+ 'log_path': 'logs/',
+ 'models': ['light_boost'],
+ 'save_log': True}
+INFO: 2020-04-14 13:23:52 
+--- START BUILDING DATASET ---
+INFO: 2020-04-14 13:23:52 
+- DATASET -
+INFO: 2020-04-14 13:23:52 
+elliptic
+INFO: 2020-04-14 13:23:52 
+- CONFIG -
+INFO: 2020-04-14 13:23:52 
+'configuration/data/data_config.yaml'
+INFO: 2020-04-14 13:24:00 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-04-14 13:24:00 
+--- START BUILDING MODELS ---
+INFO: 2020-04-14 13:24:00 
+- MODELS -
+INFO: 2020-04-14 13:24:00 
+['light_boost']
+INFO: 2020-04-14 13:24:00 
+[START BUILDING MODEL 'light_boost']
+INFO: 2020-04-14 13:24:00 
+- ARGUMENTS -
+INFO: 2020-04-14 13:24:00 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_1/tuned_models'},
+ 'tune_props': {'k_folds': 10,
+                'method': 'tpe',
+                'n_iterations': 100,
+                'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.4,
+                                                    'type': 'suggest_uniform'},
+                               'learning_rate': {'type': 'fixed',
+                                                 'value': 0.0575},
+                               'min_child_samples': {'max': 100,
+                                                     'min': 5,
+                                                     'type': 'suggest_int'},
+                               'n_estimators': {'type': 'fixed', 'value': 850},
+                               'num_leaves': {'max': 256,
+                                              'min': 2,
+                                              'type': 'suggest_int'},
+                               'reg_alpha': {'max': 10.0,
+                                             'min': 1e-08,
+                                             'type': 'suggest_loguniform'},
+                               'reg_lambda': {'max': 10.0,
+                                              'min': 1e-08,
+                                              'type': 'suggest_loguniform'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.4,
+                                             'type': 'suggest_uniform'},
+                               'subsample_freq': {'max': 7,
+                                                  'min': 0,
+                                                  'type': 'suggest_int'}},
+                'scoring': 'neg_log_loss'}}
+INFO: 2020-04-14 13:24:00 
+----> [START BUILDING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-04-14 13:24:00 
+----> [FINISH BUILDING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-04-14 13:24:00 
+[FINISH BUILDING MODEL 'light_boost']
+INFO: 2020-04-14 13:24:00 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-04-14 13:24:00 
+--- START TRAINING ---
+INFO: 2020-04-14 13:24:00 
+[START TRAINING MODEL 'light_boost']
+INFO: 2020-04-14 13:24:00 
+----> [START TRAINING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-04-14 16:31:40 
+- MODEL PARAMS -
+INFO: 2020-04-14 16:31:40 
+{'boosting_type': 'gbdt',
+ 'class_weight': None,
+ 'colsample_bytree': 0.8929900537613774,
+ 'importance_type': 'split',
+ 'learning_rate': 0.0575,
+ 'max_depth': -1,
+ 'min_child_samples': 80,
+ 'min_child_weight': 0.001,
+ 'min_split_gain': 0.0,
+ 'n_estimators': 850,
+ 'n_jobs': -1,
+ 'num_leaves': 196,
+ 'objective': None,
+ 'random_state': None,
+ 'reg_alpha': 0.0007286819887214904,
+ 'reg_lambda': 0.028896357552744174,
+ 'silent': True,
+ 'subsample': 0.9034581785516684,
+ 'subsample_for_bin': 200000,
+ 'subsample_freq': 1}
+INFO: 2020-04-14 16:31:40 
+----> [FINISH TRAINING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-04-14 16:31:40 
+[FINISH TRAINING MODEL 'light_boost']
+INFO: 2020-04-14 16:31:40 
+--- FINISH TRAINING ---
+INFO: 2020-04-14 16:31:40 
+--- START EVALUATION ---
+INFO: 2020-04-14 16:31:40 
+[START EVALUATING MODEL 'light_boost']
+INFO: 2020-04-14 16:31:40 
+----> [START EVALUATING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-04-14 16:31:41 
+- RESULTS -
+INFO: 2020-04-14 16:31:41 
+OrderedDict([('precision', 0.9787516600265604),
+             ('recall', 0.6805170821791321),
+             ('f1', 0.8028322440087147),
+             ('f1_micro', 0.9782843431313737),
+             ('confusion', array([[15571,    16],
+       [  346,   737]]))])
+INFO: 2020-04-14 16:31:41 
+----> [FINISH EVALUATING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-04-14 16:31:41 
+[FINISH EVALUATING MODEL 'light_boost']
+INFO: 2020-04-14 16:31:41 
+--- FINISH EVALUATION ---
+INFO: 2020-04-14 16:31:41 
+-------- FINISH EXPERIMENT --------
