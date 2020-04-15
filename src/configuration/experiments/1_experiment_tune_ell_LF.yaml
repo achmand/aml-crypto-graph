@@ -15,9 +15,7 @@ elliptic_args:
 save_log: true 
 log_path: "logs/"
 
-# models: [random_forest, xg_boost, light_boost, cat_boost]
-models: [xg_boost]
-# models: [light_boost, xg_boost]
+# models: [xg_boost, light_boost, cat_boost]
 evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
@@ -80,48 +78,48 @@ xg_boost_args:
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
 # fixed parameters obtained from Random Search: 'learning_rate': 0.2125, 'n_estimators': 425
-# light_boost_args:
-#   persist_props:
-#     method: "save"
-#     save_path: "persistence/experiment_1/tuned_models"
-#   tune_props:
-#       method: "tpe" 
-#       scoring: "neg_log_loss"
-#       k_folds: 10
-#       n_iterations: 100
-#       param_grid: 
-#         learning_rate:
-#           value: 0.2125
-#           type: "fixed"
-#         n_estimators: 
-#           value: 425
-#           type: "fixed"
-#         reg_alpha: 
-#           min: 0.00000001
-#           max: 10.0
-#           type: "suggest_loguniform"
-#         reg_lambda: 
-#           min: 0.00000001
-#           max: 10.0
-#           type: "suggest_loguniform"
-#         num_leaves:
-#           min: 2
-#           max: 256
-#           type: "suggest_int" 
-#         colsample_bytree:
-#           min: 0.4
-#           max: 1.0
-#           type: "suggest_uniform"
-#         subsample:
-#           min: 0.4
-#           max: 1.0
-#           type: "suggest_uniform"
-#         subsample_freq:
-#           min: 0
-#           max: 7
-#           type: "suggest_int" 
-#         min_child_samples:
-#           min: 5
-#           max: 100
-#           type: "suggest_int" 
+light_boost_args:
+  persist_props:
+    method: "save"
+    save_path: "persistence/experiment_1/tuned_models"
+  tune_props:
+      method: "tpe" 
+      scoring: "neg_log_loss"
+      k_folds: 10
+      n_iterations: 100
+      param_grid: 
+        learning_rate:
+          value: 0.2125
+          type: "fixed"
+        n_estimators: 
+          value: 425
+          type: "fixed"
+        reg_alpha: 
+          min: 0.00000001
+          max: 10.0
+          type: "suggest_loguniform"
+        reg_lambda: 
+          min: 0.00000001
+          max: 10.0
+          type: "suggest_loguniform"
+        num_leaves:
+          min: 2
+          max: 256
+          type: "suggest_int" 
+        colsample_bytree:
+          min: 0.4
+          max: 1.0
+          type: "suggest_uniform"
+        subsample:
+          min: 0.4
+          max: 1.0
+          type: "suggest_uniform"
+        subsample_freq:
+          min: 0
+          max: 7
+          type: "suggest_int" 
+        min_child_samples:
+          min: 5
+          max: 100
+          type: "suggest_int" 
        
