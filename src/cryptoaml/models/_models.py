@@ -27,11 +27,12 @@ from sklearn.ensemble import RandomForestClassifier
 # TODO -> Implement logger 
 
 ###### Constants #########################################################
-MODEL_BASE  = "model_base"
-MODEL_RF    = "random_forest"
-MODEL_XGB   = "xg_boost"
-MODEL_LIGHT = "light_boost"
-MODEL_CAT   = "cat_boost"
+MODEL_BASE   = "model_base"
+MODEL_RF     = "random_forest"
+MODEL_XGB    = "xg_boost"
+MODEL_XGB_RF = "xg_boost_rf"
+MODEL_LIGHT  = "light_boost"
+MODEL_CAT    = "cat_boost"
 
 PERSIST_SAVE = "save"
 PERSIST_LOAD = "load"
@@ -217,6 +218,26 @@ class XgboostAlgo(_BaseAlgo):
     def _init_model(self, **kwargs):
         self._model_name = MODEL_XGB
         self._model = xgb.XGBClassifier(**kwargs)
+
+
+###### XGBoostRf classifier ##############################################    
+class XgboostRfAlgo(_BaseAlgo): 
+
+    # Constructor ---------------------------------------------------------
+    def __init__ (self, 
+                 tune_props=None, 
+                 persist_props=None,
+                 **kwargs): 
+        super ().__init__(
+            tune_props = tune_props,
+            persist_props = persist_props,
+            **kwargs
+        )
+
+    # Init/Parameters functions -------------------------------------------
+    def _init_model(self, **kwargs):
+        self._model_name = MODEL_XGB_RF
+        self._model = xgb.XGBRFClassifier(**kwargs)
 
 ###### LightGBM classifier ###############################################
 class LightGbmAlgo(_BaseAlgo):
