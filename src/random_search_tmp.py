@@ -29,6 +29,7 @@ def objective(trial):
     
     param = {
         # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
+        "verbose": 0,
         "task_type": "GPU", # FOR CAT BOOST 
         "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.01, 0.3, 0.0025) # FOR CAT BOOST, 
     }
