@@ -130,3 +130,4 @@ dmypy.json
 # data 
 /src/data/elliptic/
 src/data/elliptic.zip
+src/catboost_info

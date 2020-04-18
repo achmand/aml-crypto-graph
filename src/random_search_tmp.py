@@ -11,9 +11,10 @@ from sklearn.model_selection import StratifiedKFold
 import cryptoaml.datareader as cdr
 from cryptoaml.models import XgboostAlgo
 from cryptoaml.models import LightGbmAlgo
+from cryptoaml.models import CatBoostAlgo
 
 elliptic = cdr.get_data("elliptic")
-data = elliptic.train_test_split(train_size=0.7, feat_set="AF_NE")
+data = elliptic.train_test_split(train_size=0.7, feat_set="LF")
 
 print(data.train_X.shape)
 
@@ -22,23 +23,20 @@ train_y = data.train_y
 test_X = data.test_X
 test_y = data.test_y
 
-scorer = make_scorer(log_loss, greater_is_better=False, needs_proba=True, eps=1e-7)
-#tmp_estimator = LightGbmAlgo()
-tmp_estimator = XgboostAlgo()
+tmp_estimator = CatBoostAlgo()
 def objective(trial):
     
     param = {
-        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025),
-        "tree_method":"gpu_hist", 
-        "predictor":"gpu_predictor"
+        # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
+        "task_type": "GPU", # FOR CAT BOOST 
+        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.01, 0.3, 0.0025) # FOR CAT BOOST, 
     }
 
     if param["learning_rate"] < 0.1:
-        param["n_estimators"] = trial.suggest_int("n_estimators", 400, 1000, 25)
+        param["iterations"] = trial.suggest_int("iterations", 400, 1000, 25)
     else: 
-        param["n_estimators"] = trial.suggest_int("n_estimators", 100, 500, 25)
+        param["iterations"] = trial.suggest_int("iterations", 100, 500, 25)
 
-    
     tmp_estimator.set_params(**param)
     scores = cross_val_score(tmp_estimator, 
                              train_X, 
@@ -67,5 +65,5 @@ study.set_user_attr("k_folds", 10)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("gs_xgboost_AF_NE.pkl", "wb") as model_file:
+with open("gs_catboost_LF.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
