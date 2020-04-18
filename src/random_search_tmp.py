@@ -12,6 +12,7 @@ import cryptoaml.datareader as cdr
 from cryptoaml.models import XgboostAlgo
 from cryptoaml.models import LightGbmAlgo
 from cryptoaml.models import CatBoostAlgo
+from catboost import CatBoostClassifier
 
 elliptic = cdr.get_data("elliptic")
 data = elliptic.train_test_split(train_size=0.7, feat_set="LF")
@@ -23,7 +24,7 @@ train_y = data.train_y
 test_X = data.test_X
 test_y = data.test_y
 
-tmp_estimator = CatBoostAlgo()
+# tmp_estimator = CatBoostAlgo()
 def objective(trial):
     
     param = {
@@ -37,7 +38,9 @@ def objective(trial):
     else: 
         param["iterations"] = trial.suggest_int("iterations", 100, 500, 25)
 
-    tmp_estimator.set_params(**param)
+    # tmp_estimator.set_params(**param)
+    
+    tmp_estimator = CatBoostClassifier(**param)
     scores = cross_val_score(tmp_estimator, 
                              train_X, 
                              train_y, 
