@@ -1,0 +1,19 @@
+
+data: elliptic
+data_config_file: "configuration/data/data_config.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [LF, LF_NE, AF, AF_NE] 
+  train_size: 0.7
+
+save_log: true 
+log_path: "logs/"
+
+evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "accuracy", "auc", "feature_importance", "confusion"]
+time_indexed_evaluation: ["f1"]
+
+models: 
+  xg_boost_LF:
+    feat_set: LF 
+    
