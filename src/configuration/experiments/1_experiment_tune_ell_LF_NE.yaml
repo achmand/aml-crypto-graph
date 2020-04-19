@@ -137,9 +137,6 @@ cat_boost_args:
       k_folds: 10
       n_iterations: 100
       param_grid: 
-        # task_type:
-        #   value: "GPU"
-        #   type: "fixed"
         verbose: 
           value: 0
           type: "fixed"
@@ -155,8 +152,8 @@ cat_boost_args:
           step: 0.05
           type: "suggest_discrete_uniform"
         depth:
-          min: 1
-          max: 16
+          min: 4
+          max: 10
           type: "suggest_int"
         rsm:
           min: 0.01
