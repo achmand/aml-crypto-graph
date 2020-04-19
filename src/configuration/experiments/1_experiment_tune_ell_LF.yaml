@@ -136,14 +136,17 @@ cat_boost_args:
       k_folds: 10
       n_iterations: 100
       param_grid: 
+        task_type:
+          value: "GPU"
+          type: "fixed"
+        verbose: 
+          value: 0
+          type: "fixed"
         learning_rate:
           value: 0.1600
           type: "fixed"
         iterations: 
           value: 100
-          type: "fixed"
-        verbose: 
-          value: 0
           type: "fixed"
         l2_leaf_reg:
           min: 1.00
