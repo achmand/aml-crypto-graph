@@ -69,5 +69,5 @@ study.set_user_attr("k_folds", 10)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("rs_catboost_AF_NE.pkl", "wb") as model_file:
+with open("rs_catboost_AF.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
