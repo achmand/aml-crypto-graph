@@ -142,6 +142,9 @@ cat_boost_args:
         iterations: 
           value: 450
           type: "fixed"
+        verbose: 
+          value: 0
+          type: "fixed"
         l2_leaf_reg:
           min: 1.00
           max: 10.00
