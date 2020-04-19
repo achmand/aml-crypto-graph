@@ -5,7 +5,6 @@ import yaml
 import argparse
 from logger import Logger
 
-
 ###### start result extraction ############################################
 if __name__ == "__main__":
 
