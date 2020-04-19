@@ -1,0 +1,179 @@
+INFO: 2020-04-19 21:29:44 
+-------- START EXPERIMENT --------
+INFO: 2020-04-19 21:29:44 
+- PROPERTIES -
+INFO: 2020-04-19 21:29:44 
+{'cat_boost_args': {'persist_props': {'method': 'save',
+                                      'save_path': 'persistence/experiment_1/tuned_models'},
+                    'tune_props': {'k_folds': 10,
+                                   'method': 'tpe',
+                                   'n_iterations': 100,
+                                   'param_grid': {'depth': {'max': 16,
+                                                            'min': 1,
+                                                            'type': 'suggest_int'},
+                                                  'iterations': {'type': 'fixed',
+                                                                 'value': 300},
+                                                  'l2_leaf_reg': {'max': 10.0,
+                                                                  'min': 1.0,
+                                                                  'step': 0.05,
+                                                                  'type': 'suggest_discrete_uniform'},
+                                                  'learning_rate': {'type': 'fixed',
+                                                                    'value': 0.12},
+                                                  'random_strength': {'max': 100.0,
+                                                                      'min': 0.0,
+                                                                      'type': 'suggest_uniform'},
+                                                  'rsm': {'max': 1.0,
+                                                          'min': 0.01,
+                                                          'type': 'suggest_uniform'},
+                                                  'task_type': {'type': 'fixed',
+                                                                'value': 'GPU'},
+                                                  'verbose': {'type': 'fixed',
+                                                              'value': 0}},
+                                   'scoring': 'f1'}},
+ 'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'log_path': 'logs/',
+ 'models': ['cat_boost'],
+ 'save_log': True}
+INFO: 2020-04-19 21:29:44 
+--- START BUILDING DATASET ---
+INFO: 2020-04-19 21:29:44 
+- DATASET -
+INFO: 2020-04-19 21:29:44 
+elliptic
+INFO: 2020-04-19 21:29:44 
+- CONFIG -
+INFO: 2020-04-19 21:29:44 
+'configuration/data/data_config.yaml'
+INFO: 2020-04-19 21:29:52 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-04-19 21:29:52 
+--- START BUILDING MODELS ---
+INFO: 2020-04-19 21:29:52 
+- MODELS -
+INFO: 2020-04-19 21:29:52 
+['cat_boost']
+INFO: 2020-04-19 21:29:52 
+[START BUILDING MODEL 'cat_boost']
+INFO: 2020-04-19 21:29:52 
+- ARGUMENTS -
+INFO: 2020-04-19 21:29:52 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_1/tuned_models'},
+ 'tune_props': {'k_folds': 10,
+                'method': 'tpe',
+                'n_iterations': 100,
+                'param_grid': {'depth': {'max': 16,
+                                         'min': 1,
+                                         'type': 'suggest_int'},
+                               'iterations': {'type': 'fixed', 'value': 300},
+                               'l2_leaf_reg': {'max': 10.0,
+                                               'min': 1.0,
+                                               'step': 0.05,
+                                               'type': 'suggest_discrete_uniform'},
+                               'learning_rate': {'type': 'fixed',
+                                                 'value': 0.12},
+                               'random_strength': {'max': 100.0,
+                                                   'min': 0.0,
+                                                   'type': 'suggest_uniform'},
+                               'rsm': {'max': 1.0,
+                                       'min': 0.01,
+                                       'type': 'suggest_uniform'},
+                               'task_type': {'type': 'fixed', 'value': 'GPU'},
+                               'verbose': {'type': 'fixed', 'value': 0}},
+                'scoring': 'f1'}}
+INFO: 2020-04-19 21:29:52 
+----> [START BUILDING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 21:29:52 
+----> [FINISH BUILDING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 21:29:52 
+[FINISH BUILDING MODEL 'cat_boost']
+INFO: 2020-04-19 21:29:52 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-04-19 21:29:52 
+--- START TRAINING ---
+INFO: 2020-04-19 21:29:52 
+[START TRAINING MODEL 'cat_boost']
+INFO: 2020-04-19 21:29:52 
+----> [START TRAINING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+ERROR: 2020-04-19 21:30:02 
+(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7f0caf8bf320>)
+Traceback (most recent call last):
+  File "experiment.py", line 204, in <module>
+    train_models(dataset, models)
+  File "experiment.py", line 135, in train_models
+    model.fit(X, y)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/models/_models.py", line 116, in fit
+    self._tuner, self._tune_props = tu.tune_model(self._model, X, y, self._tune_props)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 535, in tune_model
+    tuner.fit(X, y)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 240, in fit
+    self._study.optimize(self._objective, n_trials=self._n_iterations)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 331, in optimize
+    func, n_trials, timeout, catch, callbacks, gc_after_trial, None
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 626, in _optimize_sequential
+    self._run_trial_and_callbacks(func, catch, callbacks, gc_after_trial)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 656, in _run_trial_and_callbacks
+    trial = self._run_trial(func, catch, gc_after_trial)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 677, in _run_trial
+    result = func(trial)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 219, in _objective
+    cv=StratifiedKFold(n_splits=self._k_folds))
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/model_selection/_validation.py", line 390, in cross_val_score
+    error_score=error_score)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/model_selection/_validation.py", line 236, in cross_validate
+    for train, test in cv.split(X, y, groups))
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 1007, in __call__
+    while self.dispatch_one_batch(iterator):
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 835, in dispatch_one_batch
+    self._dispatch(tasks)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 754, in _dispatch
+    job = self._backend.apply_async(batch, callback=cb)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/_parallel_backends.py", line 209, in apply_async
+    result = ImmediateResult(func)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/_parallel_backends.py", line 590, in __init__
+    self.results = batch()
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 256, in __call__
+    for func, args, kwargs in self.items]
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 256, in <listcomp>
+    for func, args, kwargs in self.items]
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/model_selection/_validation.py", line 508, in _fit_and_score
+    X_train, y_train = _safe_split(estimator, X, y, train)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/utils/metaestimators.py", line 201, in _safe_split
+    X_subset = _safe_indexing(X, indices)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/utils/__init__.py", line 411, in _safe_indexing
+    return _pandas_indexing(X, indices, indices_dtype, axis=axis)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/utils/__init__.py", line 213, in _pandas_indexing
+    return indexer[:, key] if axis else indexer[key]
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/indexing.py", line 1767, in __getitem__
+    return self._getitem_axis(maybe_callable, axis=axis)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/indexing.py", line 2128, in _getitem_axis
+    return self._get_list_axis(key, axis=axis)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/indexing.py", line 2110, in _get_list_axis
+    return self.obj._take_with_is_copy(key, axis=axis)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/generic.py", line 3409, in _take_with_is_copy
+    result = self.take(indices=indices, axis=axis, **kwargs)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/generic.py", line 3395, in take
+    indices, axis=self._get_block_manager_axis(axis), verify=True
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/internals/managers.py", line 1394, in take
+    new_axis=new_labels, indexer=indexer, axis=axis, allow_dups=True
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/internals/managers.py", line 1267, in reindex_indexer
+    for blk in self.blocks
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/internals/managers.py", line 1267, in <listcomp>
+    for blk in self.blocks
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/internals/blocks.py", line 1291, in take_nd
+    values, indexer, axis=axis, allow_fill=allow_fill, fill_value=fill_value
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/algorithms.py", line 1660, in take_nd
+    arr.ndim, arr.dtype, out.dtype, axis=axis, mask_info=mask_info
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/pandas/core/algorithms.py", line 1440, in _get_take_nd_function
+    tup = (arr_dtype.name, out_dtype.name)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/numpy/core/_dtype.py", line 344, in _name_get
+    name = _kind_name(dtype)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/numpy/core/_dtype.py", line 38, in _kind_name
+    return _kind_to_stem[dtype.kind]
+KeyboardInterrupt

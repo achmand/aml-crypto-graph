@@ -1,0 +1,166 @@
+INFO: 2020-04-19 22:00:10 
+-------- START EXPERIMENT --------
+INFO: 2020-04-19 22:00:10 
+- PROPERTIES -
+INFO: 2020-04-19 22:00:10 
+{'cat_boost_args': {'persist_props': {'method': 'save',
+                                      'save_path': 'persistence/experiment_1/tuned_models'},
+                    'tune_props': {'k_folds': 10,
+                                   'method': 'tpe',
+                                   'n_iterations': 100,
+                                   'param_grid': {'depth': {'max': 10,
+                                                            'min': 4,
+                                                            'type': 'suggest_int'},
+                                                  'iterations': {'type': 'fixed',
+                                                                 'value': 300},
+                                                  'l2_leaf_reg': {'max': 10.0,
+                                                                  'min': 1.0,
+                                                                  'step': 0.05,
+                                                                  'type': 'suggest_discrete_uniform'},
+                                                  'learning_rate': {'type': 'fixed',
+                                                                    'value': 0.12},
+                                                  'random_strength': {'max': 100.0,
+                                                                      'min': 0.0,
+                                                                      'type': 'suggest_uniform'},
+                                                  'rsm': {'max': 1.0,
+                                                          'min': 0.01,
+                                                          'type': 'suggest_uniform'},
+                                                  'verbose': {'type': 'fixed',
+                                                              'value': 0}},
+                                   'scoring': 'f1'}},
+ 'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'log_path': 'logs/',
+ 'models': ['cat_boost'],
+ 'save_log': True}
+INFO: 2020-04-19 22:00:10 
+--- START BUILDING DATASET ---
+INFO: 2020-04-19 22:00:10 
+- DATASET -
+INFO: 2020-04-19 22:00:10 
+elliptic
+INFO: 2020-04-19 22:00:10 
+- CONFIG -
+INFO: 2020-04-19 22:00:10 
+'configuration/data/data_config.yaml'
+INFO: 2020-04-19 22:00:18 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-04-19 22:00:18 
+--- START BUILDING MODELS ---
+INFO: 2020-04-19 22:00:18 
+- MODELS -
+INFO: 2020-04-19 22:00:18 
+['cat_boost']
+INFO: 2020-04-19 22:00:18 
+[START BUILDING MODEL 'cat_boost']
+INFO: 2020-04-19 22:00:18 
+- ARGUMENTS -
+INFO: 2020-04-19 22:00:18 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_1/tuned_models'},
+ 'tune_props': {'k_folds': 10,
+                'method': 'tpe',
+                'n_iterations': 100,
+                'param_grid': {'depth': {'max': 10,
+                                         'min': 4,
+                                         'type': 'suggest_int'},
+                               'iterations': {'type': 'fixed', 'value': 300},
+                               'l2_leaf_reg': {'max': 10.0,
+                                               'min': 1.0,
+                                               'step': 0.05,
+                                               'type': 'suggest_discrete_uniform'},
+                               'learning_rate': {'type': 'fixed',
+                                                 'value': 0.12},
+                               'random_strength': {'max': 100.0,
+                                                   'min': 0.0,
+                                                   'type': 'suggest_uniform'},
+                               'rsm': {'max': 1.0,
+                                       'min': 0.01,
+                                       'type': 'suggest_uniform'},
+                               'verbose': {'type': 'fixed', 'value': 0}},
+                'scoring': 'f1'}}
+INFO: 2020-04-19 22:00:18 
+----> [START BUILDING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 22:00:18 
+----> [FINISH BUILDING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 22:00:18 
+[FINISH BUILDING MODEL 'cat_boost']
+INFO: 2020-04-19 22:00:18 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-04-19 22:00:18 
+--- START TRAINING ---
+INFO: 2020-04-19 22:00:18 
+[START TRAINING MODEL 'cat_boost']
+INFO: 2020-04-19 22:00:18 
+----> [START TRAINING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 23:47:39 
+- MODEL PARAMS -
+INFO: 2020-04-19 23:47:39 
+{'bayesian_matrix_reg': 0.10000000149011612,
+ 'best_model_min_trees': 1,
+ 'boost_from_average': False,
+ 'boosting_type': 'Plain',
+ 'bootstrap_type': 'MVS',
+ 'border_count': 254,
+ 'class_names': [0, 1],
+ 'classes_count': 0,
+ 'depth': 10,
+ 'eval_metric': 'Logloss',
+ 'feature_border_type': 'GreedyLogSum',
+ 'grow_policy': 'SymmetricTree',
+ 'iterations': 300,
+ 'l2_leaf_reg': 5.550000190734863,
+ 'leaf_estimation_backtracking': 'AnyImprovement',
+ 'leaf_estimation_iterations': 10,
+ 'leaf_estimation_method': 'Newton',
+ 'learning_rate': 0.119999997317791,
+ 'loss_function': 'Logloss',
+ 'max_leaves': 1024,
+ 'min_data_in_leaf': 1,
+ 'model_shrink_mode': 'Constant',
+ 'model_shrink_rate': 0,
+ 'model_size_reg': 0.5,
+ 'nan_mode': 'Min',
+ 'random_seed': 0,
+ 'random_strength': 60.06633758544922,
+ 'rsm': 0.028898483142256737,
+ 'sampling_frequency': 'PerTree',
+ 'score_function': 'Cosine',
+ 'sparse_features_conflict_fraction': 0,
+ 'subsample': 0.800000011920929,
+ 'task_type': 'CPU',
+ 'use_best_model': False}
+INFO: 2020-04-19 23:47:39 
+----> [FINISH TRAINING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 23:47:39 
+[FINISH TRAINING MODEL 'cat_boost']
+INFO: 2020-04-19 23:47:39 
+--- FINISH TRAINING ---
+INFO: 2020-04-19 23:47:39 
+--- START EVALUATION ---
+INFO: 2020-04-19 23:47:39 
+[START EVALUATING MODEL 'cat_boost']
+INFO: 2020-04-19 23:47:39 
+----> [START EVALUATING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 23:47:39 
+- RESULTS -
+INFO: 2020-04-19 23:47:39 
+OrderedDict([('precision', 0.9463007159904535),
+             ('recall', 0.7322253000923361),
+             ('f1', 0.8256116605934409),
+             ('f1_micro', 0.9799040191961608),
+             ('confusion', array([[15542,    45],
+       [  290,   793]]))])
+INFO: 2020-04-19 23:47:39 
+----> [FINISH EVALUATING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 23:47:39 
+[FINISH EVALUATING MODEL 'cat_boost']
+INFO: 2020-04-19 23:47:39 
+--- FINISH EVALUATION ---
+INFO: 2020-04-19 23:47:39 
+-------- FINISH EXPERIMENT --------

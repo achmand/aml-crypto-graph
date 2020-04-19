@@ -1,0 +1,138 @@
+INFO: 2020-04-19 21:32:05 
+-------- START EXPERIMENT --------
+INFO: 2020-04-19 21:32:05 
+- PROPERTIES -
+INFO: 2020-04-19 21:32:05 
+{'cat_boost_args': {'persist_props': {'method': 'save',
+                                      'save_path': 'persistence/experiment_1/tuned_models'},
+                    'tune_props': {'k_folds': 10,
+                                   'method': 'tpe',
+                                   'n_iterations': 100,
+                                   'param_grid': {'depth': {'max': 16,
+                                                            'min': 1,
+                                                            'type': 'suggest_int'},
+                                                  'iterations': {'type': 'fixed',
+                                                                 'value': 300},
+                                                  'l2_leaf_reg': {'max': 10.0,
+                                                                  'min': 1.0,
+                                                                  'step': 0.05,
+                                                                  'type': 'suggest_discrete_uniform'},
+                                                  'learning_rate': {'type': 'fixed',
+                                                                    'value': 0.12},
+                                                  'random_strength': {'max': 100.0,
+                                                                      'min': 0.0,
+                                                                      'type': 'suggest_uniform'},
+                                                  'rsm': {'max': 1.0,
+                                                          'min': 0.01,
+                                                          'type': 'suggest_uniform'},
+                                                  'verbose': {'type': 'fixed',
+                                                              'value': 0}},
+                                   'scoring': 'f1'}},
+ 'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision', 'recall', 'f1', 'f1_micro', 'confusion'],
+ 'log_path': 'logs/',
+ 'models': ['cat_boost'],
+ 'save_log': True}
+INFO: 2020-04-19 21:32:05 
+--- START BUILDING DATASET ---
+INFO: 2020-04-19 21:32:05 
+- DATASET -
+INFO: 2020-04-19 21:32:05 
+elliptic
+INFO: 2020-04-19 21:32:05 
+- CONFIG -
+INFO: 2020-04-19 21:32:05 
+'configuration/data/data_config.yaml'
+INFO: 2020-04-19 21:32:13 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-04-19 21:32:13 
+--- START BUILDING MODELS ---
+INFO: 2020-04-19 21:32:13 
+- MODELS -
+INFO: 2020-04-19 21:32:13 
+['cat_boost']
+INFO: 2020-04-19 21:32:13 
+[START BUILDING MODEL 'cat_boost']
+INFO: 2020-04-19 21:32:13 
+- ARGUMENTS -
+INFO: 2020-04-19 21:32:13 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_1/tuned_models'},
+ 'tune_props': {'k_folds': 10,
+                'method': 'tpe',
+                'n_iterations': 100,
+                'param_grid': {'depth': {'max': 16,
+                                         'min': 1,
+                                         'type': 'suggest_int'},
+                               'iterations': {'type': 'fixed', 'value': 300},
+                               'l2_leaf_reg': {'max': 10.0,
+                                               'min': 1.0,
+                                               'step': 0.05,
+                                               'type': 'suggest_discrete_uniform'},
+                               'learning_rate': {'type': 'fixed',
+                                                 'value': 0.12},
+                               'random_strength': {'max': 100.0,
+                                                   'min': 0.0,
+                                                   'type': 'suggest_uniform'},
+                               'rsm': {'max': 1.0,
+                                       'min': 0.01,
+                                       'type': 'suggest_uniform'},
+                               'verbose': {'type': 'fixed', 'value': 0}},
+                'scoring': 'f1'}}
+INFO: 2020-04-19 21:32:13 
+----> [START BUILDING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 21:32:13 
+----> [FINISH BUILDING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-04-19 21:32:13 
+[FINISH BUILDING MODEL 'cat_boost']
+INFO: 2020-04-19 21:32:13 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-04-19 21:32:13 
+--- START TRAINING ---
+INFO: 2020-04-19 21:32:13 
+[START TRAINING MODEL 'cat_boost']
+INFO: 2020-04-19 21:32:13 
+----> [START TRAINING 'cat_boost' MODEL FOR 'AF' FEATURE SET]
+ERROR: 2020-04-19 21:50:05 
+(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7fd8c25de230>)
+Traceback (most recent call last):
+  File "experiment.py", line 204, in <module>
+    train_models(dataset, models)
+  File "experiment.py", line 135, in train_models
+    model.fit(X, y)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/models/_models.py", line 116, in fit
+    self._tuner, self._tune_props = tu.tune_model(self._model, X, y, self._tune_props)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 535, in tune_model
+    tuner.fit(X, y)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 240, in fit
+    self._study.optimize(self._objective, n_trials=self._n_iterations)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 331, in optimize
+    func, n_trials, timeout, catch, callbacks, gc_after_trial, None
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 626, in _optimize_sequential
+    self._run_trial_and_callbacks(func, catch, callbacks, gc_after_trial)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 656, in _run_trial_and_callbacks
+    trial = self._run_trial(func, catch, gc_after_trial)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/optuna/study.py", line 677, in _run_trial
+    result = func(trial)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 219, in _objective
+    cv=StratifiedKFold(n_splits=self._k_folds))
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/model_selection/_validation.py", line 390, in cross_val_score
+    error_score=error_score)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/sklearn/model_selection/_validation.py", line 236, in cross_validate
+    for train, test in cv.split(X, y, groups))
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 1017, in __call__
+    self.retrieve()
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/parallel.py", line 909, in retrieve
+    self._output.extend(job.get(timeout=self.timeout))
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/site-packages/joblib/_parallel_backends.py", line 562, in wrap_future_result
+    return future.result(timeout=timeout)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/concurrent/futures/_base.py", line 430, in result
+    self._condition.wait(timeout)
+  File "/home/dvassallo/anaconda3/envs/btc_classifier/lib/python3.7/threading.py", line 296, in wait
+    waiter.acquire()
+KeyboardInterrupt
