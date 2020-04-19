@@ -15,11 +15,13 @@ from collections import OrderedDict
 from sklearn.metrics import log_loss
 from sklearn.metrics import f1_score
 from sklearn.metrics import recall_score
+from sklearn.metrics import roc_auc_score
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import confusion_matrix
 
 ###### evaluation functions ###############################################
+AUC              = "auc"
 ACCURARCY        = "accuracy"
 LOG_LOSS         = "log_loss"
 F1_BINARY        = "f1"
@@ -29,7 +31,10 @@ PRECISION_BINARY = "precision"
 CONFUSION_MATRIX = "confusion"
 
 # metrics which can be displayed in a table 
-TABLE_METRICS = {ACCURARCY, F1_BINARY, F1_MICRO, RECALL_BINARY, PRECISION_BINARY}
+TABLE_METRICS = {AUC, ACCURARCY, F1_BINARY, F1_MICRO, RECALL_BINARY, PRECISION_BINARY}
+
+def compute_auc(y_true, y_pred):
+    return roc_auc_score(y_true, y_pred)
 
 def compute_accuracy(y_true, y_pred):
     return accuracy_score(y_true, y_pred, normalize=True)
@@ -54,6 +59,8 @@ def compute_confusion_matrix(y_true, y_pred):
 
 # map different metric constants to metric function
 eval_options = {
+    AUC:              compute_auc,
+    ACCURARCY:        compute_accuracy,
     F1_BINARY:        compute_f1_binary,
     F1_MICRO:         compute_f1_micro,
     RECALL_BINARY:    compute_recall_binary,
