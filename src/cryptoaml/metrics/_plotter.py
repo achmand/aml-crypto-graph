@@ -47,6 +47,7 @@ def plot_time_indexed_results(time_steps,
                               indexed_total_samples,
                               indexed_scores,
                               metric_title,
+                              plot_title,
                               figsize=(16,6),
                               font_scale=1.2):
     
@@ -106,6 +107,7 @@ def plot_time_indexed_results(time_steps,
         
     ax2.grid(True, axis="y", color="lightblue")    
     ax2.tick_params(axis=u'both', which=u'both',length=0)
+    ax2.set_title(plot_title)
 
     # show legend and plot 
     plt.legend(handles=legend_items, 

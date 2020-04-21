@@ -4,6 +4,7 @@
 import sys 
 import yaml
 import argparse
+import pandas as pd
 from logger import Logger
 from collections import OrderedDict
 from cryptoaml.utils import Namespace, save_pickle
@@ -94,18 +95,18 @@ def build_models(args):
 
 ###### extract results #####################################################
 def extract_time_indexed(metric, dataset, model, X, y):
+    results = []
     if dataset == "elliptic":
         tmp_data = X.copy()
         tmp_data["label"] = y.copy()
         ts_data = tmp_data.groupby("ts")
         for ts, group in ts_data:
-            print(ts)
-        print(X)
-        print(y)
-        print(tmp_data)
-        print("OK")
-
-        return ""
+            test_ts_X = group.iloc[:,:-1]
+            test_ts_y = group["label"]
+            evaluation = model.evaluate([metric], test_ts_X, test_ts_y)
+            label_count = group["label"].value_counts()
+            results.append({"timestep": ts, "score":evaluation[metric], "total_pos_label": label_count.tolist()[1]}) 
+        return results
     else:
         raise NotImplementedError("'{}' dataset cannot extract time indexed score".format(model))
 
@@ -170,7 +171,7 @@ def extract_results(args, models, dataset):
                 results[model_key][feat_set]["metrics"] = { key: metric_single[key] for key in evaluation_metrics }
                 results[model_key][feat_set]["importance"] = results[model_key][feat_set]["feat_importance_iterations"][0]
                 if time_indexed_metric != "none":
-                    results[model_key][feat_set]["time_metrics"] = results[model_key][feat_set]["time_indexed_iterations"][0]
+                    results[model_key][feat_set]["time_metrics"] = pd.DataFrame(results[model_key][feat_set]["time_indexed_iterations"][0])
             
             # TODO -> ELSE CONSOLIDATE iterations greater than 0
 
