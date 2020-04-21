@@ -93,12 +93,31 @@ def build_models(args):
     return models 
 
 ###### extract results #####################################################
+def extract_time_indexed(metric, dataset, model, X, y):
+    if dataset == "elliptic":
+        tmp_data = X.copy()
+        tmp_data["label"] = y.copy()
+        ts_data = tmp_data.groupby("ts")
+        for ts, group in ts_data:
+            print(ts)
+        print(X)
+        print(y)
+        print(tmp_data)
+        print("OK")
+
+        return ""
+    else:
+        raise NotImplementedError("'{}' dataset cannot extract time indexed score".format(model))
+
 def extract_results(args, models, dataset):
     logger_exp.info("--- START GATHERING RESULTS ---")
     evaluation_metrics = args.evaluation_metrics
-    results = OrderedDict()
+
+     # check if time indexed evaluation is required 
+    time_indexed_metric = args.time_indexed_evaluation
     
     # loop models 
+    results = OrderedDict()
     for model_key in models: 
         results[model_key] = OrderedDict()
         for feat_set in models[model_key]:
@@ -114,12 +133,13 @@ def extract_results(args, models, dataset):
             # get model and iterations 
             model = models[model_key][feat_set]["model"]
             iterations = models[model_key][feat_set]["iterations"]
-
+          
             # loop number of iterations specified, 
             # this is mainly set greater than 1 when 
             # evaluating a non-deterministic model (results are averaged)
             results[model_key][feat_set]["metrics_iterations"] = []
             results[model_key][feat_set]["feat_importance_iterations"] = []
+            results[model_key][feat_set]["time_indexed_iterations"] = []
             for i in range(iterations):
                 logger_exp.info("- CURRENT ITERATION ({}) -".format(i))
                 
@@ -139,12 +159,22 @@ def extract_results(args, models, dataset):
                 # extract feature importance 
                 results[model_key][feat_set]["feat_importance_iterations"].append(model.feature_importances_)
 
+                # extracted time indexed evaluation if required
+                if time_indexed_metric != "none":
+                    current_time_indexed = extract_time_indexed(time_indexed_metric, args.data, model, test_X, test_y)
+                    results[model_key][feat_set]["time_indexed_iterations"].append(current_time_indexed)
+
             # summarise metrics 
             if iterations == 1: # no need to average results 
                 metric_single = results[model_key][feat_set]["metrics_iterations"][0]
                 results[model_key][feat_set]["metrics"] = { key: metric_single[key] for key in evaluation_metrics }
                 results[model_key][feat_set]["importance"] = results[model_key][feat_set]["feat_importance_iterations"][0]
-                
+                if time_indexed_metric != "none":
+                    results[model_key][feat_set]["time_metrics"] = results[model_key][feat_set]["time_indexed_iterations"][0]
+            
+            # TODO -> ELSE CONSOLIDATE iterations greater than 0
+
+
             logger_exp.info("----> [FINISH GATHERING FOR '{}' MODEL FOR '{}' FEATURE SET]".format(model_key, feat_set))
 
     logger_exp.info("--- END GATHERING RESULTS ---")
@@ -174,7 +204,6 @@ if __name__ == "__main__":
     logger_exp.info("-------- START RESULTS EXTRACTION --------")
     logger_exp.info("- PROPERTIES -")
     logger_exp.info (args.__dict__, pp=True) 
-
     try:
         
         # build dataset 

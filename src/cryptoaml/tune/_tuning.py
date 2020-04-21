@@ -217,10 +217,7 @@ class OptunaTuner(_BaseTuner):
                                  scoring="f1", 
                                  n_jobs=-1,
                                  cv=StratifiedKFold(n_splits=self._k_folds))
-                                 
-        print(scores)
-        print(tmp_estimator.get_params())
-
+   
         mean_score = scores.mean()
         trial.set_user_attr("cv_mean", mean_score)    
         std_score  = scores.std()
@@ -252,8 +249,6 @@ class OptunaTuner(_BaseTuner):
         best_params = {**self._fixed_prop, **params}       
         self._best_params = best_params
         
-        print(self._best_params)
-
         # 3. train model with best parameters found  
         estimator = self._estimator_class(**best_params)
         estimator.fit(self._X, self._y)
