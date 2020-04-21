@@ -2,8 +2,6 @@
 Top level API for metrics and plotting.
 """
 
-#Socrates123
-
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### importing dependencies #############################################

@@ -1,0 +1,3 @@
+if 'save_logs' is set to true in /configuration/experiments, log files will be saved here
+-> Useful to log exception and the whole process of extracting results or tuning models
+-> Logs can be deleted when there is no longer use for them (no component depends on logs)

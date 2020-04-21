@@ -127,10 +127,7 @@ def train_models(dataset, models):
             logger_exp.info("----> [START TRAINING '{}' MODEL FOR '{}' FEATURE SET]".format(model_key, feature_set))
             
             # train model
-            X = dataset[feature_set].train_X
-    
-            print(X.shape)
-
+            X = dataset[feature_set].train_X   
             y = dataset[feature_set].train_y
             model.fit(X, y)
 

@@ -108,7 +108,7 @@ def results_table(results_dict, num_of_decimals=3):
             }
             
             # extract result for each metric
-            for metric, result in set_results.items():
+            for metric, result in set_results["metrics"].items():
                 
                 # check whether the current metric can be displayed in a table 
                 if metric not in TABLE_METRICS:

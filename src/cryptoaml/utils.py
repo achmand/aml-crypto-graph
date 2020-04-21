@@ -15,3 +15,7 @@ def read_pickle(path):
     with open(path, "rb") as obj_file:
         pickle_object = pickle.load(obj_file)
     return pickle_object
+
+def save_pickle(path, obj):
+    with open(path, "wb") as obj_file:
+        pickle.dump(obj, obj_file)

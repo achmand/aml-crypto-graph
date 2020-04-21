@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 
 def plot_confusion_matrix(matrices, 
-                          titles=None, 
                           figsize=(17,15), 
                           columns=2, 
                           font_scale=1.2, 
@@ -41,7 +40,6 @@ def plot_confusion_matrix(matrices,
         ax.set_xlabel("Predicted Label")
         ax.set_ylabel("True Label")
         current_plot+=1
-
 
 COLORS = ["red", "green", "purple", "orange", "pink", "blue", "black"]
 MARKERS = ["o", "p", "D", "*", "X", "+", "s"]
