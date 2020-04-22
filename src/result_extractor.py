@@ -44,12 +44,14 @@ def build_dataset(args):
     return dataset
 
 ###### build models #######################################################
-# TODO -> HANDLE ARGS UKOLL
-def load_model(model_type, path=None):
+def load_model(model_type, path=None, params=None):
     model = None 
     model_args = {} 
     if path != None: 
         model_args["persist_props"] = {"method":"load", "load_path": path}
+    
+    if params != None:
+        model_args = {**model_args, **params}
 
     if model_type == "random_forest":
         model = RandomForestAlgo(**model_args)
@@ -84,8 +86,9 @@ def build_models(args):
         model_feat_set = model_args["feat_set"]
         if model_feat_set not in models: 
             model_path = model_args.get("load_path", None)
+            params = model_args.get("params", None)
             models[model_type][model_feat_set] = {}
-            models[model_type][model_feat_set]["model"] = load_model(model_type, model_path)
+            models[model_type][model_feat_set]["model"] = load_model(model_type, model_path, params)
             models[model_type][model_feat_set]["iterations"] = model_args["iterations"]
 
         logger_exp.info("[FINISH BUILDING MODEL '{}']".format(model))
@@ -146,7 +149,7 @@ def extract_results(args, models, dataset):
                 
                 # train model 
                 model.fit(train_X, train_y, tune=False)
-                              
+
                 # first iteration extract parameters 
                 if i == 0:
                     results[model_key][feat_set]["params"] = model.get_params()
@@ -172,9 +175,26 @@ def extract_results(args, models, dataset):
                 results[model_key][feat_set]["importance"] = results[model_key][feat_set]["feat_importance_iterations"][0]
                 if time_indexed_metric != "none":
                     results[model_key][feat_set]["time_metrics"] = pd.DataFrame(results[model_key][feat_set]["time_indexed_iterations"][0])
-            
-            # TODO -> ELSE CONSOLIDATE iterations greater than 0
-
+         
+            else: # average results since more than 1 iteration
+                metrics_all = results[model_key][feat_set]["metrics_iterations"]
+                results[model_key][feat_set]["metrics_iterations"] = pd.DataFrame(metrics_all)
+                results[model_key][feat_set]["metrics"] = results[model_key][feat_set]["metrics_iterations"][evaluation_metrics].mean(axis=0).to_dict()
+                feat_imp_all = results[model_key][feat_set]["feat_importance_iterations"]
+                results[model_key][feat_set]["feat_importance_iterations"] = pd.concat(feat_imp_all, axis=1)
+                results[model_key][feat_set]["importance"] = results[model_key][feat_set]["feat_importance_iterations"].mean(
+                    axis=1).to_frame().rename(columns={0:"importance"})
+                if time_indexed_metric != "none":
+                    time_indexed_dicts = results[model_key][feat_set]["time_indexed_iterations"]
+                    time_indexed_dfs = []
+                    for time_indexed_i in time_indexed_dicts:
+                        time_indexed_dfs.append(pd.DataFrame(time_indexed_i))
+                    results[model_key][feat_set]["time_indexed_iterations"] = time_indexed_dfs                 
+                    time_indexed_merged = pd.concat(time_indexed_dfs, axis=1)
+                    tmp_df = time_indexed_merged["score"].mean(axis=1).to_frame().rename(columns={0:"score"})
+                    tmp_df["timestep"] = time_indexed_dfs[0]["timestep"]
+                    tmp_df["total_pos_label"] = time_indexed_dfs[0]["total_pos_label"]
+                    results[model_key][feat_set]["time_metrics"] = tmp_df
 
             logger_exp.info("----> [FINISH GATHERING FOR '{}' MODEL FOR '{}' FEATURE SET]".format(model_key, feat_set))
 

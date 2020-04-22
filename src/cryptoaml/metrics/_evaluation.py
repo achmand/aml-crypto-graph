@@ -20,9 +20,12 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import confusion_matrix
 
+import pprint
+from IPython.core.display import display, HTML
+
 ###### evaluation functions ###############################################
 AUC              = "auc"
-ACCURARCY        = "accuracy"
+ACCURACY        = "accuracy"
 LOG_LOSS         = "log_loss"
 F1_BINARY        = "f1"
 F1_MICRO         = "f1_micro"
@@ -31,7 +34,7 @@ PRECISION_BINARY = "precision"
 CONFUSION_MATRIX = "confusion"
 
 # metrics which can be displayed in a table 
-TABLE_METRICS = {AUC, ACCURARCY, F1_BINARY, F1_MICRO, RECALL_BINARY, PRECISION_BINARY}
+TABLE_METRICS = {AUC, ACCURACY, F1_BINARY, F1_MICRO, RECALL_BINARY, PRECISION_BINARY}
 
 def compute_auc(y_true, y_pred):
     return roc_auc_score(y_true, y_pred)
@@ -60,7 +63,7 @@ def compute_confusion_matrix(y_true, y_pred):
 # map different metric constants to metric function
 eval_options = {
     AUC:              compute_auc,
-    ACCURARCY:        compute_accuracy,
+    ACCURACY:        compute_accuracy,
     F1_BINARY:        compute_f1_binary,
     F1_MICRO:         compute_f1_micro,
     RECALL_BINARY:    compute_recall_binary,
@@ -121,3 +124,18 @@ def results_table(results_dict, num_of_decimals=3):
     # create and return results dataframe
     df = pd.DataFrame(df_results) 
     return df 
+
+def print_model_params(results):
+    pp = pprint.PrettyPrinter(indent=4)
+    for model_key, model_value in results.items():
+        for feature_set, feature_set_value in model_value.items():
+            print("Parameters used for '{}' on '{}' feature set".format(model_key, feature_set))
+            pp.pprint(feature_set_value["params"])
+            display(HTML("</hr>"))
+
+def display_metrics_stats(results):
+    for model_key, model_value in results.items():
+        for feature_set, feature_set_value in model_value.items():       
+            title = "'{}' on '{}' feature set - performance metrics stats".format(model_key, feature_set)
+            print(title)
+            display(feature_set_value["metrics_iterations"].describe())
