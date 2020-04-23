@@ -23,28 +23,28 @@ models:
     params: 
       n_estimators: 50
       max_features: 50
-    iterations: 3
-  # random_forest_LF_NE:
-  #   model: "random_forest"
-  #   feat_set: LF_NE 
-  #   params: 
-  #     n_estimators: 50
-  #     max_features: 50
-  #   iterations: 100
-  # random_forest_AF:
-  #   model: "random_forest"
-  #   feat_set: AF 
-  #   params: 
-  #     n_estimators: 50
-  #     max_features: 50
-  #   iterations: 100
-  # random_forest_AF_NE:
-  #   model: "random_forest"
-  #   feat_set: AF_NE
-  #   params: 
-  #     n_estimators: 50
-  #     max_features: 50
-  #   iterations: 100
+    iterations: 100
+  random_forest_LF_NE:
+    model: "random_forest"
+    feat_set: LF_NE 
+    params: 
+      n_estimators: 50
+      max_features: 50
+    iterations: 100
+  random_forest_AF:
+    model: "random_forest"
+    feat_set: AF 
+    params: 
+      n_estimators: 50
+      max_features: 50
+    iterations: 100
+  random_forest_AF_NE:
+    model: "random_forest"
+    feat_set: AF_NE
+    params: 
+      n_estimators: 50
+      max_features: 50
+    iterations: 100
 
   
   
