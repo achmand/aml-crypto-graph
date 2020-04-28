@@ -14,37 +14,52 @@ from cryptoaml.models import LightGbmAlgo
 from cryptoaml.models import CatBoostAlgo
 from catboost import CatBoostClassifier
 
+# elliptic dataset
 # elliptic = cdr.get_data("elliptic")
+# data = elliptic.train_test_split(train_size=0.7, feat_set="LF")
+# data = elliptic.train_test_split(train_size=0.7, feat_set="LF_NE")
+# data = elliptic.train_test_split(train_size=0.7, feat_set="AF")
 # data = elliptic.train_test_split(train_size=0.7, feat_set="AF_NE")
 # print(data.train_X.shape)
 # train_X = data.train_X
 # train_y = data.train_y
 
+# eth accounts dataset
 eth_accounts = cdr.get_data("eth_accounts")
 data = eth_accounts.train_test_split(train_size=0.7)
 print(data["ALL"].train_X.shape)
 train_X = data["ALL"].train_X
 train_y = data["ALL"].train_y
 
-
-# tmp_estimator = CatBoostAlgo()
 def objective(trial):
     
     param = {
-        # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
-        "verbose": 0, 
-        # "task_type": "GPU", # FOR CAT BOOST 
-        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.01, 0.3, 0.0025) # FOR CAT BOOST, 
+        # FOR XGB and LightBoost
+        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
+        
+        # FOR CAT BOOST 
+        # "verbose": 0, 
+        # "task_type": "GPU", 
+        # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.01, 0.3, 0.0025)
     }
 
+    # FOR XGB and LightBoost
     if param["learning_rate"] < 0.1:
-        param["iterations"] = trial.suggest_int("iterations", 400, 1000, 25)
+        param["n_estimators"] = trial.suggest_int("n_estimators", 400, 1000, 25)
     else: 
-        param["iterations"] = trial.suggest_int("iterations", 100, 500, 25)
+        param["n_estimators"] = trial.suggest_int("n_estimators", 100, 500, 25)
 
-    # tmp_estimator.set_params(**param)
-    
-    tmp_estimator = CatBoostClassifier(**param)
+    # FOR CATBOOST 
+    # if param["learning_rate"] < 0.1:
+    #     param["iterations"] = trial.suggest_int("iterations", 400, 1000, 25)
+    # else: 
+    #     param["iterations"] = trial.suggest_int("iterations", 100, 500, 25)
+
+
+    tmp_estimator = XgboostAlgo(**param)
+    # tmp_estimator = LightGbmAlgo(**param)
+    # tmp_estimator = CatBoostClassifier(**param)
+
     scores = cross_val_score(tmp_estimator, 
                              train_X, 
                              train_y, 
@@ -72,5 +87,5 @@ study.set_user_attr("k_folds", 10)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("rs_catboost_ALL.pkl", "wb") as model_file:
+with open("rs_xgboost_ALL.pkl", "wb") as model_file:
     pickle.dump(study, model_file)

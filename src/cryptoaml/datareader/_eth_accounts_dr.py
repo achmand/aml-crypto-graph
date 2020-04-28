@@ -67,7 +67,7 @@ class Eth_Accounts_Dataset(_BaseDatareader):
         dataset["erc20_most_sent_token_type"] = dataset["erc20_most_sent_token_type"].astype("category").cat.codes
         dataset["erc20_most_rec_token_type"] = dataset["erc20_most_rec_token_type"].astype("category").cat.codes
 
-        # 7. Rearrange order of columns 
+        # 7. re-arrange order of columns 
         columns = dataset.columns
         self._cols_features = [col for col in columns if col not in [self.COL_CLASS]]
         reordered_cols =  self._cols_features + [self.COL_CLASS]
