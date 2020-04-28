@@ -14,23 +14,26 @@ from cryptoaml.models import LightGbmAlgo
 from cryptoaml.models import CatBoostAlgo
 from catboost import CatBoostClassifier
 
-elliptic = cdr.get_data("elliptic")
-data = elliptic.train_test_split(train_size=0.7, feat_set="AF_NE")
+# elliptic = cdr.get_data("elliptic")
+# data = elliptic.train_test_split(train_size=0.7, feat_set="AF_NE")
+# print(data.train_X.shape)
+# train_X = data.train_X
+# train_y = data.train_y
 
-print(data.train_X.shape)
+eth_accounts = cdr.get_data("eth_accounts")
+data = eth_accounts.train_test_split(train_size=0.7)
+print(data["ALL"].train_X.shape)
+train_X = data["ALL"].train_X
+train_y = data["ALL"].train_y
 
-train_X = data.train_X
-train_y = data.train_y
-test_X = data.test_X
-test_y = data.test_y
 
 # tmp_estimator = CatBoostAlgo()
 def objective(trial):
     
     param = {
         # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
-        "verbose": 0,
-        "task_type": "GPU", # FOR CAT BOOST 
+        "verbose": 0, 
+        # "task_type": "GPU", # FOR CAT BOOST 
         "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.01, 0.3, 0.0025) # FOR CAT BOOST, 
     }
 
@@ -48,7 +51,7 @@ def objective(trial):
                              scoring="f1", 
                              verbose=3,
                              cv=StratifiedKFold(n_splits=10),
-                             n_jobs=1)
+                             n_jobs=-1)
     
     print(tmp_estimator.get_params())
     mean_score = scores.mean()
@@ -69,5 +72,5 @@ study.set_user_attr("k_folds", 10)
 study.set_user_attr("cv_method", "StratifiedKFold")
 study.optimize(objective, n_trials=100, n_jobs=1)
 
-with open("rs_catboost_AF_NE.pkl", "wb") as model_file:
+with open("rs_catboost_ALL.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
