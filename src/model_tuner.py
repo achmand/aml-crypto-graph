@@ -38,6 +38,11 @@ def build_dataset(args):
                                                  feat_set=elliptic_args.feat_sets,
                                                  inc_meta=False,
                                                  inc_unknown=elliptic_args.inc_unknown)
+    elif args.data == "eth_accounts":
+        eth_accounts_args = Namespace(args.eth_accounts_args)
+        eth_accounts_data = cdr.get_data(source="eth_accounts", 
+                                         config_file=args.data_config_file)
+        dataset = eth_accounts_data.train_test_split(train_size=eth_accounts_args.train_size)                             
     else:
         raise NotImplementedError("'{}' dataset not yet implemented".format(args.data))
     
