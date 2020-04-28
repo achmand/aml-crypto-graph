@@ -11,19 +11,19 @@ import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 from IPython.core.display import display, HTML
 
-def plot_feature_imp(results, N):
+def plot_feature_imp(results, N, figsize=(17,10)):
     for model_key, model_value in results.items():
         for feature_set, feature_set_value in model_value.items():       
             title = "'{}' on '{}' feature set - TOP {} Features".format(model_key, feature_set, N)
             sorted_imp = feature_set_value["importance"].sort_values("importance", ascending=False) 
-            ax = sorted_imp.head(N).plot.barh(rot=0, title=title, figsize=(17,10))
+            ax = sorted_imp.head(N).plot.barh(rot=0, title=title, figsize=figsize)
             plt.show()
             title = "'{}' on '{}' feature set - BOTTOM {} Features".format(model_key, feature_set, N)
-            ax = sorted_imp.tail(N).plot.barh(rot=0, title=title, figsize=(17,10))
+            ax = sorted_imp.tail(N).plot.barh(rot=0, title=title, figsize=figsize)
             plt.show()
             display(HTML("</hr>"))
 
-def plot_result_matrices(results, figsize):
+def plot_result_matrices(results, figsize, columns=2):
 
     # loop and extract confusion matrices 
     confusion_matrices = []
@@ -34,7 +34,7 @@ def plot_result_matrices(results, figsize):
             confusion_matrices.append((plot_title, confusion_matrix))
         
     # display plots 
-    plot_confusion_matrix(matrices=confusion_matrices, figsize=figsize)
+    plot_confusion_matrix(matrices=confusion_matrices, figsize=figsize, columns=columns)
 
 def plot_confusion_matrix(matrices, 
                           figsize=(17,15), 

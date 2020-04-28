@@ -1,0 +1,30 @@
+data: eth_accounts
+data_config_file: "configuration/data/data_config.yaml"
+eth_accounts_args: 
+  feat_sets: [ALL] 
+  train_size: 0.7
+
+save_log: false 
+log_path: "logs/"
+evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
+time_indexed_evaluation: "none"
+results_path: persistence/experiment_1.1/results
+results_file: "defaults_models_results.pkl"
+
+models: 
+  xg_boost_ALL:
+    model: "xg_boost"
+    feat_set: ALL 
+    iterations: 1
+  light_boost_ALL: 
+    model: "light_boost"
+    feat_set: ALL 
+    iterations: 1
+  cat_boost_ALL: 
+    model: "cat_boost"
+    feat_set: ALL 
+    iterations: 1
+
+  
+  
+    
