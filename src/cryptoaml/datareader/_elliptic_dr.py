@@ -1,5 +1,5 @@
 """
-Class which reads the elliptic dataset (node classification).
+Class which reads the elliptic dataset (node/transaction classification).
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
@@ -209,7 +209,7 @@ class Elliptic_Dataset(_BaseDatareader):
         last_ts = data.tail(1)[self.COL_TS]
         split_ts = int(last_ts * train_size)
 
-        # split training and test by timestamp
+        # split training and test by timestamp (temporal splitting)
         data_train = data[data[self.COL_TS] <= split_ts]
         data_test = data[data[self.COL_TS] > split_ts]
 

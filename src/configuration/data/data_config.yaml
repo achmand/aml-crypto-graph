@@ -9,6 +9,6 @@ elliptic_dataset:
   embs_file: elliptic_embs.csv
 
 # https://github.com/sfarrugia15/Ethereum_Fraud_Detection/blob/master/Account_Stats/Complete.csv
-eth_fraud_dataset:
+eth_accounts_dataset:
   folder: data/eth_fraud/
   accounts_file: eth_accounts.csv
