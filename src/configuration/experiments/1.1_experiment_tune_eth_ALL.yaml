@@ -28,12 +28,12 @@ evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "conf
 #       k_folds: 10
 #       n_iterations: 100
 #       param_grid: 
-#         tree_method:
-#           value: "gpu_hist"
-#           type: "throw"
-#         predictor:
-#           value: "gpu_predictor"
-#           type: "throw"
+#         # tree_method:
+#         #   value: "gpu_hist"
+#         #   type: "throw"
+#         # predictor:
+#         #   value: "gpu_predictor"
+#         #   type: "throw"
 #         learning_rate:
 #           value: 0.1975
 #           type: "fixed"
@@ -74,8 +74,9 @@ evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "conf
 #           max: 1.0
 #           type: "suggest_loguniform"
 
-# parameter grid/search domain is based on settings/suggestions from previous studies,
-# fixed parameters obtained from Random Search: 'learning_rate': 0.0650, 'n_estimators': 700
+# fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.034611882461906766, 'n_estimators': 1290
+# search space for non fixed hyper-parameters taken from: 
+# https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/lightgbm_experiment.py
 light_boost_args:
   persist_props:
     method: "save"
@@ -83,46 +84,50 @@ light_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "f1"
-      k_folds: 10
-      n_iterations: 100
+      k_folds: 5
+      n_iterations: 50
       param_grid: 
         learning_rate:
-          value: 0.0650
+          value: 0.034611882461906766
           type: "fixed"
         n_estimators: 
-          value: 700
+          value: 1290
           type: "fixed"
-        reg_alpha: 
-          min: 0.00000001
-          max: 10.0
-          type: "suggest_loguniform"
-        reg_lambda: 
-          min: 0.00000001
-          max: 10.0
-          type: "suggest_loguniform"
+        subsample_freq:               # alias: bagging_freq
+          value: 1
+          type: fixed
         num_leaves:
-          min: 2
-          max: 256
+          min: 1
+          max: 1000                    # in source goes upto round(exp(7))
           type: "suggest_int" 
-        colsample_bytree:
-          min: 0.4
+        colsample_bytree:              # alias: feature_fraction
+          min: 0.5
           max: 1.0
           type: "suggest_uniform"
-        subsample:
-          min: 0.4
+        subsample:                     # alias: bagging_fraction
+          min: 0.5
           max: 1.0
           type: "suggest_uniform"
-        subsample_freq:
-          min: 0
-          max: 7
+        min_child_samples:             # alias: min_data_in_leaf
+          min: 1
+          max: 400                     # in source goes upto round(exp(6))
           type: "suggest_int" 
-        min_child_samples:
-          min: 5
-          max: 100
-          type: "suggest_int" 
+        min_child_weight:              # alias: min_sum_hessian_in_leaf
+          min: 0.000000112535175       # exp(-16)
+          max: 148.413159103           # exp(5)
+          type: "suggest_loguniform"
+        reg_alpha:                     # alias: lambda_l1
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+        reg_lambda:                    # alias: lambda_l2
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
-# fixed parameters obtained from Random Search: 'learning_rate': 0.0400, 'iterations': 725
+# fixed parameters obtained from Random Search: 'learning_rate': 0.046841540687159004, 'iterations': 775
 # cat_boost_args:
 #   persist_props:
 #     method: "save"
@@ -137,10 +142,10 @@ light_boost_args:
 #           value: 0
 #           type: "fixed"
 #         learning_rate:
-#           value: 0.0400
+#           value: 0.046841540687159004
 #           type: "fixed"
 #         iterations: 
-#           value: 725
+#           value: 775
 #           type: "fixed"
 #         l2_leaf_reg:
 #           min: 1.00

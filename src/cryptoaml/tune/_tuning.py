@@ -4,6 +4,7 @@
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
 
 ###### importing dependencies ############################################
+import random
 import numpy as np
 import pandas as pd
 from .. import utils as u 
@@ -106,6 +107,7 @@ class OptunaTuner(_BaseTuner):
                  scoring, 
                  k_folds, 
                  n_iterations,
+                 stratify_shuffle=True,
                  verbose=1):
         super().__init__(
             estimator=estimator,
@@ -117,6 +119,7 @@ class OptunaTuner(_BaseTuner):
 
         self._n_iterations = n_iterations
         self._estimator_class = type(estimator)
+        self._stratify_shuffle = stratify_shuffle
         # self._scorer = get_scorer("neg_log_loss")
         # to fix divide by zero problem in log loss 
         # https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/48701
@@ -216,7 +219,7 @@ class OptunaTuner(_BaseTuner):
                                  verbose=3,
                                  scoring="f1", 
                                  n_jobs=-1,
-                                 cv=StratifiedKFold(n_splits=self._k_folds))
+                                 cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle))
    
         mean_score = scores.mean()
         trial.set_user_attr("cv_mean", mean_score)    

@@ -1,0 +1,118 @@
+"""
+'As described in Sections 2.1 and 2.2, a trade-off exists among maximum tree depth, 
+learning rate and the number of iteration in GB and XGBoost, 
+which violates the independence assumption in the TPE algorithm. 
+Therefore, we introduce a stepwise training process. 
+First, learning rate and the number of boosts are manually determined. 
+We follow the default learning rate 0.1, which is also suggested value in GB (Friedman, 2001).'
+
+source: A boosted decision tree approach using Bayesian hyper-parameter optimization for credit scoring
+url: https://www.sciencedirect.com/science/article/abs/pii/S0957417417301008
+
+Hyperparameter search space for learning rate 
+source: https://github.com/catboost/benchmarks (quality benchmarks)
+
+- XGBoost:  ['eta': hp.loguniform('eta', -7, 0)]
+- LightGBM: ['learning_rate': hp.loguniform('learning_rate', -7, 0)]
+- CatBoost: ['learning_rate': hp.loguniform('learning_rate', -5, 0)]
+
+"""
+
+# TODO -> This code should be refactored and moved to tuning module 
+
+import math
+import optuna
+import pickle
+import numpy as np
+
+from sklearn.metrics import f1_score
+from sklearn.model_selection import StratifiedKFold
+
+import lightgbm as lgb
+import cryptoaml.datareader as cdr
+
+# constants 
+folds = 5
+train_size = 0.7
+rs_iterations = 50
+estimators = 5000
+dataset = "eth_accounts" # elliptic, eth_accounts
+feature_set = "ALL"  # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
+model = "lightgbm" # xgboost, lightgbm, catboost 
+save_file = "rs_lightgbm_ALL.pkl"
+stratify_shuffle = True
+
+# loads dataset 
+data = cdr.get_data(dataset)
+data_split = data.train_test_split(train_size=train_size)
+X = data_split[feature_set].train_X
+y = data_split[feature_set].train_y
+
+# custom f1 score eval function for lgb
+def lgb_f1_score(y_true, y_pred):
+    y_true = y_true.astype(int)
+    y_pred = np.round(y_pred).astype(int)
+    return ("f1", f1_score(y_true, y_pred), True)
+
+# objective for Random Search maximise F1 score 
+def objective(trial):
+    param_grid = {}
+    score = None 
+
+    # setting up learning rate 
+    estimator = None 
+    if model == "lightgbm":
+        param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate", math.exp(-7), math.exp(0))
+        param_grid["n_estimators"] = estimators
+        param_grid["n_jobs"] = -1
+        estimator = lgb.LGBMClassifier(**param_grid)
+    elif model == "xgboost":
+        param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate", math.exp(-7), math.exp(0))
+    elif model == "catboost":
+        param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate",  math.exp(-5), math.exp(0))
+
+    if model == "lightgbm":
+        evals_results = []
+        cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle)
+        for train_index, test_index in cross_val.split(X, y):
+            X_train, y_train = X.iloc[train_index], y.iloc[train_index]
+            X_test, y_test = X.iloc[test_index], y.iloc[test_index]
+
+            estimator.fit(X_train, 
+                          y_train, 
+                          eval_names="test",
+                          verbose=False,
+                          eval_metric=lgb_f1_score,
+                          eval_set=[(X_test, y_test)])
+            
+            results = estimator.evals_result_["test"]["f1"]
+            evals_results.append(results)
+
+        mean_evals_results = np.mean(evals_results, axis=0)
+        best_n_estimators = np.argmax(mean_evals_results) + 1
+        trial.set_user_attr("best_n_estimators", best_n_estimators)
+
+        std_evals_results = np.std(evals_results, axis=0)
+        trial.set_user_attr("cv_std", std_evals_results[best_n_estimators - 1])
+        
+        min_evals_results = np.min(evals_results, axis=0)
+        trial.set_user_attr("cv_min", min_evals_results[best_n_estimators - 1])
+
+        max_evals_results = np.max(evals_results, axis=0)
+        trial.set_user_attr("cv_max", max_evals_results[best_n_estimators - 1])
+       
+        if np.isnan(mean_evals_results[best_n_estimators - 1]):
+            score = 0
+        else: 
+            score = mean_evals_results[best_n_estimators - 1]
+
+    return score
+
+study = optuna.create_study(sampler=optuna.samplers.RandomSampler(), 
+                            direction="maximize")
+study.set_user_attr("k_folds", folds)
+study.set_user_attr("cv_method", "StratifiedKFold")
+study.optimize(objective, n_trials=rs_iterations, n_jobs=1)
+
+with open(save_file, "wb") as model_file:
+    pickle.dump(study, model_file)

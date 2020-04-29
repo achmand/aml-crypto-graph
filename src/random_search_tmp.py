@@ -1,3 +1,15 @@
+"""
+'As described in Sections 2.1 and 2.2, a trade-off exists among maximum tree depth, 
+learning rate and the number of iteration in GB and XGBoost, 
+which violates the independence assumption in the TPE algorithm. 
+Therefore, we introduce a stepwise training process. 
+First, learning rate and the number of boosts are manually determined. 
+We follow the default learning rate 0.1, which is also suggested value in GB (Friedman, 2001).'
+
+source: A boosted decision tree approach using Bayesian hyper-parameter optimization for credit scoring
+url: https://www.sciencedirect.com/science/article/abs/pii/S0957417417301008
+"""
+
 import numpy as np
 import sklearn.datasets
 import sklearn.metrics
@@ -13,6 +25,11 @@ from cryptoaml.models import XgboostAlgo
 from cryptoaml.models import LightGbmAlgo
 from cryptoaml.models import CatBoostAlgo
 from catboost import CatBoostClassifier
+
+# constants 
+folds = 10
+rs_iterations = 100
+estimators = 5000
 
 # elliptic dataset
 # elliptic = cdr.get_data("elliptic")
@@ -35,30 +52,31 @@ def objective(trial):
     
     param = {
         # FOR XGB and LightBoost
-        "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
+        # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.05, 0.3, 0.0025)
         
         # FOR CAT BOOST 
-        # "verbose": 0, 
+        "verbose": 0, 
         # "task_type": "GPU", 
         # "learning_rate": trial.suggest_discrete_uniform("learning_rate", 0.01, 0.3, 0.0025)
+        "learning_rate": trial.suggest_loguniform("learning_rate", 0.01, 0.3)
+
     }
 
     # FOR XGB and LightBoost
-    if param["learning_rate"] < 0.1:
-        param["n_estimators"] = trial.suggest_int("n_estimators", 400, 1000, 25)
-    else: 
-        param["n_estimators"] = trial.suggest_int("n_estimators", 100, 500, 25)
+    # if param["learning_rate"] < 0.1:
+    #     param["n_estimators"] = trial.suggest_int("n_estimators", 400, 1000, 25)
+    # else: 
+    #     param["n_estimators"] = trial.suggest_int("n_estimators", 100, 500, 25)
 
     # FOR CATBOOST 
-    # if param["learning_rate"] < 0.1:
-    #     param["iterations"] = trial.suggest_int("iterations", 400, 1000, 25)
-    # else: 
-    #     param["iterations"] = trial.suggest_int("iterations", 100, 500, 25)
+    if param["learning_rate"] < 0.1:
+        param["iterations"] = trial.suggest_int("iterations", 400, 1000, 25)
+    else: 
+        param["iterations"] = trial.suggest_int("iterations", 100, 500, 25)
 
-
-    tmp_estimator = XgboostAlgo(**param)
+    # tmp_estimator = XgboostAlgo(**param)
     # tmp_estimator = LightGbmAlgo(**param)
-    # tmp_estimator = CatBoostClassifier(**param)
+    tmp_estimator = CatBoostClassifier(**param)
 
     scores = cross_val_score(tmp_estimator, 
                              train_X, 
@@ -83,9 +101,9 @@ def objective(trial):
 study = optuna.create_study(sampler=optuna.samplers.RandomSampler(), 
                             direction="maximize")
 
-study.set_user_attr("k_folds", 10)
+study.set_user_attr("k_folds", folds)
 study.set_user_attr("cv_method", "StratifiedKFold")
-study.optimize(objective, n_trials=100, n_jobs=1)
+study.optimize(objective, n_trials=rs_iterations, n_jobs=1)
 
-with open("rs_xgboost_ALL.pkl", "wb") as model_file:
+with open("rs_catboost_ALL.pkl", "wb") as model_file:
     pickle.dump(study, model_file)
