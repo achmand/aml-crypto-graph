@@ -139,9 +139,9 @@ cat_boost_args:
           min: 1.0
           max: 10.00
           type: "suggest_loguniform"
-        mvs_reg:                     # "bagging_temperature" when Bayesian 
-          min: 0.0
-          max: 10.00
+        subsample:                     # "bagging_temperature" when Bayesian 
+          min: 0.8
+          max: 1.0
           type: "suggest_uniform"
         leaf_estimation_iterations:   # previously known as ‘gradient_iterations’
           min: 1
