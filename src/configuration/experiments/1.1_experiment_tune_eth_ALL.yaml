@@ -94,7 +94,7 @@ light_boost_args:
           max: 7.38905609893           # exp(2)
           type: "suggest_loguniform"
 
-# fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.00866434394567924, 'n_estimators': 2807
+# fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.15012677389748091, 'n_estimators': 624
 # search space for non fixed hyper-parameters taken from: 
 # https://arxiv.org/pdf/1706.09516.pdf
 # https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/catboost_experiment.py
@@ -106,16 +106,16 @@ cat_boost_args:
       method: "tpe" 
       scoring: "f1"
       k_folds: 5
-      n_iterations: 50
+      n_iterations: 2
       param_grid: 
         verbose: 
           value: 0
           type: "fixed"
         learning_rate:
-          value: 0.00866434394567924
+          value: 0.15012677389748091
           type: "fixed"
         iterations: 
-          value: 2807
+          value: 624
           type: "fixed"
         bootstrap_type:
           value: "Bayesian"
