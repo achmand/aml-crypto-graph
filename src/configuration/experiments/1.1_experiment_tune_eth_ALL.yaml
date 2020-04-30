@@ -148,10 +148,5 @@ cat_boost_args:
           max: 10              
           step: 1     
           type: "suggest_int" 
-        rsm:
-          min: 0.0
-          max: 1.0
-          step: 0.0025
-          type: "suggest_discrete_uniform"
 
         
