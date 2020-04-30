@@ -13,7 +13,7 @@ eth_accounts_args:
 save_log: false 
 log_path: "logs/"
 # models: [xg_boost, light_boost, cat_boost]
-models: [light_boost]
+models: [cat_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
@@ -95,7 +95,7 @@ light_boost_args:
           max: 7.38905609893           # exp(2)
           type: "suggest_loguniform"
 
-# fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.15012677389748091, 'n_estimators': 624
+# fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.04423645114954285, 'n_estimators': 405
 # search space for non fixed hyper-parameters taken from: 
 # https://arxiv.org/pdf/1706.09516.pdf
 # https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/catboost_experiment.py
@@ -107,7 +107,7 @@ cat_boost_args:
       method: "tpe" 
       scoring: "f1"
       k_folds: 5
-      n_iterations: 50
+      n_iterations: 405
       param_grid: 
         verbose: 
           value: 0
@@ -116,13 +116,13 @@ cat_boost_args:
           value: 12
           type: "fixed"
         learning_rate:
-          value: 0.15012677389748091
+          value: 0.04423645114954285
           type: "fixed"
         iterations: 
           value: 624
           type: "fixed"
         bootstrap_type:
-          value: "Bayesian"
+          value: "MVS"                # "Bayesian"
           type: "fixed"
         depth:                        # alias: max_depth
           value: 6                    
@@ -136,7 +136,7 @@ cat_boost_args:
           min: 1.0
           max: 10.00
           type: "suggest_loguniform"
-        bagging_temperature:
+        mvs_reg:                     # "bagging_temperature" when Bayesian 
           min: 0.0
           max: 1.00
           type: "suggest_uniform"

@@ -213,9 +213,6 @@ class OptunaTuner(_BaseTuner):
         
         params = self._new_params(trial)
         tmp_estimator = self._estimator_class(**params)
-
-        print(self._stratify_shuffle)
-
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
                                  self._y, 
