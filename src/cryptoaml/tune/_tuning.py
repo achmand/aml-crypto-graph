@@ -213,6 +213,9 @@ class OptunaTuner(_BaseTuner):
         
         params = self._new_params(trial)
         tmp_estimator = self._estimator_class(**params)
+
+        print(self._stratify_shuffle)
+
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
                                  self._y, 
@@ -518,13 +521,16 @@ def tune_model(estimator, X, y, tune_props):
         # set default if not passed. 
         if "n_iterations" not in tune_props: 
             properties.n_iterations = 100
+        if "stratify_shuffle" not in tune_props: 
+            properties.stratify_shuffle = True
 
         # initialize optuna tuner
         tuner = OptunaTuner(estimator=estimator,
                             param_grid=properties.param_grid,
                             scoring="neg_log_loss",
                             k_folds=properties.k_folds,
-                            n_iterations=properties.n_iterations)
+                            n_iterations=properties.n_iterations,
+                            stratify_shuffle=properties.stratify_shuffle)
 
     else:
         raise NotImplementedError("The specified tuning method '{}' is not yet implemented".format(properties.method))

@@ -13,7 +13,7 @@ eth_accounts_args:
 save_log: false 
 log_path: "logs/"
 # models: [xg_boost, light_boost, cat_boost]
-models: [cat_boost]
+models: [light_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
@@ -55,6 +55,7 @@ light_boost_args:
       scoring: "f1"
       k_folds: 5
       n_iterations: 50
+      stratify_shuffle: false         # since there is no element in time in the dataset we shuffle before splitting to k folds
       param_grid: 
         learning_rate:
           value: 0.034611882461906766
