@@ -107,7 +107,8 @@ cat_boost_args:
       method: "tpe" 
       scoring: "f1"
       k_folds: 5
-      n_iterations: 405
+      n_iterations: 50
+      stratify_shuffle: true        
       param_grid: 
         verbose: 
           value: 0
@@ -119,7 +120,7 @@ cat_boost_args:
           value: 0.04423645114954285
           type: "fixed"
         iterations: 
-          value: 624
+          value: 405
           type: "fixed"
         bootstrap_type:
           value: "MVS"                # "Bayesian"
