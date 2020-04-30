@@ -44,7 +44,7 @@ model = "catboost"       # xgboost, lightgbm, catboost
 
 save_file = "rs_{}_{}.pkl".format(model, feature_set)
 stratify_shuffle = True
-use_gpu = True
+use_gpu = False
 n_jobs = 12
 
 # loads dataset 
