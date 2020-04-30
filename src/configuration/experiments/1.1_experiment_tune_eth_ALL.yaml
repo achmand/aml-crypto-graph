@@ -13,7 +13,7 @@ eth_accounts_args:
 save_log: false 
 log_path: "logs/"
 # models: [xg_boost, light_boost, cat_boost]
-models: [cat_boost]
+models: [light_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # parameter grid/search domain is based on settings/suggestions from previous studies,
@@ -57,15 +57,19 @@ light_boost_args:
       n_iterations: 50
       stratify_shuffle: true        
       param_grid: 
-        learning_rate:
-          value: 0.034611882461906766
-          type: "fixed"
         n_estimators: 
-          value: 1290
-          type: "fixed"
+          value: 5000
+          type: "throw"
+        n_jobs: 
+          value: 12
+          type: "throw"
         subsample_freq:               # alias: bagging_freq
           value: 1
-          type: fixed
+          type: "fixed"
+        learning_rate:
+          min: 0.00091188196           # exp(-7)
+          max: 1.0                     # exp(0)
+          type: "suggest_loguniform"
         num_leaves:
           min: 1
           max: 1000                    # in source goes upto round(exp(7))

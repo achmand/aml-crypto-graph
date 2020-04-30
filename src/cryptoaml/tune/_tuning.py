@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from .. import utils as u 
 from abc import ABC, abstractmethod
+from sklearn.metrics import f1_score
 
 import optuna
 from hyperopt import fmin, tpe, atpe, rand, space_eval, Trials, STATUS_OK
@@ -18,6 +19,10 @@ from sklearn.metrics import log_loss, make_scorer
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
 from evolutionary_search import EvolutionaryAlgorithmSearchCV
+
+import xgboost as xgb
+import lightgbm as lgb
+from catboost import CatBoostClassifier
 
 ###### constants #########################################################
 TUNE_BASE                = "tuner_base"           # Base tuner 
@@ -209,6 +214,18 @@ class OptunaTuner(_BaseTuner):
 
         return new_params    
 
+    # custom f1 score eval function for lgb
+    def _lgb_f1_score(self, y_true, y_pred):
+        y_true = y_true.astype(int)
+        y_pred = np.round(y_pred).astype(int)
+        return ("F1", f1_score(y_true, y_pred, average="binary"), True)
+
+    # custom f1 score eval function for xgb
+    def _xgb_f1_score(self, y_pred, y_true):
+        y_true = y_true.get_label().astype(int)
+        y_pred = [1 if y_cont > 0.5 else 0 for y_cont in y_pred] 
+        return ("F1", f1_score(y_true, y_pred, average="binary"))
+
     def _objective(self, trial):
         
         params = self._new_params(trial)
@@ -218,28 +235,102 @@ class OptunaTuner(_BaseTuner):
         if self._stratify_shuffle == True:
             rs = 42
 
-        scores = cross_val_score(tmp_estimator, 
-                                 self._X, 
-                                 self._y, 
-                                 verbose=3,
-                                 scoring="f1", 
-                                 n_jobs=-1,
-                                 cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle, random_state=rs))
-   
-        mean_score = scores.mean()
-        trial.set_user_attr("cv_mean", mean_score)    
-        std_score  = scores.std()
-        trial.set_user_attr("cv_std", std_score)
-        min_score  = scores.min()
-        trial.set_user_attr("cv_min", min_score)
-        max_score  = scores.max()
-        trial.set_user_attr("cv_max", max_score)
+        score = None
+        evals_results = []
+        cross_val = StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle, random_state=rs)
+        for train_index, test_index in cross_val.split(self._X, self._y):
+            X_train, y_train = self._X.iloc[train_index], self._y.iloc[train_index]
+            X_test, y_test = self._X.iloc[test_index], self._y.iloc[test_index]       
 
-        return mean_score
+            fit_props = None
+            eval_result_name = None 
+            eval_result_metric = "F1" 
+
+            if isinstance(tmp_estimator, lgb.LGBMClassifier):
+                eval_result_name = "test"
+                fit_props = {
+                    "X":X_train,
+                    "y":y_train,
+                    "eval_names":eval_result_name,
+                    "eval_metric":self._lgb_f1_score,
+                    "verbose":False,
+                    "eval_set":[(X_test, y_test)]
+                }
+            elif isinstance(tmp_estimator, CatBoostClassifier):
+                eval_result_name = "learn"
+                fit_props = {
+                    "X":X_train,
+                    "y":y_train,
+                    "verbose":False,
+                    "eval_set":[(X_test, y_test)]
+                }
+            elif isinstance(tmp_estimator, xgb.XGBClassifier):
+                eval_result_name = "validation_0"
+                fit_props = {
+                    "X":X_train,
+                    "y":y_train,
+                    "verbose":False,
+                    "eval_metric": self._xgb_f1_score,
+                    "eval_set":[(X_test, y_test)]
+                }
+
+            results = None
+            tmp_estimator.fit(**fit_props)
+
+            if isinstance(tmp_estimator, lgb.LGBMClassifier):
+                print("extract stats from LightGBM eval")
+                results = tmp_estimator.evals_result_[eval_result_name][eval_result_metric]
+            elif isinstance(tmp_estimator, CatBoostClassifier):
+                print("extract stats from CatBoost eval")
+                _, results, _ = np.genfromtxt('catboost_info/test_error.tsv', delimiter="\t", unpack=True, skip_header=1)           
+            elif isinstance(tmp_estimator, xgb.XGBClassifier):
+                print("extract stats from XGBoost eval")
+                results = tmp_estimator.evals_result()[eval_result_name][eval_result_metric]
+
+            evals_results.append(results)           
+
+        mean_evals_results = np.mean(evals_results, axis=0)
+        best_n_estimators = np.argmax(mean_evals_results) + 1
+        trial.set_user_attr("best_n_estimators", best_n_estimators)
+
+        std_evals_results = np.std(evals_results, axis=0)
+        trial.set_user_attr("cv_std", std_evals_results[best_n_estimators - 1])
+        
+        min_evals_results = np.min(evals_results, axis=0)
+        trial.set_user_attr("cv_min", min_evals_results[best_n_estimators - 1])
+
+        max_evals_results = np.max(evals_results, axis=0)
+        trial.set_user_attr("cv_max", max_evals_results[best_n_estimators - 1])
+        
+        if np.isnan(mean_evals_results[best_n_estimators - 1]):
+            score = 0
+        else: 
+            print("Best n_estimators: {}".format(best_n_estimators))
+            score = mean_evals_results[best_n_estimators - 1]
+
+        return score
+
+        # scores = cross_val_score(tmp_estimator, 
+        #                          self._X, 
+        #                          self._y, 
+        #                          verbose=3,
+        #                          scoring="f1", 
+        #                          n_jobs=-1,
+        #                          cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle, random_state=rs))
+   
+        # mean_score = scores.mean()
+        # trial.set_user_attr("cv_mean", mean_score)    
+        # std_score  = scores.std()
+        # trial.set_user_attr("cv_std", std_score)
+        # min_score  = scores.min()
+        # trial.set_user_attr("cv_min", min_score)
+        # max_score  = scores.max()
+        # trial.set_user_attr("cv_max", max_score)
+
+        # return mean_score
     
     def fit(self, X, y):
 
-        # optimize on log loss 
         self._X = X
         self._y = y
         self._study.optimize(self._objective, n_trials=self._n_iterations) 
@@ -253,9 +344,23 @@ class OptunaTuner(_BaseTuner):
         # train a model with best params and set as best estimator
         # 1. get best parameters found
         params = self._study.best_trial.params  
-        # 2. concat best parameters with fixed ones as they are not returned        
+
+        # 2. concat best parameters with fixed ones as they are not returned     
+        if self._estimator_class == lgb.LGBMClassifier:
+            print("Setting best n_estimator for LGBM")
+            best_n_estimators = self._study.best_trial.user_attrs["best_n_estimators"]
+            params["n_estimators"] = best_n_estimators
+        elif isinstance(self._estimator_class, CatBoostClassifier):
+            best_n_estimators = self._study.best_trial.user_attrs["best_n_estimators"]
+            params["iterations"] = best_n_estimators
+        elif isinstance(self._estimator_class, xgb.XGBClassifier):
+            best_n_estimators = self._study.best_trial.user_attrs["best_n_estimators"]
+            params["n_estimators"] = best_n_estimators
+
         best_params = {**self._fixed_prop, **params}       
         self._best_params = best_params
+
+        print("Best parameters: {}".format(best_params))
         
         # 3. train model with best parameters found  
         estimator = self._estimator_class(**best_params)
