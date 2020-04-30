@@ -219,7 +219,6 @@ class XgboostAlgo(_BaseAlgo):
         self._model_name = MODEL_XGB
         self._model = xgb.XGBClassifier(**kwargs)
 
-
 ###### XGBoostRf classifier ##############################################    
 class XgboostRfAlgo(_BaseAlgo): 
 

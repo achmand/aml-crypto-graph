@@ -29,7 +29,6 @@ import cryptoaml.datareader as cdr
 from sklearn.metrics import f1_score
 from sklearn.model_selection import StratifiedKFold
 
-import xgboost as xgb
 import lightgbm as lgb
 from catboost import CatBoostClassifier
 
@@ -40,12 +39,10 @@ rs_iterations = 50
 estimators = 5000
 dataset = "eth_accounts" # elliptic, eth_accounts
 feature_set = "ALL"      # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
-model = "xgboost"        # xgboost, lightgbm, catboost 
-
-save_file = "rs_{}_{}.pkl".format(model, feature_set)
+model = "catboost"       # xgboost, lightgbm, catboost 
+save_file = "rs_catboost_ALL.pkl"
 stratify_shuffle = True
-use_gpu = True
-n_jobs = -1
+use_gpu = False
 
 # loads dataset 
 data = cdr.get_data(dataset)
@@ -57,13 +54,7 @@ y = data_split[feature_set].train_y
 def lgb_f1_score(y_true, y_pred):
     y_true = y_true.astype(int)
     y_pred = np.round(y_pred).astype(int)
-    return ("F1", f1_score(y_true, y_pred, average="binary"), True)
-
-# custom f1 score eval function for xgb
-def xgb_f1_score(y_pred, y_true):
-    y_true = y_true.get_label().astype(int)
-    y_pred = [1 if y_cont > 0.5 else 0 for y_cont in y_pred] 
-    return ("F1", f1_score(y_true, y_pred, average="binary"))
+    return ("F1", f1_score(y_true, y_pred), True)
 
 # objective for Random Search maximise F1 score 
 def objective(trial):
@@ -75,19 +66,16 @@ def objective(trial):
     if model == "lightgbm":
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate", math.exp(-7), math.exp(0))
         param_grid["n_estimators"] = estimators
-        param_grid["n_jobs"] = n_jobs
+        param_grid["n_jobs"] = -1
         estimator = lgb.LGBMClassifier(**param_grid)
     elif model == "xgboost":
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate", math.exp(-7), math.exp(0))
-        param_grid["n_estimators"] = estimators
-        param_grid["n_jobs"] = n_jobs
-        estimator = xgb.XGBClassifier(**param_grid)
     elif model == "catboost":
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate",  math.exp(-7), math.exp(0))
         param_grid["eval_metric"] = "F1"
         param_grid["bootstrap_type"] = "Bayesian"
         param_grid["iterations"] = estimators
-        param_grid["thread_count"] = n_jobs
+        param_grid["thread_count"] = 12
         if use_gpu:
             param_grid["task_type"] = "GPU"
             param_grid["devices"] = "0"
@@ -123,27 +111,16 @@ def objective(trial):
                 "verbose":False,
                 "eval_set":[(X_test, y_test)]
             }
-        elif model == "xgboost":
-            eval_result_name = "validation_0"
-            fit_props = {
-                "X":X_train,
-                "y":y_train,
-                "verbose":False,
-                "eval_metric": xgb_f1_score,
-                "eval_set":[(X_test, y_test)]
-            }
         
         results = None
         estimator.fit(**fit_props)
+
         print(estimator.get_params())
 
         if model == "lightgbm":
             results = estimator.evals_result_[eval_result_name][eval_result_metric]
         elif model == "catboost":
             _, results, _ = np.genfromtxt('catboost_info/test_error.tsv', delimiter="\t", unpack=True, skip_header=1)           
-        elif model == "xgboost":
-            results = estimator.evals_result()[eval_result_name][eval_result_metric]
-            print(len(results))
 
         evals_results.append(results)
 
