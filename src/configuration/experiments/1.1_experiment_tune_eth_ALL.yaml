@@ -25,8 +25,8 @@ evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "conf
 #   tune_props:
 #       method: "tpe" 
 #       scoring: "f1"
-#       k_folds: 10
-#       n_iterations: 100
+#       k_folds: 5
+#       n_iterations: 50
 #       param_grid: 
 #         # tree_method:
 #         #   value: "gpu_hist"
@@ -40,42 +40,11 @@ evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "conf
 #         n_estimators: 
 #           value: 275
 #           type: "fixed"
-#         max_depth:
-#           min: 1
-#           max: 12
-#           type: "suggest_int"
-#         subsample: 
-#           min: 0.9
-#           max: 1.0
-#           type: "suggest_uniform"
-#         colsample_bytree:
-#           min: 0.9
-#           max: 1.0
-#           type: "suggest_uniform"
-#         min_child_weight:
-#           min: 0
-#           max: 10
-#           type: "suggest_int" 
-#         max_delta_step:
-#           min: 0
-#           max: 1
-#           type: "suggest_int"
-#         gamma: 
-#           min: 0.0
-#           max: 0.02
-#           step: 0.00025
-#           type: "suggest_discrete_uniform"
-#         reg_alpha: 
-#           min: 0.00000001
-#           max: 1.0
-#           type: "suggest_loguniform"
-#         reg_lambda: 
-#           min: 0.00000001
-#           max: 1.0
-#           type: "suggest_loguniform"
+  
 
 # fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.034611882461906766, 'n_estimators': 1290
 # search space for non fixed hyper-parameters taken from: 
+# https://arxiv.org/pdf/1706.09516.pdf
 # https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/lightgbm_experiment.py
 light_boost_args:
   persist_props:
@@ -125,46 +94,52 @@ light_boost_args:
           max: 7.38905609893           # exp(2)
           type: "suggest_loguniform"
 
-
-# parameter grid/search domain is based on settings/suggestions from previous studies,
-# fixed parameters obtained from Random Search: 'learning_rate': 0.046841540687159004, 'iterations': 775
-# cat_boost_args:
-#   persist_props:
-#     method: "save"
-#     save_path: "persistence/experiment_1.1/tuned_models"
-#   tune_props:
-#       method: "tpe" 
-#       scoring: "f1"
-#       k_folds: 10
-#       n_iterations: 100
-#       param_grid: 
-#         verbose: 
-#           value: 0
-#           type: "fixed"
-#         learning_rate:
-#           value: 0.046841540687159004
-#           type: "fixed"
-#         iterations: 
-#           value: 775
-#           type: "fixed"
-#         l2_leaf_reg:
-#           min: 1.00
-#           max: 10.00
-#           step: 0.05
-#           type: "suggest_discrete_uniform"
-#         depth:
-#           min: 4
-#           max: 10
-#           type: "suggest_int"
-#         rsm:
-#           min: 0.01
-#           max: 1.00
-#           type: "suggest_uniform"
-#         random_strength:
-#           min: 0.00
-#           max: 100.00
-#           type: "suggest_uniform"
-
-
+# fixed hyper-parameters obtained from Random Search: 'learning_rate': 0.00866434394567924, 'n_estimators': 2807
+# search space for non fixed hyper-parameters taken from: 
+# https://arxiv.org/pdf/1706.09516.pdf
+# https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/catboost_experiment.py
+cat_boost_args:
+  persist_props:
+    method: "save"
+    save_path: "persistence/experiment_1.1/tuned_models"
+  tune_props:
+      method: "tpe" 
+      scoring: "f1"
+      k_folds: 5
+      n_iterations: 50
+      param_grid: 
+        verbose: 
+          value: 0
+          type: "fixed"
+        learning_rate:
+          value: 0.00866434394567924
+          type: "fixed"
+        iterations: 
+          value: 2807
+          type: "fixed"
+        bootstrap_type:
+          value: "Bayesian"
+          type: "fixed"
+        depth:                        # alias: max_depth
+          value: 6                    
+          type: "fixed"
+        random_strength:
+          min: 1
+          max: 20              
+          step: 1     
+          type: "suggest_int" 
+        l2_leaf_reg:
+          min: 1.0
+          max: 10.00
+          type: "suggest_loguniform"
+        bagging_temperature:
+          min: 0.0
+          max: 1.00
+          type: "suggest_uniform"
+        leaf_estimation_iterations:   # previously known as ‘gradient_iterations’
+          min: 1
+          max: 10              
+          step: 1     
+          type: "suggest_int" 
 
         

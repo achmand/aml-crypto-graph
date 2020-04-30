@@ -70,8 +70,9 @@ def objective(trial):
     elif model == "xgboost":
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate", math.exp(-7), math.exp(0))
     elif model == "catboost":
-        param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate",  math.exp(-5), math.exp(0))
+        param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate",  math.exp(-7), math.exp(0))
         param_grid["eval_metric"] = "F1"
+        param_grid["bootstrap_type"] = "Bayesian"
         param_grid["iterations"] = estimators
         param_grid["thread_count"] = -1
         param_grid["verbose"] = 0
