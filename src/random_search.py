@@ -42,7 +42,7 @@ feature_set = "ALL"      # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
 model = "catboost"       # xgboost, lightgbm, catboost 
 save_file = "rs_catboost_ALL.pkl"
 stratify_shuffle = True
-use_gpu = True
+use_gpu = False
 
 # loads dataset 
 data = cdr.get_data(dataset)
@@ -75,10 +75,10 @@ def objective(trial):
         param_grid["eval_metric"] = "F1"
         param_grid["bootstrap_type"] = "Bayesian"
         param_grid["iterations"] = estimators
-        # param_grid["thread_count"] = -1
+        param_grid["thread_count"] = 12
         if use_gpu:
             param_grid["task_type"] = "GPU"
-            param_grid["devices"] = 0
+            param_grid["devices"] = "0"
 
         param_grid["verbose"] = 0
         estimator = CatBoostClassifier(**param_grid)
