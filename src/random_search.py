@@ -42,6 +42,7 @@ feature_set = "ALL"      # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
 model = "catboost"       # xgboost, lightgbm, catboost 
 save_file = "rs_catboost_ALL.pkl"
 stratify_shuffle = True
+use_gpu = True
 
 # loads dataset 
 data = cdr.get_data(dataset)
@@ -74,7 +75,11 @@ def objective(trial):
         param_grid["eval_metric"] = "F1"
         param_grid["bootstrap_type"] = "Bayesian"
         param_grid["iterations"] = estimators
-        param_grid["thread_count"] = -1
+        # param_grid["thread_count"] = -1
+        if use_gpu:
+            param_grid["task_type"] = "GPU"
+            param_grid["devices"] = 0
+
         param_grid["verbose"] = 0
         estimator = CatBoostClassifier(**param_grid)
 
@@ -110,6 +115,8 @@ def objective(trial):
         results = None
         estimator.fit(**fit_props)
 
+        print(estimator.get_params())
+
         if model == "lightgbm":
             results = estimator.evals_result_[eval_result_name][eval_result_metric]
         elif model == "catboost":
@@ -133,28 +140,8 @@ def objective(trial):
     if np.isnan(mean_evals_results[best_n_estimators - 1]):
         score = 0
     else: 
+        print("Best n_estimators: {}".format(best_n_estimators))
         score = mean_evals_results[best_n_estimators - 1]
-
-    # elif model == "catboost":
-    #     evals_results = []
-    #     cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle)
-    #     for train_index, test_index in cross_val.split(X, y):
-    #         X_train, y_train = X.iloc[train_index], y.iloc[train_index]
-    #         X_test, y_test = X.iloc[test_index], y.iloc[test_index]
-
-    #         estimator.fit(X=X_train, 
-    #                       y=y_train, 
-    #                       # verbose=False,
-    #                       eval_set=[(X_test, y_test)])
-            
-    #         results = estimator.evals_result_["learn"]["F1"]
-    #         evals_results.append(results)
-
-    #     mean_evals_results = np.mean(evals_results, axis=0)
-    #     best_n_estimators = np.argmax(mean_evals_results) + 1
-    #     trial.set_user_attr("best_n_estimators", best_n_estimators)
-
-    #     print(best_n_estimators)
 
     return score
 
