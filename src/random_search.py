@@ -40,12 +40,12 @@ rs_iterations = 50
 estimators = 5000
 dataset = "eth_accounts" # elliptic, eth_accounts
 feature_set = "ALL"      # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
-model = "xgboost"        # xgboost, lightgbm, catboost 
+model = "catboost"       # xgboost, lightgbm, catboost 
 
 save_file = "rs_{}_{}.pkl".format(model, feature_set)
 stratify_shuffle = True
 use_gpu = True
-n_jobs = -1
+n_jobs = 12
 
 # loads dataset 
 data = cdr.get_data(dataset)
@@ -85,7 +85,7 @@ def objective(trial):
     elif model == "catboost":
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate",  math.exp(-7), math.exp(0))
         param_grid["eval_metric"] = "F1"
-        param_grid["bootstrap_type"] = "Bayesian"
+        param_grid["bootstrap_type"] = "MVS"
         param_grid["iterations"] = estimators
         param_grid["thread_count"] = n_jobs
         if use_gpu:
