@@ -213,13 +213,18 @@ class OptunaTuner(_BaseTuner):
         
         params = self._new_params(trial)
         tmp_estimator = self._estimator_class(**params)
+
+        rs = None 
+        if self._stratify_shuffle == True:
+            rs = 42
+
         scores = cross_val_score(tmp_estimator, 
                                  self._X, 
                                  self._y, 
                                  verbose=3,
                                  scoring="f1", 
                                  n_jobs=1,
-                                 cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle))
+                                 cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle, random_state=rs))
    
         mean_score = scores.mean()
         trial.set_user_attr("cv_mean", mean_score)    

@@ -95,8 +95,12 @@ def objective(trial):
         param_grid["verbose"] = 0
         estimator = CatBoostClassifier(**param_grid)
 
+    rs = None 
+    if stratify_shuffle == True:
+        rs = 42
+
     evals_results = []
-    cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle)
+    cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle, random_state=rs)
     for train_index, test_index in cross_val.split(X, y):
         X_train, y_train = X.iloc[train_index], y.iloc[train_index]
         X_test, y_test = X.iloc[test_index], y.iloc[test_index]
