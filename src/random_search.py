@@ -40,12 +40,12 @@ rs_iterations = 50
 estimators = 5000
 dataset = "eth_accounts" # elliptic, eth_accounts
 feature_set = "ALL"      # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
-model = "catboost"       # xgboost, lightgbm, catboost 
+model = "lightgbm"       # xgboost, lightgbm, catboost 
 
 save_file = "rs_{}_{}.pkl".format(model, feature_set)
 stratify_shuffle = True
 use_gpu = False
-n_jobs = 12
+n_jobs = -1
 
 # loads dataset 
 data = cdr.get_data(dataset)
@@ -103,8 +103,8 @@ def objective(trial):
     cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle, random_state=rs)
     for train_index, test_index in cross_val.split(X, y):
         X_train, y_train = X.iloc[train_index], y.iloc[train_index]
-        X_test, y_test = X.iloc[test_index], y.iloc[test_index]
-        
+        X_test, y_test = X.iloc[test_index], y.iloc[test_index]       
+
         fit_props = None
         eval_result_name = None 
         eval_result_metric = "F1" 
