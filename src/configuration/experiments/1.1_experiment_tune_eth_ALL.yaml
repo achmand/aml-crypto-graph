@@ -55,7 +55,7 @@ light_boost_args:
       scoring: "f1"
       k_folds: 5
       n_iterations: 50
-      stratify_shuffle: false        
+      stratify_shuffle: true        
       param_grid: 
         learning_rate:
           value: 0.034611882461906766
