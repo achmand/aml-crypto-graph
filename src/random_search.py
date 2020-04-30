@@ -25,11 +25,12 @@ import optuna
 import pickle
 import numpy as np
 
+import cryptoaml.datareader as cdr
 from sklearn.metrics import f1_score
 from sklearn.model_selection import StratifiedKFold
 
 import lightgbm as lgb
-import cryptoaml.datareader as cdr
+from catboost import CatBoostClassifier
 
 # constants 
 folds = 5
@@ -37,9 +38,9 @@ train_size = 0.7
 rs_iterations = 50
 estimators = 5000
 dataset = "eth_accounts" # elliptic, eth_accounts
-feature_set = "ALL"  # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
-model = "lightgbm" # xgboost, lightgbm, catboost 
-save_file = "rs_lightgbm_ALL.pkl"
+feature_set = "ALL"      # elliptic [LF, LF_NE, AF, AF_NE], eth_accounts [ALL]
+model = "catboost"       # xgboost, lightgbm, catboost 
+save_file = "rs_catboost_ALL.pkl"
 stratify_shuffle = True
 
 # loads dataset 
@@ -52,7 +53,7 @@ y = data_split[feature_set].train_y
 def lgb_f1_score(y_true, y_pred):
     y_true = y_true.astype(int)
     y_pred = np.round(y_pred).astype(int)
-    return ("f1", f1_score(y_true, y_pred), True)
+    return ("F1", f1_score(y_true, y_pred), True)
 
 # objective for Random Search maximise F1 score 
 def objective(trial):
@@ -70,41 +71,89 @@ def objective(trial):
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate", math.exp(-7), math.exp(0))
     elif model == "catboost":
         param_grid["learning_rate"] = trial.suggest_loguniform("learning_rate",  math.exp(-5), math.exp(0))
+        param_grid["eval_metric"] = "F1"
+        param_grid["iterations"] = estimators
+        param_grid["thread_count"] = -1
+        param_grid["verbose"] = 0
+        estimator = CatBoostClassifier(**param_grid)
 
-    if model == "lightgbm":
-        evals_results = []
-        cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle)
-        for train_index, test_index in cross_val.split(X, y):
-            X_train, y_train = X.iloc[train_index], y.iloc[train_index]
-            X_test, y_test = X.iloc[test_index], y.iloc[test_index]
-
-            estimator.fit(X_train, 
-                          y_train, 
-                          eval_names="test",
-                          verbose=False,
-                          eval_metric=lgb_f1_score,
-                          eval_set=[(X_test, y_test)])
-            
-            results = estimator.evals_result_["test"]["f1"]
-            evals_results.append(results)
-
-        mean_evals_results = np.mean(evals_results, axis=0)
-        best_n_estimators = np.argmax(mean_evals_results) + 1
-        trial.set_user_attr("best_n_estimators", best_n_estimators)
-
-        std_evals_results = np.std(evals_results, axis=0)
-        trial.set_user_attr("cv_std", std_evals_results[best_n_estimators - 1])
+    evals_results = []
+    cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle)
+    for train_index, test_index in cross_val.split(X, y):
+        X_train, y_train = X.iloc[train_index], y.iloc[train_index]
+        X_test, y_test = X.iloc[test_index], y.iloc[test_index]
         
-        min_evals_results = np.min(evals_results, axis=0)
-        trial.set_user_attr("cv_min", min_evals_results[best_n_estimators - 1])
+        fit_props = None
+        eval_result_name = None 
+        eval_result_metric = "F1" 
 
-        max_evals_results = np.max(evals_results, axis=0)
-        trial.set_user_attr("cv_max", max_evals_results[best_n_estimators - 1])
-       
-        if np.isnan(mean_evals_results[best_n_estimators - 1]):
-            score = 0
-        else: 
-            score = mean_evals_results[best_n_estimators - 1]
+        if model == "lightgbm":
+            eval_result_name = "test"
+            fit_props = {
+                "X":X_train,
+                "y":y_train,
+                "eval_names":eval_result_name,
+                "eval_metric":lgb_f1_score,
+                "verbose":False,
+                "eval_set":[(X_test, y_test)]
+            }
+        elif model == "catboost":
+            eval_result_name = "learn"
+            fit_props = {
+                "X":X_train,
+                "y":y_train,
+                "verbose":False,
+                "eval_set":[(X_test, y_test)]
+            }
+        
+        results = None
+        estimator.fit(**fit_props)
+
+        if model == "lightgbm":
+            results = estimator.evals_result_[eval_result_name][eval_result_metric]
+        elif model == "catboost":
+            _, results, _ = np.genfromtxt('catboost_info/test_error.tsv', delimiter="\t", unpack=True, skip_header=1)           
+
+        evals_results.append(results)
+
+    mean_evals_results = np.mean(evals_results, axis=0)
+    best_n_estimators = np.argmax(mean_evals_results) + 1
+    trial.set_user_attr("best_n_estimators", best_n_estimators)
+
+    std_evals_results = np.std(evals_results, axis=0)
+    trial.set_user_attr("cv_std", std_evals_results[best_n_estimators - 1])
+    
+    min_evals_results = np.min(evals_results, axis=0)
+    trial.set_user_attr("cv_min", min_evals_results[best_n_estimators - 1])
+
+    max_evals_results = np.max(evals_results, axis=0)
+    trial.set_user_attr("cv_max", max_evals_results[best_n_estimators - 1])
+    
+    if np.isnan(mean_evals_results[best_n_estimators - 1]):
+        score = 0
+    else: 
+        score = mean_evals_results[best_n_estimators - 1]
+
+    # elif model == "catboost":
+    #     evals_results = []
+    #     cross_val = StratifiedKFold(n_splits=folds, shuffle=stratify_shuffle)
+    #     for train_index, test_index in cross_val.split(X, y):
+    #         X_train, y_train = X.iloc[train_index], y.iloc[train_index]
+    #         X_test, y_test = X.iloc[test_index], y.iloc[test_index]
+
+    #         estimator.fit(X=X_train, 
+    #                       y=y_train, 
+    #                       # verbose=False,
+    #                       eval_set=[(X_test, y_test)])
+            
+    #         results = estimator.evals_result_["learn"]["F1"]
+    #         evals_results.append(results)
+
+    #     mean_evals_results = np.mean(evals_results, axis=0)
+    #     best_n_estimators = np.argmax(mean_evals_results) + 1
+    #     trial.set_user_attr("best_n_estimators", best_n_estimators)
+
+    #     print(best_n_estimators)
 
     return score
 
