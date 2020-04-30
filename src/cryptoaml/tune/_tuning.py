@@ -223,7 +223,7 @@ class OptunaTuner(_BaseTuner):
                                  self._y, 
                                  verbose=3,
                                  scoring="f1", 
-                                 n_jobs=1,
+                                 n_jobs=-1,
                                  cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle, random_state=rs))
    
         mean_score = scores.mean()
