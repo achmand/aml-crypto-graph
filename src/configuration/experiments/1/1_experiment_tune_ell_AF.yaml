@@ -15,7 +15,7 @@ elliptic_args:
 save_log: false 
 log_path: "logs/"
 # models: [xg_boost, light_boost, cat_boost]
-models: [cat_boost]
+models: [light_boost]
 evaluation_metrics: ["precision", "recall", "f1", "f1_micro", "confusion"]
 
 # search space for hyper-parameters mainly taken from: 
@@ -92,8 +92,8 @@ light_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "f1"
-      k_folds: 5
-      n_iterations: 50
+      k_folds: 3
+      n_iterations: 2
       stratify_shuffle: true        
       param_grid: 
         n_estimators: 
@@ -147,8 +147,8 @@ cat_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "f1"
-      k_folds: 3
-      n_iterations: 2
+      k_folds: 5
+      n_iterations: 50
       stratify_shuffle: true      
       param_grid: 
         iterations: 
