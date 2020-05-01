@@ -147,7 +147,7 @@ cat_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "f1"
-      k_folds: 5
+      k_folds: 3
       n_iterations: 2
       stratify_shuffle: true      
       param_grid: 
@@ -155,7 +155,7 @@ cat_boost_args:
           value: 5000
           type: "throw"
         thread_count: 
-          value: 12
+          value: 16
           type: "throw"
         verbose: 
           value: 0
