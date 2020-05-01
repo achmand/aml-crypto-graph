@@ -68,6 +68,8 @@ def load_model(model_type, path=None, params=None):
         model = CatBoostAlgo(**model_args)
     else:
         raise NotImplementedError("'{}' model not yet implemented".format(model))
+
+    print(model.get_params())
     return model
 
 def build_models(args):
