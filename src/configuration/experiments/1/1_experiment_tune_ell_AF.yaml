@@ -155,7 +155,7 @@ cat_boost_args:
           value: 5000
           type: "throw"
         thread_count: 
-          value: 16
+          value: 10
           type: "throw"
         verbose: 
           value: 0
