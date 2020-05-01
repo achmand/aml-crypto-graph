@@ -158,6 +158,8 @@ def eval_models(args, dataset, models):
             X = dataset[feature_set].test_X
             y = dataset[feature_set].test_y
             metrics = model.evaluate(metrics=args.evaluation_metrics, X=X, y=y)
+            
+            print(model.get_params())
 
             # log metrics 
             logger_exp.info("- RESULTS -")
