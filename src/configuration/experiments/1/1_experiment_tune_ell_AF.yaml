@@ -28,16 +28,10 @@ xg_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "f1"
-      k_folds: 5
-      n_iterations: 50
+      k_folds: 3
+      n_iterations: 2
       stratify_shuffle: true        
       param_grid: 
-        # tree_method:
-        #   value: "gpu_hist"
-        #   type: "throw"
-        # predictor:
-        #   value: "gpu_predictor"
-        #   type: "throw"
         n_estimators: 
           value: 5000
           type: "throw"
@@ -147,8 +141,8 @@ cat_boost_args:
   tune_props:
       method: "tpe" 
       scoring: "f1"
-      k_folds: 5
-      n_iterations: 50
+      k_folds: 3
+      n_iterations: 2
       stratify_shuffle: true      
       param_grid: 
         iterations: 
