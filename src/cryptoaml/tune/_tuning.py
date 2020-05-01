@@ -196,9 +196,14 @@ class OptunaTuner(_BaseTuner):
         # 3. set 'search' parameters
         for search_key in self._search_space:
             tmp_prop = self._search_space[search_key]
+            tmp_prop_type = tmp_prop["type"]
+            if tmp_prop_type == "suggest_categorical":
+                tmp_prop_options = tmp_prop["choices"]
+                new_params[search_key] =  trial.suggest_categorical(search_key,tmp_prop_options)
+                continue
+            
             tmp_prop_min = tmp_prop["min"]
             tmp_prop_max = tmp_prop["max"]
-            tmp_prop_type = tmp_prop["type"]
             if tmp_prop_type == "suggest_int":
                 step = tmp_prop.get("step", 1)
                 new_params[search_key] = trial.suggest_int(search_key, tmp_prop_min, tmp_prop_max, step)
@@ -226,6 +231,31 @@ class OptunaTuner(_BaseTuner):
         y_pred = [1 if y_cont > 0.5 else 0 for y_cont in y_pred] 
         return ("F1", f1_score(y_true, y_pred, average="binary"))
 
+    # for other models 
+    def _objective_normal(self, trial):
+        
+        params = self._new_params(trial)
+        tmp_estimator = self._estimator_class(**params)
+        scores = cross_val_score(tmp_estimator, 
+                                 self._X, 
+                                 self._y, 
+                                 verbose=3,
+                                 scoring="f1", 
+                                 n_jobs=-1,
+                                 cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle))
+   
+        mean_score = scores.mean()
+        trial.set_user_attr("cv_mean", mean_score)    
+        std_score  = scores.std()
+        trial.set_user_attr("cv_std", std_score)
+        min_score  = scores.min()
+        trial.set_user_attr("cv_min", min_score)
+        max_score  = scores.max()
+        trial.set_user_attr("cv_max", max_score)
+
+        return mean_score
+
+    # for boosting models (includes exhaustive search on number of boosters)
     def _objective(self, trial):
         
         params = self._new_params(trial)
@@ -309,31 +339,17 @@ class OptunaTuner(_BaseTuner):
             score = mean_evals_results[best_n_estimators - 1]
 
         return score
-
-        # scores = cross_val_score(tmp_estimator, 
-        #                          self._X, 
-        #                          self._y, 
-        #                          verbose=3,
-        #                          scoring="f1", 
-        #                          n_jobs=-1,
-        #                          cv=StratifiedKFold(n_splits=self._k_folds, shuffle=self._stratify_shuffle, random_state=rs))
-   
-        # mean_score = scores.mean()
-        # trial.set_user_attr("cv_mean", mean_score)    
-        # std_score  = scores.std()
-        # trial.set_user_attr("cv_std", std_score)
-        # min_score  = scores.min()
-        # trial.set_user_attr("cv_min", min_score)
-        # max_score  = scores.max()
-        # trial.set_user_attr("cv_max", max_score)
-
-        # return mean_score
     
     def fit(self, X, y):
 
         self._X = X
         self._y = y
-        self._study.optimize(self._objective, n_trials=self._n_iterations) 
+
+        is_boosting = self._estimator_class == lgb.LGBMClassifier or self._estimator_class == CatBoostClassifier or self._estimator_class == xgb.XGBClassifier
+        if is_boosting:
+            self._study.optimize(self._objective, n_trials=self._n_iterations) 
+        else:
+            self._study.optimize(self._objective_normal, n_trials=self._n_iterations) 
 
         # gets and sets best score from trials
         self._best_score = self._study.best_trial.value

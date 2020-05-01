@@ -95,7 +95,7 @@ def build_models(args, dataset):
             if persist_model:
                 persist_props[persist_method_key] = persist_initial_path + "/" + feature_set
            
-            if model_args == "random_forest":
+            if model == "random_forest":
                models[model][feature_set] = RandomForestAlgo(tune_props=tune_props,
                                                              persist_props=persist_props, 
                                                              **arguments)    
