@@ -4,7 +4,7 @@ eth_accounts_args:
   feat_sets: [ALL] 
   train_size: 0.7
 
-ssave_log: false 
+save_log: false 
 log_path: "logs/"
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 time_indexed_evaluation: "none"
