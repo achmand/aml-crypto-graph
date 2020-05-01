@@ -118,6 +118,7 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
         
         # Persist model after training 
         if self._persist_props != None and self._persist_props.method == PERSIST_SAVE:
+            print("Saving model")
             self.save(self._persist_props.save_path)
 
     def predict(self, X):

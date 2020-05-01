@@ -351,9 +351,11 @@ class OptunaTuner(_BaseTuner):
             best_n_estimators = self._study.best_trial.user_attrs["best_n_estimators"]
             params["n_estimators"] = best_n_estimators
         elif isinstance(self._estimator_class, CatBoostClassifier):
+            print("Setting best n_estimator for CatBoost")
             best_n_estimators = self._study.best_trial.user_attrs["best_n_estimators"]
             params["iterations"] = best_n_estimators
         elif isinstance(self._estimator_class, xgb.XGBClassifier):
+            print("Setting best n_estimator for XGBoost")
             best_n_estimators = self._study.best_trial.user_attrs["best_n_estimators"]
             params["n_estimators"] = best_n_estimators
 
