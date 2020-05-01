@@ -6,7 +6,7 @@ data_config_file: "configuration/data/data_config.yaml"
 elliptic_args: 
   inc_unknown: false 
   encode_classes: true 
-  feat_sets: [AF] # All Features (Local + Aggregated Features) - you can specify a collection of features here, were split as we ran them simultaneously on different machines
+  feat_sets: [LF_NE] # Local Features + Node Embeddings - you can specify a collection of features here, were split as we ran them simultaneously on different machines
   train_size: 0.7
 
 ##########################################################################
