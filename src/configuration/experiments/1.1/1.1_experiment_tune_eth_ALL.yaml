@@ -12,8 +12,7 @@ eth_accounts_args:
 ##########################################################################  
 save_log: false 
 log_path: "logs/"
-# models: [xg_boost, light_boost, cat_boost]
-models: [xg_boost]
+models: [xg_boost, light_boost, cat_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # search space for hyper-parameters mainly taken from: 
