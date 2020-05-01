@@ -30,14 +30,17 @@ xg_boost_args:
       n_iterations: 50
       stratify_shuffle: true        
       param_grid: 
-        tree_method:
-          value: "gpu_hist"
-          type: "throw"
-        predictor:
-          value: "gpu_predictor"
-          type: "throw"
+        # tree_method:
+        #   value: "gpu_hist"
+        #   type: "throw"
+        # predictor:
+        #   value: "gpu_predictor"
+        #   type: "throw"
         n_estimators: 
           value: 5000
+          type: "throw"
+        n_jobs: 
+          value: 12
           type: "throw"
         # n_jobs: 
         #   value: 12
