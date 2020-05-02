@@ -12,7 +12,8 @@ eth_accounts_args:
 ##########################################################################  
 save_log: false 
 log_path: "logs/"
-models: [xg_boost, light_boost, cat_boost]
+# models: [xg_boost, light_boost, cat_boost]
+models: [light_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # search space for hyper-parameters mainly taken from: 
@@ -33,7 +34,7 @@ xg_boost_args:
           value: 5000
           type: "throw"
         n_jobs: 
-          value: -1
+          value: 120
           type: "throw"
         learning_rate:
           min: 0.00091188196           # exp(-7)
