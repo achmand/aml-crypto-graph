@@ -17,3 +17,6 @@ models:
     load_path: "persistence/experiment_1.1/tuned_models/ALL/random_forest"
     feat_set: ALL 
     iterations: 100
+    params: 
+        n_jobs: 120
+  
