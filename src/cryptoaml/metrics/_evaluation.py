@@ -25,7 +25,7 @@ from IPython.core.display import display, HTML
 
 ###### evaluation functions ###############################################
 AUC              = "auc"
-ACCURACY        = "accuracy"
+ACCURACY         = "accuracy"
 LOG_LOSS         = "log_loss"
 F1_BINARY        = "f1"
 F1_MICRO         = "f1_micro"

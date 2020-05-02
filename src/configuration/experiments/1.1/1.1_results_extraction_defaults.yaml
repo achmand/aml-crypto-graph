@@ -16,14 +16,20 @@ models:
     model: "xg_boost"
     feat_set: ALL 
     iterations: 1
+    params: 
+      n_jobs: 120
   light_boost_ALL: 
     model: "light_boost"
     feat_set: ALL 
     iterations: 1
+    params: 
+      n_jobs: 120
   cat_boost_ALL: 
     model: "cat_boost"
     feat_set: ALL 
     iterations: 1
+    params: 
+      thread_count: 120
 
   
   

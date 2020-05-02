@@ -16,5 +16,7 @@ models:
     model: "random_forest"
     feat_set: ALL 
     iterations: 100
+    params: 
+      n_jobs: 120
  
     

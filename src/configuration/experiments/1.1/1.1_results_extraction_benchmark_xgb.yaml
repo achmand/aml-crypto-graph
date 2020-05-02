@@ -20,5 +20,6 @@ models:
       learning_rate: 0.2
       max_depth: 4
       n_estimators: 150
+      n_jobs: 120
  
     
