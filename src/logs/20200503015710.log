@@ -208,3 +208,57 @@ INFO: 2020-05-03 01:57:15
 [START TRAINING MODEL 'light_boost']
 INFO: 2020-05-03 01:57:15 
 ----> [START TRAINING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 04:11:15 
+- MODEL PARAMS -
+INFO: 2020-05-03 04:11:15 
+{'boosting_type': 'gbdt',
+ 'class_weight': None,
+ 'colsample_bytree': 0.6478101618090795,
+ 'importance_type': 'split',
+ 'learning_rate': 0.09722424033543176,
+ 'max_depth': -1,
+ 'min_child_samples': 255,
+ 'min_child_weight': 8.479757535852648e-06,
+ 'min_split_gain': 0.0,
+ 'n_estimators': 4261,
+ 'n_jobs': -1,
+ 'num_leaves': 770,
+ 'objective': None,
+ 'random_state': None,
+ 'reg_alpha': 1.3090333096292452e-07,
+ 'reg_lambda': 0.005951314850246193,
+ 'silent': True,
+ 'subsample': 0.6139853128533745,
+ 'subsample_for_bin': 200000,
+ 'subsample_freq': 1}
+INFO: 2020-05-03 04:11:15 
+----> [FINISH TRAINING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 04:11:15 
+[FINISH TRAINING MODEL 'light_boost']
+INFO: 2020-05-03 04:11:15 
+--- FINISH TRAINING ---
+INFO: 2020-05-03 04:11:15 
+--- START EVALUATION ---
+INFO: 2020-05-03 04:11:15 
+[START EVALUATING MODEL 'light_boost']
+INFO: 2020-05-03 04:11:15 
+----> [START EVALUATING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 04:11:15 
+- RESULTS -
+INFO: 2020-05-03 04:11:15 
+OrderedDict([('precision', 0.9855832241153342),
+             ('recall', 0.6943674976915974),
+             ('f1_micro', 0.9794841031793641),
+             ('accuracy', 0.9794841031793641),
+             ('auc', 0.8468308906947756),
+             ('confusion', array([[15576,    11],
+       [  331,   752]])),
+             ('f1', 0.8147345612134345)])
+INFO: 2020-05-03 04:11:15 
+----> [FINISH EVALUATING 'light_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 04:11:15 
+[FINISH EVALUATING MODEL 'light_boost']
+INFO: 2020-05-03 04:11:15 
+--- FINISH EVALUATION ---
+INFO: 2020-05-03 04:11:15 
+-------- FINISH EXPERIMENT --------

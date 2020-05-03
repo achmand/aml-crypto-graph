@@ -212,3 +212,72 @@ INFO: 2020-05-03 02:00:03
 [START TRAINING MODEL 'cat_boost']
 INFO: 2020-05-03 02:00:03 
 ----> [START TRAINING 'cat_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 09:58:35 
+- MODEL PARAMS -
+INFO: 2020-05-03 09:58:35 
+{'bayesian_matrix_reg': 0.10000000149011612,
+ 'best_model_min_trees': 1,
+ 'boost_from_average': False,
+ 'boosting_type': 'Plain',
+ 'bootstrap_type': 'MVS',
+ 'border_count': 254,
+ 'class_names': [0, 1],
+ 'classes_count': 0,
+ 'depth': 4,
+ 'eval_metric': 'F1',
+ 'feature_border_type': 'GreedyLogSum',
+ 'grow_policy': 'SymmetricTree',
+ 'iterations': 2203,
+ 'l2_leaf_reg': 1.1098747253417969,
+ 'leaf_estimation_backtracking': 'AnyImprovement',
+ 'leaf_estimation_iterations': 6,
+ 'leaf_estimation_method': 'Newton',
+ 'learning_rate': 0.12073484808206558,
+ 'loss_function': 'Logloss',
+ 'max_leaves': 16,
+ 'min_data_in_leaf': 1,
+ 'model_shrink_mode': 'Constant',
+ 'model_shrink_rate': 0,
+ 'model_size_reg': 0.5,
+ 'nan_mode': 'Min',
+ 'penalties_coefficient': 1,
+ 'random_seed': 0,
+ 'random_strength': 8,
+ 'rsm': 0.8700000047683716,
+ 'sampling_frequency': 'PerTree',
+ 'score_function': 'Cosine',
+ 'sparse_features_conflict_fraction': 0,
+ 'subsample': 0.6365466117858887,
+ 'task_type': 'CPU',
+ 'use_best_model': False}
+INFO: 2020-05-03 09:58:35 
+----> [FINISH TRAINING 'cat_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 09:58:35 
+[FINISH TRAINING MODEL 'cat_boost']
+INFO: 2020-05-03 09:58:35 
+--- FINISH TRAINING ---
+INFO: 2020-05-03 09:58:35 
+--- START EVALUATION ---
+INFO: 2020-05-03 09:58:35 
+[START EVALUATING MODEL 'cat_boost']
+INFO: 2020-05-03 09:58:35 
+----> [START EVALUATING 'cat_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 09:58:35 
+- RESULTS -
+INFO: 2020-05-03 09:58:35 
+OrderedDict([('precision', 0.9842105263157894),
+             ('recall', 0.6906740535549399),
+             ('f1_micro', 0.9791841631673666),
+             ('accuracy', 0.9791841631673666),
+             ('auc', 0.8449520906127174),
+             ('confusion', array([[15575,    12],
+       [  335,   748]])),
+             ('f1', 0.8117200217037439)])
+INFO: 2020-05-03 09:58:35 
+----> [FINISH EVALUATING 'cat_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-03 09:58:35 
+[FINISH EVALUATING MODEL 'cat_boost']
+INFO: 2020-05-03 09:58:35 
+--- FINISH EVALUATION ---
+INFO: 2020-05-03 09:58:35 
+-------- FINISH EXPERIMENT --------
