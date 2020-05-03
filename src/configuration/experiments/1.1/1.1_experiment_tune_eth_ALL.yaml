@@ -102,7 +102,7 @@ light_boost_args:
           max: 1.0                     # exp(0)
           type: "suggest_loguniform"
         num_leaves:
-          min: 1
+          min: 2
           max: 1000                    # in source goes upto round(exp(7))
           type: "suggest_int" 
         colsample_bytree:              # alias: feature_fraction
@@ -148,7 +148,7 @@ cat_boost_args:
           value: 5000
           type: "throw"
         thread_count: 
-          value: 120
+          value: 16
           type: "throw"
         verbose: 
           value: 0
