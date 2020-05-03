@@ -92,7 +92,7 @@ light_boost_args:
           value: 5000
           type: "throw"
         n_jobs: 
-          value: 120
+          value: 20
           type: "throw"
         subsample_freq:               # alias: bagging_freq
           value: 1
@@ -148,7 +148,7 @@ cat_boost_args:
           value: 5000
           type: "throw"
         thread_count: 
-          value: 16
+          value: 120
           type: "throw"
         verbose: 
           value: 0
