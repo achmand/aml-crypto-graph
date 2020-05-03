@@ -13,8 +13,13 @@ eth_accounts_args:
 save_log: false 
 log_path: "logs/"
 
+<<<<<<< HEAD
 models: [cat_boost]
 #models: [cat_boost]
+=======
+#models: [xg_boost]
+models: [cat_boost]
+>>>>>>> e7580bea8d942bcc25498397c5367f7bc8ff8b18
 #models: [xg_boost, light_boost, cat_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
