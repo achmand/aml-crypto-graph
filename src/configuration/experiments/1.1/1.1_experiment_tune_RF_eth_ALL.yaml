@@ -15,8 +15,6 @@ log_path: "logs/"
 models: [random_forest]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
-# search space for hyper-parameters mainly taken from: 
-
 random_forest_args:
   persist_props:
     method: "save"
@@ -29,7 +27,7 @@ random_forest_args:
       stratify_shuffle: true        
       param_grid: 
         n_jobs: 
-          value: 120
+          value: 16
           type: "throw"
         n_estimators:
           min: 100

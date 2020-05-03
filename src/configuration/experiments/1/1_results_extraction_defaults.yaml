@@ -19,73 +19,73 @@ models:
     feat_set: LF 
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   xg_boost_LF_NE:
     model: "xg_boost"
     feat_set: LF_NE 
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   xg_boost_AF:
     model: "xg_boost"
     feat_set: AF 
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   xg_boost_AF_NE:
     model: "xg_boost"
     feat_set: AF_NE 
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   light_boost_LF: 
     model: "light_boost"
     feat_set: LF 
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   light_boost_LF_NE: 
     model: "light_boost"
     feat_set: LF_NE
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   light_boost_AF: 
     model: "light_boost"
     feat_set: AF 
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   light_boost_AF_NE: 
     model: "light_boost"
     feat_set: AF_NE
     iterations: 1
     params: 
-      n_jobs: 24
+      n_jobs: 16
   cat_boost_LF: 
     model: "cat_boost"
     feat_set: LF 
     iterations: 1
     params: 
-      thread_count: 24
+      thread_count: 16
   cat_boost_LF_NE: 
     model: "cat_boost"
     feat_set: LF_NE 
     iterations: 1
     params: 
-      thread_count: 24
+      thread_count: 16
   cat_boost_AF: 
     model: "cat_boost"
     feat_set: AF  
     iterations: 1
     params: 
-      thread_count: 24
+      thread_count: 16
   cat_boost_AF_NE: 
     model: "cat_boost"
     feat_set: AF_NE 
     iterations: 1
     params: 
-      thread_count: 24
+      thread_count: 16
 
   
   

@@ -13,14 +13,7 @@ eth_accounts_args:
 save_log: false 
 log_path: "logs/"
 
-<<<<<<< HEAD
-models: [cat_boost]
-#models: [cat_boost]
-=======
-#models: [xg_boost]
-models: [cat_boost]
->>>>>>> e7580bea8d942bcc25498397c5367f7bc8ff8b18
-#models: [xg_boost, light_boost, cat_boost]
+models: [xg_boost, light_boost, cat_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # search space for hyper-parameters mainly taken from: 
@@ -99,7 +92,7 @@ light_boost_args:
           value: 5000
           type: "throw"
         n_jobs: 
-          value: 24
+          value: 16
           type: "throw"
         subsample_freq:               # alias: bagging_freq
           value: 1
@@ -155,7 +148,7 @@ cat_boost_args:
           value: 5000
           type: "throw"
         thread_count: 
-          value: 32
+          value: 16
           type: "throw"
         verbose: 
           value: 0
