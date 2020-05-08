@@ -8,6 +8,14 @@ elliptic_dataset:
   feats_file: elliptic_txs_features.csv
   embs_file: elliptic_embs.csv
 
+# down-sampled version of the elliptic dataset using the 'Neighborhood Cleaning Rule'
+elliptic_ncr_dataset:
+  folder: data/elliptic_ncr/
+  classes_file: elliptic_txs_classes.csv
+  edges_file: elliptic_txs_edgelist.csv
+  feats_file: elliptic_txs_features.csv
+  embs_file: elliptic_embs.csv
+
 # https://github.com/sfarrugia15/Ethereum_Fraud_Detection/blob/master/Account_Stats/Complete.csv
 eth_accounts_dataset:
   folder: data/eth_fraud/

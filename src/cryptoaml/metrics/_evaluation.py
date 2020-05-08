@@ -63,7 +63,7 @@ def compute_confusion_matrix(y_true, y_pred):
 # map different metric constants to metric function
 eval_options = {
     AUC:              compute_auc,
-    ACCURACY:        compute_accuracy,
+    ACCURACY:         compute_accuracy,
     F1_BINARY:        compute_f1_binary,
     F1_MICRO:         compute_f1_micro,
     RECALL_BINARY:    compute_recall_binary,
