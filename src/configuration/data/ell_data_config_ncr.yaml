@@ -1,0 +1,9 @@
+# Config file to load data, change paths if data is located in a different dir 
+
+# down_sampled_version of  https://www.kaggle.com/ellipticco/elliptic-data-set
+elliptic_dataset:
+  folder: data/
+  classes_file: elliptic/elliptic_txs_classes.csv
+  edges_file: elliptic/elliptic_txs_edgelist.csv
+  feats_file: elliptic_ncr/elliptic_txs_features.csv
+  embs_file: elliptic/elliptic_embs.csv

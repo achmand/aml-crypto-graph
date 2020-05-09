@@ -27,10 +27,10 @@ class Elliptic_Dataset(_BaseDatareader):
     COL_TS    = "ts"    # TX time step 
 
     # columns - feature sets 
-    FEATS_LF = "LF"       # Local features
-    FEATS_AF = "AF"       # Local features + Aggregated Features
-    FEATS_LF_NE = "LF_NE" # Local features and Node Embeddings from GCN 
-    FEATS_AF_NE = "AF_NE" # Local features + Aggregated Features and Node Embedding from GCN 
+    FEATS_LF    = "LF"       # Local features
+    FEATS_AF    = "AF"       # Local features + Aggregated Features
+    FEATS_LF_NE = "LF_NE"    # Local features and Node Embeddings from GCN 
+    FEATS_AF_NE = "AF_NE"    # Local features + Aggregated Features and Node Embedding from GCN 
 
     # labels
     LABEL_UNKNOWN = "unknown" # Unknown label 
@@ -84,6 +84,20 @@ class Elliptic_Dataset(_BaseDatareader):
     def feature_cols_AF_NE_(self):
         """Get the feature names for the All feature set + node embeddings (AF_NE)."""
         return  self.feature_cols_ + self._cols_ne     
+
+    def get_feature_names(self, feat_set, inc_meta=False):
+
+        feat_set_cols = self._cols_meta.copy() if inc_meta else []
+        if feat_set == self.FEATS_LF:
+            feat_set_cols.extend(self.feature_cols_LF_)
+        elif feat_set == self.FEATS_LF_NE:
+            feat_set_cols.extend(self.feature_cols_LF_NE_)
+        elif feat_set == self.FEATS_AF:
+            feat_set_cols.extend(self.feature_cols_AF_)
+        elif feat_set == self.FEATS_AF_NE:
+            feat_set_cols.extend(self.feature_cols_AF_NE_)
+
+        return feat_set_cols
 
     # load data functions -------------------------------------------------
     def _load_dataset(self, data_args, encode_classes):

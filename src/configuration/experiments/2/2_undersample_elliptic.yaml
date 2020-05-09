@@ -6,9 +6,12 @@ data_config_file: "configuration/data/data_config.yaml"
 elliptic_args: 
   inc_unknown: false 
   encode_classes: true 
-  feat_sets: [AF] # All Features (Local + Aggregated Features) - you can specify a collection of features here, were split as we ran them simultaneously on different machines
   train_size: 0.7
 
-  
+save_log: true 
+log_path: "logs/"
+output_file: "data/elliptic_ncr/elliptic_txs_features.csv"
+
+stratify_timestep: false
 
 
