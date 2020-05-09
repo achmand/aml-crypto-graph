@@ -5,5 +5,5 @@ elliptic_dataset:
   folder: data/
   classes_file: elliptic/elliptic_txs_classes.csv
   edges_file: elliptic/elliptic_txs_edgelist.csv
-  feats_file: elliptic_ncr_stratify/elliptic_txs_features.csv
+  feats_file: elliptic_ncr_stratified/elliptic_txs_features.csv
   embs_file: elliptic/elliptic_embs.csv

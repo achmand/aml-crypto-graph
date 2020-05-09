@@ -1,0 +1,55 @@
+data: elliptic
+data_config_file: "configuration/data/ell_data_config_ncr.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [AF, AF_NE] 
+  train_size: 0.7
+
+save_log: false 
+log_path: "logs/"
+evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
+time_indexed_evaluation: "f1"
+results_path: persistence/experiment_2/results
+results_file: "defaults_models_results.pkl"
+
+models: 
+  xg_boost_AF:
+    model: "xg_boost"
+    feat_set: AF 
+    iterations: 1
+    params: 
+      n_jobs: 16
+  xg_boost_AF_NE:
+    model: "xg_boost"
+    feat_set: AF_NE 
+    iterations: 1
+    params: 
+      n_jobs: 16
+  light_boost_AF: 
+    model: "light_boost"
+    feat_set: AF 
+    iterations: 1
+    params: 
+      n_jobs: 16
+  light_boost_AF_NE: 
+    model: "light_boost"
+    feat_set: AF_NE
+    iterations: 1
+    params: 
+      n_jobs: 16
+  cat_boost_AF: 
+    model: "cat_boost"
+    feat_set: AF  
+    iterations: 1
+    params: 
+      thread_count: 16
+  cat_boost_AF_NE: 
+    model: "cat_boost"
+    feat_set: AF_NE 
+    iterations: 1
+    params: 
+      thread_count: 16
+
+  
+  
