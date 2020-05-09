@@ -1,6 +1,8 @@
 data: elliptic
 data_config_file: "configuration/data/ell_data_config_ncr.yaml"
-eth_accounts_args: 
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
   feat_sets: [AF, AF_NE] 
   train_size: 0.7
 
