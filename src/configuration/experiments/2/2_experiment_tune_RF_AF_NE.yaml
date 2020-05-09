@@ -1,0 +1,47 @@
+##########################################################################
+# Dataset configuration 
+##########################################################################
+data: elliptic
+data_config_file: "configuration/data/ell_data_config_ncr.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [AF_NE] # All Features (Local + Aggregated Features) - you can specify a collection of features here, were split as we ran them simultaneously on different machines
+  train_size: 0.7
+
+##########################################################################
+# Models to be tested 
+##########################################################################  
+save_log: false 
+log_path: "logs/"
+models: [random_forest]
+evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
+
+random_forest_args:
+  persist_props:
+    method: "save"
+    save_path: "persistence/experiment_2/tuned_models"
+  tune_props:
+      method: "tpe" 
+      scoring: "f1"
+      k_folds: 5
+      n_iterations: 50
+      stratify_shuffle: true        
+      param_grid: 
+        n_jobs: 
+          value: 16
+          type: "throw"
+        n_estimators:
+          min: 100
+          max: 1000                    
+          step: 50
+          type: "suggest_int" 
+        max_samples:
+          min: 0.0
+          max: 1.0
+          type: "suggest_uniform"
+        max_features:                       
+          choices: ["sqrt", "log2"]
+          type: "suggest_categorical"
+
+      
