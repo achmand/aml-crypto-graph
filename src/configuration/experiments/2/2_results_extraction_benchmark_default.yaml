@@ -1,0 +1,27 @@
+data: elliptic
+data_config_file: "configuration/data/ell_data_config_ncr.yaml"
+eth_accounts_args: 
+  feat_sets: [AF, AF_NE] 
+  train_size: 0.7
+
+save_log: false 
+log_path: "logs/"
+evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
+time_indexed_evaluation: "none"
+results_path: persistence/experiment_2/results
+results_file: "benchmark_model_results.pkl"
+
+models: 
+  random_forest_AF:
+    model: "random_forest"
+    feat_set: AF 
+    iterations: 100
+    params: 
+      n_jobs: 16
+  random_forest_AF_NE:
+    model: "random_forest"
+    feat_set: AF_NE 
+    iterations: 100
+    params: 
+      n_jobs: 16
+    
