@@ -10,7 +10,7 @@ save_log: false
 log_path: "logs/"
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 time_indexed_evaluation: "f1"
-results_path: persistence/experiment_2/results
+results_path: persistence/experiment_2.1/results
 results_file: "defaults_models_results.pkl"
 
 models: 
