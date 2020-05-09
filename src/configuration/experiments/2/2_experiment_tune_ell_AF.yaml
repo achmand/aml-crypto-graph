@@ -1,0 +1,196 @@
+##########################################################################
+# Dataset configuration 
+##########################################################################
+data: elliptic
+data_config_file: "configuration/data/ell_data_config_ncr.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  feat_sets: [AF] # All Features (Local + Aggregated Features) - you can specify a collection of features here, were split as we ran them simultaneously on different machines
+  train_size: 0.7
+
+##########################################################################
+# Models to be tested 
+##########################################################################  
+save_log: true 
+log_path: "logs/"
+models: [xg_boost, light_boost, cat_boost]
+evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
+
+# search space for hyper-parameters mainly taken from: 
+# https://arxiv.org/pdf/1706.09516.pdf
+# https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/xgboost_experiment.py
+xg_boost_args:
+  persist_props:
+    method: "save"
+    save_path: "persistence/experiment_2/tuned_models"
+  tune_props:
+      method: "tpe" 
+      scoring: "f1"
+      k_folds: 5
+      n_iterations: 50
+      stratify_shuffle: true        
+      param_grid: 
+        n_estimators: 
+          value: 5000
+          type: "throw"
+        n_jobs: 
+          value: 16
+          type: "throw"
+        learning_rate:
+          min: 0.00091188196           # exp(-7)
+          max: 1.0                     # exp(0)
+          type: "suggest_loguniform"
+        max_depth:                       
+          min: 2
+          max: 10              
+          step: 1  
+          type: "suggest_int"
+        subsample:
+          min: 0.5
+          max: 1.0
+          type: "suggest_uniform"
+        colsample_bytree:
+          min: 0.5
+          max: 1.0
+          type: "suggest_uniform"
+        colsample_bylevel:
+          min: 0.5
+          max: 1.0
+          type: "suggest_uniform"
+        min_child_weight:
+          min: 0.000000112535175       # exp(-16)
+          max: 148.413159103           # exp(5)
+          type: "suggest_loguniform"
+        reg_alpha:
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+        reg_lambda:                   
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+        gamma:                   
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+
+# search space for hyper-parameters mainly taken from: 
+# https://arxiv.org/pdf/1706.09516.pdf
+# https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/lightgbm_experiment.py
+light_boost_args:
+  persist_props:
+    method: "save"
+    save_path: "persistence/experiment_2/tuned_models"
+  tune_props:
+      method: "tpe" 
+      scoring: "f1"
+      k_folds: 5
+      n_iterations: 50
+      stratify_shuffle: true        
+      param_grid: 
+        n_estimators: 
+          value: 5000
+          type: "throw"
+        n_jobs: 
+          value: 16
+          type: "throw"
+        subsample_freq:               # alias: bagging_freq
+          value: 1
+          type: "fixed"
+        learning_rate:
+          min: 0.00091188196           # exp(-7)
+          max: 1.0                     # exp(0)
+          type: "suggest_loguniform"
+        num_leaves:
+          min: 2
+          max: 1000                    # in source goes upto round(exp(7))
+          type: "suggest_int" 
+        colsample_bytree:              # alias: feature_fraction
+          min: 0.5
+          max: 1.0
+          type: "suggest_uniform"
+        subsample:                     # alias: bagging_fraction
+          min: 0.5
+          max: 1.0
+          type: "suggest_uniform"
+        min_child_samples:             # alias: min_data_in_leaf
+          min: 1
+          max: 400                     # in source goes upto round(exp(6))
+          type: "suggest_int" 
+        min_child_weight:              # alias: min_sum_hessian_in_leaf
+          min: 0.000000112535175       # exp(-16)
+          max: 148.413159103           # exp(5)
+          type: "suggest_loguniform"
+        reg_alpha:                     # alias: lambda_l1
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+        reg_lambda:                    # alias: lambda_l2
+          min: 0.000000112535175       # exp(-16)
+          max: 7.38905609893           # exp(2)
+          type: "suggest_loguniform"
+
+# search space for hyper-parameters mainly taken from: 
+# https://arxiv.org/pdf/1706.09516.pdf
+# https://github.com/catboost/benchmarks/blob/master/quality_benchmarks/catboost_experiment.py
+cat_boost_args:
+  persist_props:
+    method: "save"
+    save_path: "persistence/experiment_2/tuned_models"
+  tune_props:
+      method: "tpe" 
+      scoring: "f1"
+      k_folds: 5
+      n_iterations: 50
+      stratify_shuffle: true      
+      param_grid: 
+        iterations: 
+          value: 5000
+          type: "throw"
+        thread_count: 
+          value: 16
+          type: "throw"
+        verbose: 
+          value: 0
+          type: "fixed"
+        eval_metric: 
+          value: "F1"
+          type: "fixed"
+        bootstrap_type:
+          value: "MVS"                # "Bayesian"
+          type: "fixed"
+        learning_rate:
+          min: 0.00091188196           # exp(-7)
+          max: 1.0                     # exp(0)
+          type: "suggest_loguniform"
+        depth:                        # alias: max_depth
+          min: 4
+          max: 10              
+          step: 1  
+          type: "suggest_int"
+        random_strength:
+          min: 1
+          max: 20              
+          step: 1     
+          type: "suggest_int" 
+        l2_leaf_reg:
+          min: 1.0
+          max: 10.0
+          type: "suggest_loguniform"
+        subsample:                     # "bagging_temperature" when Bayesian 
+          min: 0.5
+          max: 1.0
+          type: "suggest_uniform"
+        leaf_estimation_iterations:   # previously known as ‘gradient_iterations’
+          min: 1
+          max: 10              
+          step: 1     
+          type: "suggest_int" 
+        rsm: 
+          min: 0.0
+          max: 0.9975
+          step: 0.0025
+          type: "suggest_discrete_uniform"
+
+
