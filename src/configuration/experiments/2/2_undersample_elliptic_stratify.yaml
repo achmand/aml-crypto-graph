@@ -1,0 +1,17 @@
+##########################################################################
+# Dataset configuration 
+##########################################################################
+data: elliptic
+data_config_file: "configuration/data/data_config.yaml"
+elliptic_args: 
+  inc_unknown: false 
+  encode_classes: true 
+  train_size: 0.7
+
+save_log: true 
+log_path: "logs/"
+output_file: "data/elliptic_ncr_stratified/elliptic_txs_features.csv"
+
+stratify_timestep: true 
+
+

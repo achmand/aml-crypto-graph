@@ -42,6 +42,44 @@ def undersample(args):
             undersampled_set = samples_kept.append(test_X, ignore_index=True)
             undersampled_set.drop(elliptic_data.feature_cols_NE_, inplace=True, axis=1)
             undersampled_set.to_csv(args.output_file, index=False, header=False)
+        # stratify on time version
+        else:
+            tmp_data = train_X.copy()
+            tmp_data["label"] = train_y.copy()
+            ts_data = tmp_data.groupby("ts")
+
+            removed = 0
+            total_pre = tmp_data.shape[0]
+            undersampled_set = pd.DataFrame() 
+            for ts, group in ts_data:   
+                
+                grouped_X = group.iloc[:,:-1]
+                ts_X = grouped_X[elliptic_data.feature_cols_AF_NE_]
+                ts_y = group["label"]   
+                counter = Counter(ts_y)
+                print("Train set (ts:{}) counter Label: {}".format(ts, counter))
+
+                X, y = ncr.fit_resample(ts_X, ts_y)  
+                indices = ncr.sample_indices_
+            
+                counter = Counter(y)
+                print("Train set (ts:{}) counter after NCR Label: {}".format(ts, counter))
+                
+                total_removed = ts_X.shape[0] - X.shape[0]
+                print("Total removed (ts:{}): {}".format(ts, total_removed))
+                removed += total_removed 
+                
+                samples_kept = grouped_X.iloc[indices]
+                print("Total samples kept (ts:{}): {}".format(ts, samples_kept.shape[0]))
+                
+                undersampled_set = undersampled_set.append(samples_kept, ignore_index=True)
+                
+            print("-------------------------------------")
+            print("Total samples removed: {} from {}".format(removed, total_pre))
+            undersampled_set = undersampled_set.append(test_X, ignore_index=True)
+            undersampled_set.drop(elliptic_data.feature_cols_NE_, inplace=True, axis=1)
+            undersampled_set.to_csv(args.output_file, index=False, header=False)
+
     else:
         raise NotImplementedError("'{}' dataset not yet implemented".format(args.data))
 
