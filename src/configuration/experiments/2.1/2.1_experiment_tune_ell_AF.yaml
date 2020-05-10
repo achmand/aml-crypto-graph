@@ -14,12 +14,7 @@ elliptic_args:
 ##########################################################################  
 save_log: true 
 log_path: "logs/"
-#models: [xg_boost, light_boost, cat_boost]
-<<<<<<< HEAD
-models: [light_boost]
-=======
-models: [cat_boost]
->>>>>>> 0f855c27a69c5ba52d77f1344deb1ac0b95b3d15
+models: [xg_boost, light_boost, cat_boost]
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # search space for hyper-parameters mainly taken from: 
