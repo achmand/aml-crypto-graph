@@ -104,6 +104,8 @@ class _BaseAlgo(ABC, BaseEstimator, ClassifierMixin):
     # TODO-> Add the ability to not tune even if the tune_props are passed 
     def fit(self, X, y, tune=True):
         
+        self._model.set_params({n_jobs=16})
+
         # Keep a reference of features 
         self._features = X.columns.values
 
