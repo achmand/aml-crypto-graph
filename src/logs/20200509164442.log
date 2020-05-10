@@ -1,0 +1,264 @@
+INFO: 2020-05-09 16:44:42 
+-------- START EXPERIMENT --------
+INFO: 2020-05-09 16:44:42 
+- PROPERTIES -
+INFO: 2020-05-09 16:44:42 
+{'cat_boost_args': {'persist_props': {'method': 'save',
+                                      'save_path': 'persistence/experiment_2/tuned_models'},
+                    'tune_props': {'k_folds': 5,
+                                   'method': 'tpe',
+                                   'n_iterations': 50,
+                                   'param_grid': {'bootstrap_type': {'type': 'fixed',
+                                                                     'value': 'MVS'},
+                                                  'depth': {'max': 10,
+                                                            'min': 4,
+                                                            'step': 1,
+                                                            'type': 'suggest_int'},
+                                                  'eval_metric': {'type': 'fixed',
+                                                                  'value': 'F1'},
+                                                  'iterations': {'type': 'throw',
+                                                                 'value': 5000},
+                                                  'l2_leaf_reg': {'max': 10.0,
+                                                                  'min': 1.0,
+                                                                  'type': 'suggest_loguniform'},
+                                                  'leaf_estimation_iterations': {'max': 10,
+                                                                                 'min': 1,
+                                                                                 'step': 1,
+                                                                                 'type': 'suggest_int'},
+                                                  'learning_rate': {'max': 1.0,
+                                                                    'min': 0.00091188196,
+                                                                    'type': 'suggest_loguniform'},
+                                                  'random_strength': {'max': 20,
+                                                                      'min': 1,
+                                                                      'step': 1,
+                                                                      'type': 'suggest_int'},
+                                                  'rsm': {'max': 0.9975,
+                                                          'min': 0.0,
+                                                          'step': 0.0025,
+                                                          'type': 'suggest_discrete_uniform'},
+                                                  'subsample': {'max': 1.0,
+                                                                'min': 0.5,
+                                                                'type': 'suggest_uniform'},
+                                                  'thread_count': {'type': 'throw',
+                                                                   'value': 16},
+                                                  'verbose': {'type': 'fixed',
+                                                              'value': 0}},
+                                   'scoring': 'f1',
+                                   'stratify_shuffle': True}},
+ 'data': 'elliptic',
+ 'data_config_file': 'configuration/data/ell_data_config_ncr.yaml',
+ 'elliptic_args': {'encode_classes': True,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision',
+                        'recall',
+                        'f1_micro',
+                        'accuracy',
+                        'auc',
+                        'confusion',
+                        'f1'],
+ 'light_boost_args': {'persist_props': {'method': 'save',
+                                        'save_path': 'persistence/experiment_2/tuned_models'},
+                      'tune_props': {'k_folds': 5,
+                                     'method': 'tpe',
+                                     'n_iterations': 50,
+                                     'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                         'min': 0.5,
+                                                                         'type': 'suggest_uniform'},
+                                                    'learning_rate': {'max': 1.0,
+                                                                      'min': 0.00091188196,
+                                                                      'type': 'suggest_loguniform'},
+                                                    'min_child_samples': {'max': 400,
+                                                                          'min': 1,
+                                                                          'type': 'suggest_int'},
+                                                    'min_child_weight': {'max': 148.413159103,
+                                                                         'min': 1.12535175e-07,
+                                                                         'type': 'suggest_loguniform'},
+                                                    'n_estimators': {'type': 'throw',
+                                                                     'value': 5000},
+                                                    'n_jobs': {'type': 'throw',
+                                                               'value': 16},
+                                                    'num_leaves': {'max': 1000,
+                                                                   'min': 2,
+                                                                   'type': 'suggest_int'},
+                                                    'reg_alpha': {'max': 7.38905609893,
+                                                                  'min': 1.12535175e-07,
+                                                                  'type': 'suggest_loguniform'},
+                                                    'reg_lambda': {'max': 7.38905609893,
+                                                                   'min': 1.12535175e-07,
+                                                                   'type': 'suggest_loguniform'},
+                                                    'subsample': {'max': 1.0,
+                                                                  'min': 0.5,
+                                                                  'type': 'suggest_uniform'},
+                                                    'subsample_freq': {'type': 'fixed',
+                                                                       'value': 1}},
+                                     'scoring': 'f1',
+                                     'stratify_shuffle': True}},
+ 'log_path': 'logs/',
+ 'models': ['light_boost'],
+ 'save_log': True,
+ 'xg_boost_args': {'persist_props': {'method': 'save',
+                                     'save_path': 'persistence/experiment_2/tuned_models'},
+                   'tune_props': {'k_folds': 5,
+                                  'method': 'tpe',
+                                  'n_iterations': 50,
+                                  'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                                       'min': 0.5,
+                                                                       'type': 'suggest_uniform'},
+                                                 'colsample_bytree': {'max': 1.0,
+                                                                      'min': 0.5,
+                                                                      'type': 'suggest_uniform'},
+                                                 'gamma': {'max': 7.38905609893,
+                                                           'min': 1.12535175e-07,
+                                                           'type': 'suggest_loguniform'},
+                                                 'learning_rate': {'max': 1.0,
+                                                                   'min': 0.00091188196,
+                                                                   'type': 'suggest_loguniform'},
+                                                 'max_depth': {'max': 10,
+                                                               'min': 2,
+                                                               'step': 1,
+                                                               'type': 'suggest_int'},
+                                                 'min_child_weight': {'max': 148.413159103,
+                                                                      'min': 1.12535175e-07,
+                                                                      'type': 'suggest_loguniform'},
+                                                 'n_estimators': {'type': 'throw',
+                                                                  'value': 5000},
+                                                 'n_jobs': {'type': 'throw',
+                                                            'value': 16},
+                                                 'reg_alpha': {'max': 7.38905609893,
+                                                               'min': 1.12535175e-07,
+                                                               'type': 'suggest_loguniform'},
+                                                 'reg_lambda': {'max': 7.38905609893,
+                                                                'min': 1.12535175e-07,
+                                                                'type': 'suggest_loguniform'},
+                                                 'subsample': {'max': 1.0,
+                                                               'min': 0.5,
+                                                               'type': 'suggest_uniform'}},
+                                  'scoring': 'f1',
+                                  'stratify_shuffle': True}}}
+INFO: 2020-05-09 16:44:42 
+--- START BUILDING DATASET ---
+INFO: 2020-05-09 16:44:42 
+- DATASET -
+INFO: 2020-05-09 16:44:42 
+elliptic
+INFO: 2020-05-09 16:44:42 
+- CONFIG -
+INFO: 2020-05-09 16:44:42 
+'configuration/data/ell_data_config_ncr.yaml'
+INFO: 2020-05-09 16:44:44 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-05-09 16:44:44 
+--- START BUILDING MODELS ---
+INFO: 2020-05-09 16:44:44 
+- MODELS -
+INFO: 2020-05-09 16:44:44 
+['light_boost']
+INFO: 2020-05-09 16:44:44 
+[START BUILDING MODEL 'light_boost']
+INFO: 2020-05-09 16:44:44 
+- ARGUMENTS -
+INFO: 2020-05-09 16:44:44 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_2/tuned_models'},
+ 'tune_props': {'k_folds': 5,
+                'method': 'tpe',
+                'n_iterations': 50,
+                'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.5,
+                                                    'type': 'suggest_uniform'},
+                               'learning_rate': {'max': 1.0,
+                                                 'min': 0.00091188196,
+                                                 'type': 'suggest_loguniform'},
+                               'min_child_samples': {'max': 400,
+                                                     'min': 1,
+                                                     'type': 'suggest_int'},
+                               'min_child_weight': {'max': 148.413159103,
+                                                    'min': 1.12535175e-07,
+                                                    'type': 'suggest_loguniform'},
+                               'n_estimators': {'type': 'throw', 'value': 5000},
+                               'n_jobs': {'type': 'throw', 'value': 16},
+                               'num_leaves': {'max': 1000,
+                                              'min': 2,
+                                              'type': 'suggest_int'},
+                               'reg_alpha': {'max': 7.38905609893,
+                                             'min': 1.12535175e-07,
+                                             'type': 'suggest_loguniform'},
+                               'reg_lambda': {'max': 7.38905609893,
+                                              'min': 1.12535175e-07,
+                                              'type': 'suggest_loguniform'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.5,
+                                             'type': 'suggest_uniform'},
+                               'subsample_freq': {'type': 'fixed', 'value': 1}},
+                'scoring': 'f1',
+                'stratify_shuffle': True}}
+INFO: 2020-05-09 16:44:44 
+----> [START BUILDING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-09 16:44:44 
+----> [FINISH BUILDING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-09 16:44:44 
+[FINISH BUILDING MODEL 'light_boost']
+INFO: 2020-05-09 16:44:44 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-05-09 16:44:44 
+--- START TRAINING ---
+INFO: 2020-05-09 16:44:44 
+[START TRAINING MODEL 'light_boost']
+INFO: 2020-05-09 16:44:44 
+----> [START TRAINING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-09 18:12:50 
+- MODEL PARAMS -
+INFO: 2020-05-09 18:12:50 
+{'boosting_type': 'gbdt',
+ 'class_weight': None,
+ 'colsample_bytree': 0.729082769944796,
+ 'importance_type': 'split',
+ 'learning_rate': 0.0423035443405413,
+ 'max_depth': -1,
+ 'min_child_samples': 303,
+ 'min_child_weight': 0.07736806864321738,
+ 'min_split_gain': 0.0,
+ 'n_estimators': 2935,
+ 'n_jobs': -1,
+ 'num_leaves': 821,
+ 'objective': None,
+ 'random_state': None,
+ 'reg_alpha': 0.0006461317856670983,
+ 'reg_lambda': 3.2252712450565137e-06,
+ 'silent': True,
+ 'subsample': 0.9558766592739659,
+ 'subsample_for_bin': 200000,
+ 'subsample_freq': 1}
+INFO: 2020-05-09 18:12:50 
+----> [FINISH TRAINING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-09 18:12:50 
+[FINISH TRAINING MODEL 'light_boost']
+INFO: 2020-05-09 18:12:50 
+--- FINISH TRAINING ---
+INFO: 2020-05-09 18:12:50 
+--- START EVALUATION ---
+INFO: 2020-05-09 18:12:50 
+[START EVALUATING MODEL 'light_boost']
+INFO: 2020-05-09 18:12:50 
+----> [START EVALUATING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-09 18:12:51 
+- RESULTS -
+INFO: 2020-05-09 18:12:51 
+OrderedDict([('precision', 0.9081515499425947),
+             ('recall', 0.7303785780240074),
+             ('f1_micro', 0.9776844631073786),
+             ('accuracy', 0.9776844631073786),
+             ('auc', 0.8626230479136525),
+             ('confusion', array([[15507,    80],
+       [  292,   791]])),
+             ('f1', 0.8096212896622315)])
+INFO: 2020-05-09 18:12:51 
+----> [FINISH EVALUATING 'light_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-09 18:12:51 
+[FINISH EVALUATING MODEL 'light_boost']
+INFO: 2020-05-09 18:12:51 
+--- FINISH EVALUATION ---
+INFO: 2020-05-09 18:12:51 
+-------- FINISH EXPERIMENT --------

@@ -15,7 +15,11 @@ elliptic_args:
 save_log: true 
 log_path: "logs/"
 #models: [xg_boost, light_boost, cat_boost]
+<<<<<<< HEAD
+models: [light_boost]
+=======
 models: [cat_boost]
+>>>>>>> 0f855c27a69c5ba52d77f1344deb1ac0b95b3d15
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 
 # search space for hyper-parameters mainly taken from: 
@@ -94,7 +98,7 @@ light_boost_args:
           value: 5000
           type: "throw"
         n_jobs: 
-          value: 16
+          value: 8
           type: "throw"
         subsample_freq:               # alias: bagging_freq
           value: 1
