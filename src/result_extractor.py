@@ -59,7 +59,7 @@ def load_model(model_type, path=None, params=None):
         model_args = {**model_args, **params}
 
     if model_type == "random_forest":
-        model = RandomForestAlgo(**model_args, n_jobs=-1)
+        model = RandomForestAlgo(**model_args)
     elif model_type == "xg_boost":
         model = XgboostAlgo(**model_args)
     elif model_type == "light_boost":
