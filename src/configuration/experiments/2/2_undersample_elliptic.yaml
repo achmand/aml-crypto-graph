@@ -11,7 +11,7 @@ elliptic_args:
 save_log: true 
 log_path: "logs/"
 output_file: "data/elliptic_ncr/elliptic_txs_features.csv"
-
+sample_type: "ncl"
 stratify_timestep: false
 
 

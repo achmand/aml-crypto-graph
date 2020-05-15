@@ -38,11 +38,13 @@ class Elliptic_Dataset(_BaseDatareader):
     # constructor ---------------------------------------------------------
     def __init__(self, 
                  data_args, 
-                 encode_classes=True):
+                 encode_classes=True,
+                 load_edges=True):
         
         # call parent constructor 
         super().__init__(data_args=data_args, 
-                         encode_classes=encode_classes)
+                         encode_classes=encode_classes,
+                         load_edges=load_edges)
 
     # properties ----------------------------------------------------------
     @property
@@ -100,15 +102,16 @@ class Elliptic_Dataset(_BaseDatareader):
         return feat_set_cols
 
     # load data functions -------------------------------------------------
-    def _load_dataset(self, data_args, encode_classes):
+    def _load_dataset(self, data_args, encode_classes, load_edges=True):
 
         # 1. load node labels as dataframe
         labels_path = "{}{}".format(data_args.folder, data_args.classes_file) 
         node_labels = self._load_node_labels(labels_path, encode_classes)
 
         # 2. load node edges as dataframe
-        edges_path = "{}{}".format(data_args.folder, data_args.edges_file) 
-        self._node_edges = self._load_node_edges(edges_path)
+        if load_edges == True:
+            edges_path = "{}{}".format(data_args.folder, data_args.edges_file) 
+            self._node_edges = self._load_node_edges(edges_path)
 
         # 3. load node features as dataframe
         feats_path = "{}{}".format(data_args.folder, data_args.feats_file)

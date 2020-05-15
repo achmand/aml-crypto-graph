@@ -1,0 +1,8 @@
+# Config file to load data, change paths if data is located in a different dir 
+
+# over_sampled (SMOTE)_version of  https://www.kaggle.com/ellipticco/elliptic-data-set
+elliptic_dataset:
+  folder: data/
+  classes_file: elliptic_smote/elliptic_txs_classes.csv
+  feats_file: elliptic_smote/elliptic_txs_features.csv
+  embs_file: elliptic_smote/elliptic_embs.csv

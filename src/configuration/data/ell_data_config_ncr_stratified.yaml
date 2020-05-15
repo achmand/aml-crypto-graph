@@ -1,6 +1,6 @@
 # Config file to load data, change paths if data is located in a different dir 
 
-# stratified down_sampled_version of  https://www.kaggle.com/ellipticco/elliptic-data-set
+# stratified down_sampled (NCL)_version of  https://www.kaggle.com/ellipticco/elliptic-data-set
 elliptic_dataset:
   folder: data/
   classes_file: elliptic/elliptic_txs_classes.csv

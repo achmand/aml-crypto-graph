@@ -131,5 +131,7 @@ dmypy.json
 /src/data/elliptic/
 /src/data/elliptic_ncr/
 /src/data/elliptic_ncr_stratified/
+/src/data/elliptic_smote/
+/src/data/elliptic_ncr_smote/
 src/data/elliptic.zip
 src/catboost_info
