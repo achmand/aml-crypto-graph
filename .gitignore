@@ -135,3 +135,5 @@ dmypy.json
 /src/data/elliptic_ncr_smote/
 src/data/elliptic.zip
 src/catboost_info
+src/persistence/experiment_2.2/tuned_models/AF/random_forest
+src/persistence/experiment_2.2/tuned_models/AF_NE/random_forest
