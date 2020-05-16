@@ -1,0 +1,208 @@
+INFO: 2020-05-16 20:06:53 
+-------- START EXPERIMENT --------
+INFO: 2020-05-16 20:06:53 
+- PROPERTIES -
+INFO: 2020-05-16 20:06:53 
+{'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config_smote.yaml',
+ 'elliptic_args': {'encode_classes': False,
+                   'feat_sets': ['AF'],
+                   'inc_unknown': False,
+                   'load_edges': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision',
+                        'recall',
+                        'f1_micro',
+                        'accuracy',
+                        'auc',
+                        'confusion',
+                        'f1'],
+ 'light_boost_args': {'persist_props': {'method': 'save',
+                                        'save_path': 'persistence/experiment_2.2/tuned_models'},
+                      'tune_props': {'k_folds': 5,
+                                     'method': 'tpe',
+                                     'n_iterations': 50,
+                                     'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                         'min': 0.5,
+                                                                         'type': 'suggest_uniform'},
+                                                    'learning_rate': {'max': 1.0,
+                                                                      'min': 0.00091188196,
+                                                                      'type': 'suggest_loguniform'},
+                                                    'min_child_samples': {'max': 400,
+                                                                          'min': 1,
+                                                                          'type': 'suggest_int'},
+                                                    'min_child_weight': {'max': 148.413159103,
+                                                                         'min': 1.12535175e-07,
+                                                                         'type': 'suggest_loguniform'},
+                                                    'n_estimators': {'type': 'throw',
+                                                                     'value': 5000},
+                                                    'n_jobs': {'type': 'throw',
+                                                               'value': 16},
+                                                    'num_leaves': {'max': 1000,
+                                                                   'min': 2,
+                                                                   'type': 'suggest_int'},
+                                                    'reg_alpha': {'max': 7.38905609893,
+                                                                  'min': 1.12535175e-07,
+                                                                  'type': 'suggest_loguniform'},
+                                                    'reg_lambda': {'max': 7.38905609893,
+                                                                   'min': 1.12535175e-07,
+                                                                   'type': 'suggest_loguniform'},
+                                                    'subsample': {'max': 1.0,
+                                                                  'min': 0.5,
+                                                                  'type': 'suggest_uniform'},
+                                                    'subsample_freq': {'type': 'fixed',
+                                                                       'value': 1}},
+                                     'scoring': 'f1',
+                                     'stratify_shuffle': True}},
+ 'log_path': 'logs/',
+ 'models': ['xg_boost'],
+ 'save_log': True,
+ 'xg_boost_args': {'persist_props': {'method': 'save',
+                                     'save_path': 'persistence/experiment_2.2/tuned_models'},
+                   'tune_props': {'k_folds': 5,
+                                  'method': 'tpe',
+                                  'n_iterations': 50,
+                                  'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                                       'min': 0.5,
+                                                                       'type': 'suggest_uniform'},
+                                                 'colsample_bytree': {'max': 1.0,
+                                                                      'min': 0.5,
+                                                                      'type': 'suggest_uniform'},
+                                                 'gamma': {'max': 7.38905609893,
+                                                           'min': 1.12535175e-07,
+                                                           'type': 'suggest_loguniform'},
+                                                 'learning_rate': {'max': 1.0,
+                                                                   'min': 0.00091188196,
+                                                                   'type': 'suggest_loguniform'},
+                                                 'max_depth': {'max': 10,
+                                                               'min': 2,
+                                                               'step': 1,
+                                                               'type': 'suggest_int'},
+                                                 'min_child_weight': {'max': 148.413159103,
+                                                                      'min': 1.12535175e-07,
+                                                                      'type': 'suggest_loguniform'},
+                                                 'n_estimators': {'type': 'throw',
+                                                                  'value': 5000},
+                                                 'n_jobs': {'type': 'throw',
+                                                            'value': 60},
+                                                 'reg_alpha': {'max': 7.38905609893,
+                                                               'min': 1.12535175e-07,
+                                                               'type': 'suggest_loguniform'},
+                                                 'reg_lambda': {'max': 7.38905609893,
+                                                                'min': 1.12535175e-07,
+                                                                'type': 'suggest_loguniform'},
+                                                 'subsample': {'max': 1.0,
+                                                               'min': 0.5,
+                                                               'type': 'suggest_uniform'}},
+                                  'scoring': 'f1',
+                                  'stratify_shuffle': True}}}
+INFO: 2020-05-16 20:06:53 
+--- START BUILDING DATASET ---
+INFO: 2020-05-16 20:06:53 
+- DATASET -
+INFO: 2020-05-16 20:06:53 
+elliptic
+INFO: 2020-05-16 20:06:53 
+- CONFIG -
+INFO: 2020-05-16 20:06:53 
+'configuration/data/data_config_smote.yaml'
+INFO: 2020-05-16 20:06:55 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-05-16 20:06:55 
+--- START BUILDING MODELS ---
+INFO: 2020-05-16 20:06:55 
+- MODELS -
+INFO: 2020-05-16 20:06:55 
+['xg_boost']
+INFO: 2020-05-16 20:06:55 
+[START BUILDING MODEL 'xg_boost']
+INFO: 2020-05-16 20:06:55 
+- ARGUMENTS -
+INFO: 2020-05-16 20:06:55 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_2.2/tuned_models'},
+ 'tune_props': {'k_folds': 5,
+                'method': 'tpe',
+                'n_iterations': 50,
+                'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                     'min': 0.5,
+                                                     'type': 'suggest_uniform'},
+                               'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.5,
+                                                    'type': 'suggest_uniform'},
+                               'gamma': {'max': 7.38905609893,
+                                         'min': 1.12535175e-07,
+                                         'type': 'suggest_loguniform'},
+                               'learning_rate': {'max': 1.0,
+                                                 'min': 0.00091188196,
+                                                 'type': 'suggest_loguniform'},
+                               'max_depth': {'max': 10,
+                                             'min': 2,
+                                             'step': 1,
+                                             'type': 'suggest_int'},
+                               'min_child_weight': {'max': 148.413159103,
+                                                    'min': 1.12535175e-07,
+                                                    'type': 'suggest_loguniform'},
+                               'n_estimators': {'type': 'throw', 'value': 5000},
+                               'n_jobs': {'type': 'throw', 'value': 60},
+                               'reg_alpha': {'max': 7.38905609893,
+                                             'min': 1.12535175e-07,
+                                             'type': 'suggest_loguniform'},
+                               'reg_lambda': {'max': 7.38905609893,
+                                              'min': 1.12535175e-07,
+                                              'type': 'suggest_loguniform'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.5,
+                                             'type': 'suggest_uniform'}},
+                'scoring': 'f1',
+                'stratify_shuffle': True}}
+INFO: 2020-05-16 20:06:55 
+----> [START BUILDING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-16 20:06:55 
+----> [FINISH BUILDING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+INFO: 2020-05-16 20:06:55 
+[FINISH BUILDING MODEL 'xg_boost']
+INFO: 2020-05-16 20:06:55 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-05-16 20:06:55 
+--- START TRAINING ---
+INFO: 2020-05-16 20:06:55 
+[START TRAINING MODEL 'xg_boost']
+INFO: 2020-05-16 20:06:55 
+----> [START TRAINING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
+ERROR: 2020-05-16 20:08:24 
+(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7fe641295460>)
+Traceback (most recent call last):
+  File "model_tuner.py", line 210, in <module>
+    train_models(dataset, models)
+  File "model_tuner.py", line 139, in train_models
+    model.fit(X, y)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/models/_models.py", line 116, in fit
+    self._tuner, self._tune_props = tu.tune_model(self._model, X, y, self._tune_props)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 666, in tune_model
+    tuner.fit(X, y)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 352, in fit
+    self._study.optimize(self._objective, n_trials=self._n_iterations)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/optuna/study.py", line 331, in optimize
+    func, n_trials, timeout, catch, callbacks, gc_after_trial, None
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/optuna/study.py", line 626, in _optimize_sequential
+    self._run_trial_and_callbacks(func, catch, callbacks, gc_after_trial)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/optuna/study.py", line 656, in _run_trial_and_callbacks
+    trial = self._run_trial(func, catch, gc_after_trial)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/optuna/study.py", line 677, in _run_trial
+    result = func(trial)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 308, in _objective
+    tmp_estimator.fit(**fit_props)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/xgboost/sklearn.py", line 823, in fit
+    callbacks=callbacks)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/xgboost/training.py", line 209, in train
+    xgb_model=xgb_model, callbacks=callbacks)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/xgboost/training.py", line 84, in _train_internal
+    bst_eval_set = bst.eval_set(evals, i, feval)
+  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/xgboost/core.py", line 1319, in eval_set
+    feval_ret = feval(self.predict(dmat, training=False), dmat)
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 231, in _xgb_f1_score
+    y_pred = [1 if y_cont > 0.5 else 0 for y_cont in y_pred]
+  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 231, in <listcomp>
+    y_pred = [1 if y_cont > 0.5 else 0 for y_cont in y_pred]
+KeyboardInterrupt
