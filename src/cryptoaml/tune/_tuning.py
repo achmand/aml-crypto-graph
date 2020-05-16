@@ -349,7 +349,7 @@ class OptunaTuner(_BaseTuner):
 
         is_boosting = self._estimator_class == lgb.LGBMClassifier or self._estimator_class == CatBoostClassifier or self._estimator_class == xgb.XGBClassifier
         if is_boosting:
-            self._study.optimize(self._objective, n_trials=self._n_iterations) 
+            self._study.optimize(self._objective, n_trials=self._n_iterations, n_jobs=4) 
         else:
             self._study.optimize(self._objective_normal, n_trials=self._n_iterations) 
 
