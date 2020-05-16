@@ -95,7 +95,7 @@ light_boost_args:
           value: 5000
           type: "throw"
         n_jobs: 
-          value: 16
+          value: 60
           type: "throw"
         subsample_freq:               # alias: bagging_freq
           value: 1
