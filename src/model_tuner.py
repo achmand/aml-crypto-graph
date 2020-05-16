@@ -30,9 +30,11 @@ def build_dataset(args):
     
     dataset=None
     if args.data == "elliptic":
+        load_edges = args.elliptic_args.get("load_edges", True)
         elliptic_args = Namespace(args.elliptic_args)
         elliptic_data = cdr.get_data(source="elliptic", 
                                      config_file=args.data_config_file,
+                                     load_edges=load_edges, 
                                      encode_classes=elliptic_args.encode_classes)
         dataset = elliptic_data.train_test_split(train_size=elliptic_args.train_size,
                                                  feat_set=elliptic_args.feat_sets,
