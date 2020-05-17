@@ -37,7 +37,7 @@ xg_boost_args:
           value: 5000
           type: "throw"
         n_jobs: 
-          value: 10
+          value: 16
           type: "throw"
         learning_rate:
           min: 0.00091188196           # exp(-7)
