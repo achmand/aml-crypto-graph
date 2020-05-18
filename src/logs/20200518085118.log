@@ -1,12 +1,12 @@
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 -------- START EXPERIMENT --------
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 - PROPERTIES -
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 {'data': 'elliptic',
  'data_config_file': 'configuration/data/data_config_ncl_smote.yaml',
  'elliptic_args': {'encode_classes': False,
-                   'feat_sets': ['AF'],
+                   'feat_sets': ['AF_NE'],
                    'inc_unknown': False,
                    'load_edges': False,
                    'train_size': 0.7},
@@ -37,7 +37,7 @@ INFO: 2020-05-17 17:36:08
                                                     'n_estimators': {'type': 'throw',
                                                                      'value': 5000},
                                                     'n_jobs': {'type': 'throw',
-                                                               'value': 16},
+                                                               'value': 10},
                                                     'num_leaves': {'max': 1000,
                                                                    'min': 2,
                                                                    'type': 'suggest_int'},
@@ -96,29 +96,29 @@ INFO: 2020-05-17 17:36:08
                                                                'type': 'suggest_uniform'}},
                                   'scoring': 'f1',
                                   'stratify_shuffle': True}}}
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 --- START BUILDING DATASET ---
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 - DATASET -
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 elliptic
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 - CONFIG -
-INFO: 2020-05-17 17:36:08 
+INFO: 2020-05-18 08:51:18 
 'configuration/data/data_config_ncl_smote.yaml'
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 --- FINISH BUILDING DATASET ---
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 --- START BUILDING MODELS ---
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 - MODELS -
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 ['xg_boost']
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 [START BUILDING MODEL 'xg_boost']
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 - ARGUMENTS -
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 {'persist_props': {'method': 'save',
                    'save_path': 'persistence/experiment_2.3/tuned_models'},
  'tune_props': {'k_folds': 5,
@@ -156,45 +156,17 @@ INFO: 2020-05-17 17:36:27
                                              'type': 'suggest_uniform'}},
                 'scoring': 'f1',
                 'stratify_shuffle': True}}
-INFO: 2020-05-17 17:36:27 
-----> [START BUILDING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
-INFO: 2020-05-17 17:36:27 
-----> [FINISH BUILDING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
+----> [START BUILDING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-18 08:51:22 
+----> [FINISH BUILDING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-18 08:51:22 
 [FINISH BUILDING MODEL 'xg_boost']
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 --- FINISH BUILDING MODELS ---
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 --- START TRAINING ---
-INFO: 2020-05-17 17:36:27 
+INFO: 2020-05-18 08:51:22 
 [START TRAINING MODEL 'xg_boost']
-INFO: 2020-05-17 17:36:27 
-----> [START TRAINING 'xg_boost' MODEL FOR 'AF' FEATURE SET]
-ERROR: 2020-05-17 17:39:08 
-(<class 'KeyboardInterrupt'>, KeyboardInterrupt(), <traceback object at 0x7f7fc622a960>)
-Traceback (most recent call last):
-  File "model_tuner.py", line 210, in <module>
-    train_models(dataset, models)
-  File "model_tuner.py", line 139, in train_models
-    model.fit(X, y)
-  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/models/_models.py", line 116, in fit
-    self._tuner, self._tune_props = tu.tune_model(self._model, X, y, self._tune_props)
-  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 666, in tune_model
-    tuner.fit(X, y)
-  File "/home/dvassallo/repos/aml-crypto-graph/src/cryptoaml/tune/_tuning.py", line 352, in fit
-    self._study.optimize(self._objective, n_trials=self._n_iterations, n_jobs=2)
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/optuna/study.py", line 372, in optimize
-    for _ in _iter
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/joblib/parallel.py", line 1017, in __call__
-    self.retrieve()
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/site-packages/joblib/parallel.py", line 909, in retrieve
-    self._output.extend(job.get(timeout=self.timeout))
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/multiprocessing/pool.py", line 651, in get
-    self.wait(timeout)
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/multiprocessing/pool.py", line 648, in wait
-    self._event.wait(timeout)
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/threading.py", line 552, in wait
-    signaled = self._cond.wait(timeout)
-  File "/home/dvassallo/anaconda3/envs/btc-classifier/lib/python3.7/threading.py", line 296, in wait
-    waiter.acquire()
-KeyboardInterrupt
+INFO: 2020-05-18 08:51:22 
+----> [START TRAINING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
