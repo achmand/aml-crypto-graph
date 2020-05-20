@@ -1,0 +1,233 @@
+INFO: 2020-05-18 22:42:22 
+-------- START EXPERIMENT --------
+INFO: 2020-05-18 22:42:22 
+- PROPERTIES -
+INFO: 2020-05-18 22:42:22 
+{'data': 'elliptic',
+ 'data_config_file': 'configuration/data/data_config_ncl_smote.yaml',
+ 'elliptic_args': {'encode_classes': False,
+                   'feat_sets': ['AF_NE'],
+                   'inc_unknown': False,
+                   'load_edges': False,
+                   'train_size': 0.7},
+ 'evaluation_metrics': ['precision',
+                        'recall',
+                        'f1_micro',
+                        'accuracy',
+                        'auc',
+                        'confusion',
+                        'f1'],
+ 'light_boost_args': {'persist_props': {'method': 'save',
+                                        'save_path': 'persistence/experiment_2.3/tuned_models'},
+                      'tune_props': {'k_folds': 5,
+                                     'method': 'tpe',
+                                     'n_iterations': 50,
+                                     'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                         'min': 0.5,
+                                                                         'type': 'suggest_uniform'},
+                                                    'learning_rate': {'max': 1.0,
+                                                                      'min': 0.00091188196,
+                                                                      'type': 'suggest_loguniform'},
+                                                    'min_child_samples': {'max': 400,
+                                                                          'min': 1,
+                                                                          'type': 'suggest_int'},
+                                                    'min_child_weight': {'max': 148.413159103,
+                                                                         'min': 1.12535175e-07,
+                                                                         'type': 'suggest_loguniform'},
+                                                    'n_estimators': {'type': 'throw',
+                                                                     'value': 5000},
+                                                    'n_jobs': {'type': 'throw',
+                                                               'value': 10},
+                                                    'num_leaves': {'max': 1000,
+                                                                   'min': 2,
+                                                                   'type': 'suggest_int'},
+                                                    'reg_alpha': {'max': 7.38905609893,
+                                                                  'min': 1.12535175e-07,
+                                                                  'type': 'suggest_loguniform'},
+                                                    'reg_lambda': {'max': 7.38905609893,
+                                                                   'min': 1.12535175e-07,
+                                                                   'type': 'suggest_loguniform'},
+                                                    'subsample': {'max': 1.0,
+                                                                  'min': 0.5,
+                                                                  'type': 'suggest_uniform'},
+                                                    'subsample_freq': {'type': 'fixed',
+                                                                       'value': 1}},
+                                     'scoring': 'f1',
+                                     'stratify_shuffle': True}},
+ 'log_path': 'logs/',
+ 'models': ['xg_boost'],
+ 'save_log': True,
+ 'xg_boost_args': {'persist_props': {'method': 'save',
+                                     'save_path': 'persistence/experiment_2.3/tuned_models'},
+                   'tune_props': {'k_folds': 5,
+                                  'method': 'tpe',
+                                  'n_iterations': 50,
+                                  'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                                       'min': 0.5,
+                                                                       'type': 'suggest_uniform'},
+                                                 'colsample_bytree': {'max': 1.0,
+                                                                      'min': 0.5,
+                                                                      'type': 'suggest_uniform'},
+                                                 'gamma': {'max': 7.38905609893,
+                                                           'min': 1.12535175e-07,
+                                                           'type': 'suggest_loguniform'},
+                                                 'learning_rate': {'max': 1.0,
+                                                                   'min': 0.00091188196,
+                                                                   'type': 'suggest_loguniform'},
+                                                 'max_depth': {'max': 10,
+                                                               'min': 2,
+                                                               'step': 1,
+                                                               'type': 'suggest_int'},
+                                                 'min_child_weight': {'max': 148.413159103,
+                                                                      'min': 1.12535175e-07,
+                                                                      'type': 'suggest_loguniform'},
+                                                 'n_estimators': {'type': 'throw',
+                                                                  'value': 5000},
+                                                 'n_jobs': {'type': 'throw',
+                                                            'value': 12},
+                                                 'reg_alpha': {'max': 7.38905609893,
+                                                               'min': 1.12535175e-07,
+                                                               'type': 'suggest_loguniform'},
+                                                 'reg_lambda': {'max': 7.38905609893,
+                                                                'min': 1.12535175e-07,
+                                                                'type': 'suggest_loguniform'},
+                                                 'subsample': {'max': 1.0,
+                                                               'min': 0.5,
+                                                               'type': 'suggest_uniform'}},
+                                  'scoring': 'f1',
+                                  'stratify_shuffle': True}}}
+INFO: 2020-05-18 22:42:22 
+--- START BUILDING DATASET ---
+INFO: 2020-05-18 22:42:22 
+- DATASET -
+INFO: 2020-05-18 22:42:22 
+elliptic
+INFO: 2020-05-18 22:42:22 
+- CONFIG -
+INFO: 2020-05-18 22:42:22 
+'configuration/data/data_config_ncl_smote.yaml'
+INFO: 2020-05-18 22:42:25 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-05-18 22:42:25 
+--- START BUILDING MODELS ---
+INFO: 2020-05-18 22:42:25 
+- MODELS -
+INFO: 2020-05-18 22:42:25 
+['xg_boost']
+INFO: 2020-05-18 22:42:25 
+[START BUILDING MODEL 'xg_boost']
+INFO: 2020-05-18 22:42:25 
+- ARGUMENTS -
+INFO: 2020-05-18 22:42:25 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_2.3/tuned_models'},
+ 'tune_props': {'k_folds': 5,
+                'method': 'tpe',
+                'n_iterations': 50,
+                'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                     'min': 0.5,
+                                                     'type': 'suggest_uniform'},
+                               'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.5,
+                                                    'type': 'suggest_uniform'},
+                               'gamma': {'max': 7.38905609893,
+                                         'min': 1.12535175e-07,
+                                         'type': 'suggest_loguniform'},
+                               'learning_rate': {'max': 1.0,
+                                                 'min': 0.00091188196,
+                                                 'type': 'suggest_loguniform'},
+                               'max_depth': {'max': 10,
+                                             'min': 2,
+                                             'step': 1,
+                                             'type': 'suggest_int'},
+                               'min_child_weight': {'max': 148.413159103,
+                                                    'min': 1.12535175e-07,
+                                                    'type': 'suggest_loguniform'},
+                               'n_estimators': {'type': 'throw', 'value': 5000},
+                               'n_jobs': {'type': 'throw', 'value': 12},
+                               'reg_alpha': {'max': 7.38905609893,
+                                             'min': 1.12535175e-07,
+                                             'type': 'suggest_loguniform'},
+                               'reg_lambda': {'max': 7.38905609893,
+                                              'min': 1.12535175e-07,
+                                              'type': 'suggest_loguniform'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.5,
+                                             'type': 'suggest_uniform'}},
+                'scoring': 'f1',
+                'stratify_shuffle': True}}
+INFO: 2020-05-18 22:42:25 
+----> [START BUILDING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-18 22:42:25 
+----> [FINISH BUILDING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-18 22:42:25 
+[FINISH BUILDING MODEL 'xg_boost']
+INFO: 2020-05-18 22:42:25 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-05-18 22:42:25 
+--- START TRAINING ---
+INFO: 2020-05-18 22:42:25 
+[START TRAINING MODEL 'xg_boost']
+INFO: 2020-05-18 22:42:25 
+----> [START TRAINING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-19 12:35:46 
+- MODEL PARAMS -
+INFO: 2020-05-19 12:35:46 
+{'base_score': 0.5,
+ 'booster': None,
+ 'colsample_bylevel': 0.7943840681950523,
+ 'colsample_bynode': 1,
+ 'colsample_bytree': 0.675624306763575,
+ 'gamma': 3.3282488912901886e-06,
+ 'gpu_id': -1,
+ 'importance_type': 'gain',
+ 'interaction_constraints': None,
+ 'learning_rate': 0.1026141189677146,
+ 'max_delta_step': 0,
+ 'max_depth': 7,
+ 'min_child_weight': 0.00026581370473607944,
+ 'missing': nan,
+ 'monotone_constraints': None,
+ 'n_estimators': 948,
+ 'n_jobs': 0,
+ 'num_parallel_tree': 1,
+ 'objective': 'binary:logistic',
+ 'random_state': 0,
+ 'reg_alpha': 1.4494911525904446e-06,
+ 'reg_lambda': 4.770670121334852e-07,
+ 'scale_pos_weight': 1,
+ 'subsample': 0.5468285060264697,
+ 'tree_method': None,
+ 'validate_parameters': False,
+ 'verbosity': None}
+INFO: 2020-05-19 12:35:46 
+----> [FINISH TRAINING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-19 12:35:46 
+[FINISH TRAINING MODEL 'xg_boost']
+INFO: 2020-05-19 12:35:46 
+--- FINISH TRAINING ---
+INFO: 2020-05-19 12:35:46 
+--- START EVALUATION ---
+INFO: 2020-05-19 12:35:46 
+[START EVALUATING MODEL 'xg_boost']
+INFO: 2020-05-19 12:35:46 
+----> [START EVALUATING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-19 12:35:46 
+- RESULTS -
+INFO: 2020-05-19 12:35:46 
+OrderedDict([('precision', 0.9700374531835206),
+             ('recall', 0.7174515235457064),
+             ('f1_micro', 0.9802039592081584),
+             ('accuracy', 0.9802039592081584),
+             ('auc', 0.8579558894433478),
+             ('confusion', array([[15563,    24],
+       [  306,   777]])),
+             ('f1', 0.8248407643312102)])
+INFO: 2020-05-19 12:35:46 
+----> [FINISH EVALUATING 'xg_boost' MODEL FOR 'AF_NE' FEATURE SET]
+INFO: 2020-05-19 12:35:46 
+[FINISH EVALUATING MODEL 'xg_boost']
+INFO: 2020-05-19 12:35:46 
+--- FINISH EVALUATION ---
+INFO: 2020-05-19 12:35:46 
+-------- FINISH EXPERIMENT --------
