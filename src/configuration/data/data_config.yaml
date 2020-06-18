@@ -12,3 +12,10 @@ elliptic_dataset:
 eth_accounts_dataset:
   folder: data/eth_fraud/
   accounts_file: eth_accounts.csv
+
+# http://users.rowan.edu/~polikar/res/nse/weather_data.zip
+noaa_weather_dataset:
+  folder: data/noaa_weather/
+  features_file: NEweather_data.csv
+  classes_file: NEweather_class.csv
+

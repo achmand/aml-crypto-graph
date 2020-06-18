@@ -10,6 +10,7 @@ The following datasets are included;
 ###### importing dependencies #############################################
 import yaml
 from .. import utils as u 
+from ._noaa_dr import Weather_Dataset   
 from ._elliptic_dr import Elliptic_Dataset
 from ._eth_accounts_dr import Eth_Accounts_Dataset   
 
@@ -17,7 +18,7 @@ from ._eth_accounts_dr import Eth_Accounts_Dataset
 def get_data(source, config_file="configuration/data/data_config.yaml", **kwargs):
     
     # available sources 
-    sources = ["elliptic", "eth_accounts"]
+    sources = ["elliptic", "eth_accounts", "noaa_weather"]
 
     # check if source passed is valid 
     if source not in sources:
@@ -40,6 +41,11 @@ def get_data(source, config_file="configuration/data/data_config.yaml", **kwargs
     elif source == "eth_accounts":
         eth_accounts_args = u.Namespace(config["eth_accounts_dataset"])
         return Eth_Accounts_Dataset(eth_accounts_args, **kwargs)
+
+    # noaa weather dataset (downloadable from: http://users.rowan.edu/~polikar/res/nse/weather_data.zip)
+    elif source == "noaa_weather":
+        noaa_weather_args = u.Namespace(config["noaa_weather_dataset"])
+        return Weather_Dataset(noaa_weather_args, **kwargs)
 
     # source passed is invalid 
     else:

@@ -1,11 +1,10 @@
 """
 Class which reads the ethereum illicit/licit dataset (account classification).
+References:  https://github.com/sfarrugia15/Ethereum_Fraud_Detection
+             https://www.sciencedirect.com/science/article/abs/pii/S0957417420301433#ec-research-data
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
-
-# https://github.com/sfarrugia15/Ethereum_Fraud_Detection
-# https://www.sciencedirect.com/science/article/abs/pii/S0957417420301433#ec-research-data
 
 ###### importing dependencies #############################################
 import numpy as np
@@ -21,7 +20,6 @@ class Eth_Accounts_Dataset(_BaseDatareader):
     # constructor ---------------------------------------------------------
     def __init__(self, 
                  data_args):
-        
         # call parent constructor 
         super().__init__(data_args=data_args)
     

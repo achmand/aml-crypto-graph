@@ -1,16 +1,15 @@
 """
 Class which reads the elliptic dataset (node/transaction classification).
+References: https://www.elliptic.co/
+            https://arxiv.org/abs/1908.02591
+            https://www.kaggle.com/ellipticco/elliptic-data-set
+            https://www.elliptic.co/our-thinking/elliptic-dataset-cryptocurrency-financial-crime
+            https://medium.com/elliptic/the-elliptic-data-set-opening-up-machine-learning-on-the-blockchain-e0a343d99a14
+            https://mitibmwatsonailab.mit.edu/research/projects/scalable-graph-learning-for-anti-money-laundering/
+            https://www.markrweber.com/graph-deep-learning
 """
 
 # Author: Dylan Vassallo <dylan.vassallo.18@um.edu.mt>
-
-# https://www.elliptic.co/
-# https://arxiv.org/abs/1908.02591
-# https://www.kaggle.com/ellipticco/elliptic-data-set
-# https://www.elliptic.co/our-thinking/elliptic-dataset-cryptocurrency-financial-crime
-# https://medium.com/elliptic/the-elliptic-data-set-opening-up-machine-learning-on-the-blockchain-e0a343d99a14
-# https://mitibmwatsonailab.mit.edu/research/projects/scalable-graph-learning-for-anti-money-laundering/
-# https://www.markrweber.com/graph-deep-learning
 
 ###### importing dependencies #############################################
 import pandas as pd 
@@ -24,7 +23,7 @@ class Elliptic_Dataset(_BaseDatareader):
     # constants -----------------------------------------------------------
     # columns - meta 
     COL_TXID  = "txId"  # TX ID 
-    COL_TS    = "ts"    # TX time step 
+    COL_TS    = "ts"    # timestep 
 
     # columns - feature sets 
     FEATS_LF    = "LF"       # Local features
