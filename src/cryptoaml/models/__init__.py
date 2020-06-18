@@ -10,8 +10,10 @@ from ._models import XgboostAlgo
 from ._models import XgboostRfAlgo 
 from ._models import LightGbmAlgo 
 from ._models import CatBoostAlgo 
+from ._models_datastream import AdaptiveXGBoostClassifier 
 
 ###### exposed functionality ##############################################
-__all__ = ["RandomForestAlgo", "XgboostAlgo", "XgboostRfAlgo", "LightGbmAlgo", "CatBoostAlgo"]
+__all__ = ["RandomForestAlgo",  "XgboostAlgo", "XgboostRfAlgo", "LightGbmAlgo",  "CatBoostAlgo", "AdaptiveXGBoostClassifier"]
 ###########################################################################
 
+    
