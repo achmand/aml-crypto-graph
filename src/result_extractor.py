@@ -46,7 +46,12 @@ def build_dataset(args):
                                          config_file=args.data_config_file)
         dataset = eth_accounts_data.train_test_split(train_size=eth_accounts_args.train_size)     
 
-    # elif args.data = "noaa"                        
+    elif args.data == "noaa_weather":
+        noaa_args = Namespace(args.noaa_args)           
+        noaa_data = cdr.get_data(source="noaa_weather", 
+                                         config_file=args.data_config_file)         
+        dataset = noaa_data.train_test_split(train_size=noaa_args.train_size)     
+
     else:
         raise NotImplementedError("'{}' dataset not yet implemented".format(args.data))
     
@@ -110,7 +115,7 @@ def build_models(args):
 ###### extract results #####################################################
 def extract_time_indexed(metric, dataset, model, X, y):
     results = []
-    if dataset == "elliptic":
+    if dataset == "elliptic" or dataset == "noaa_weather":
         tmp_data = X.copy()
         tmp_data["label"] = y.copy()
         ts_data = tmp_data.groupby("ts")
