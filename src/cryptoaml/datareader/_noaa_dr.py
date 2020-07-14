@@ -59,18 +59,25 @@ class Weather_Dataset(_BaseDatareader):
                                self.COL_SWIN, 
                                self.COL_MXTEMP, 
                                self.COL_MITEMP]
+        
+        if data_args.processed == True:
+            self._cols_features = self._cols_features + [self.COL_TS]
+            features_df.columns = self._cols_features
 
         # 2. add timestep column (every 30 records)
-        features_df.columns = self._cols_features
-        features_df[self.COL_TS] = (features_df.index / 30) + 1
-        features_df[self.COL_TS] = features_df[self.COL_TS].astype(int) 
+        if data_args.processed == False:
+            features_df.columns = self._cols_features
+            features_df[self.COL_TS] = (features_df.index / 30) + 1
+            features_df[self.COL_TS] = features_df[self.COL_TS].astype(int) 
+            
 
         # 3. merge features and labels 
         features_df[self.COL_CLASS] = labels_df[0]
 
         # 4. encode labels to binary 
-        features_df[self.COL_CLASS] = features_df[self.COL_CLASS].apply(
-            lambda x: 1 if x == 2 else 0)  
+        if data_args.processed == False:
+            features_df[self.COL_CLASS] = features_df[self.COL_CLASS].apply(
+                lambda x: 1 if x == 2 else 0)  
 
         return features_df
 

@@ -15,6 +15,7 @@ eth_accounts_dataset:
 
 # http://users.rowan.edu/~polikar/res/nse/weather_data.zip
 noaa_weather_dataset:
+  processed: false
   folder: data/noaa_weather/
   features_file: NEweather_data.csv
   classes_file: NEweather_class.csv
