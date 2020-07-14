@@ -61,7 +61,6 @@ class Weather_Dataset(_BaseDatareader):
                                self.COL_MITEMP]
         
         if data_args.processed == True:
-            print("HERE")
             self._cols_features = self._cols_features 
             features_df.columns = self._cols_features + [self.COL_TS]
 
