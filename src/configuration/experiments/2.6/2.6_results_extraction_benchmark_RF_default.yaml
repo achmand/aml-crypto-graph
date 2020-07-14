@@ -1,0 +1,24 @@
+data: noaa_weather
+data_config_file: "configuration/data/data_config_ncl_smote.yaml"
+noaa_args: 
+  feat_sets: [ALL] 
+  train_size: 0.7
+
+save_log: false 
+log_path: "logs/"
+evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
+time_indexed_evaluation: "f1"
+results_path: persistence/experiment_2.6/results
+results_file: "benchmark_model_results.pkl"
+
+models: 
+  random_forest_ALL:
+    model: "random_forest"
+    feat_set: ALL 
+    iterations: 100
+    params: 
+      n_jobs: 16
+ 
+  
+  
+    
