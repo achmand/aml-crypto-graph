@@ -61,8 +61,9 @@ class Weather_Dataset(_BaseDatareader):
                                self.COL_MITEMP]
         
         if data_args.processed == True:
-            self._cols_features = self._cols_features + [self.COL_TS]
-            features_df.columns = self._cols_features
+            print("HERE")
+            self._cols_features = self._cols_features 
+            features_df.columns = self._cols_features + [self.COL_TS]
 
         # 2. add timestep column (every 30 records)
         if data_args.processed == False:
@@ -70,7 +71,6 @@ class Weather_Dataset(_BaseDatareader):
             features_df[self.COL_TS] = (features_df.index / 30) + 1
             features_df[self.COL_TS] = features_df[self.COL_TS].astype(int) 
             
-
         # 3. merge features and labels 
         features_df[self.COL_CLASS] = labels_df[0]
 
