@@ -1,0 +1,324 @@
+INFO: 2020-07-14 23:15:48 
+-------- START EXPERIMENT --------
+INFO: 2020-07-14 23:15:48 
+- PROPERTIES -
+INFO: 2020-07-14 23:15:48 
+{'data': 'noaa_weather',
+ 'data_config_file': 'configuration/data/data_config_smote.yaml',
+ 'evaluation_metrics': ['precision',
+                        'recall',
+                        'f1_micro',
+                        'accuracy',
+                        'auc',
+                        'confusion',
+                        'f1'],
+ 'light_boost_args': {'persist_props': {'method': 'save',
+                                        'save_path': 'persistence/experiment_2.5/tuned_models'},
+                      'tune_props': {'k_folds': 5,
+                                     'method': 'tpe',
+                                     'n_iterations': 50,
+                                     'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                                         'min': 0.5,
+                                                                         'type': 'suggest_uniform'},
+                                                    'learning_rate': {'max': 1.0,
+                                                                      'min': 0.00091188196,
+                                                                      'type': 'suggest_loguniform'},
+                                                    'min_child_samples': {'max': 400,
+                                                                          'min': 1,
+                                                                          'type': 'suggest_int'},
+                                                    'min_child_weight': {'max': 148.413159103,
+                                                                         'min': 1.12535175e-07,
+                                                                         'type': 'suggest_loguniform'},
+                                                    'n_estimators': {'type': 'throw',
+                                                                     'value': 5000},
+                                                    'n_jobs': {'type': 'throw',
+                                                               'value': 16},
+                                                    'num_leaves': {'max': 1000,
+                                                                   'min': 2,
+                                                                   'type': 'suggest_int'},
+                                                    'reg_alpha': {'max': 7.38905609893,
+                                                                  'min': 1.12535175e-07,
+                                                                  'type': 'suggest_loguniform'},
+                                                    'reg_lambda': {'max': 7.38905609893,
+                                                                   'min': 1.12535175e-07,
+                                                                   'type': 'suggest_loguniform'},
+                                                    'subsample': {'max': 1.0,
+                                                                  'min': 0.5,
+                                                                  'type': 'suggest_uniform'},
+                                                    'subsample_freq': {'type': 'fixed',
+                                                                       'value': 1}},
+                                     'scoring': 'f1',
+                                     'stratify_shuffle': True}},
+ 'log_path': 'logs/',
+ 'models': ['xg_boost', 'light_boost'],
+ 'noaa_args': {'feat_sets': ['ALL'], 'train_size': 0.7},
+ 'save_log': True,
+ 'xg_boost_args': {'persist_props': {'method': 'save',
+                                     'save_path': 'persistence/experiment_2.5/tuned_models'},
+                   'tune_props': {'k_folds': 5,
+                                  'method': 'tpe',
+                                  'n_iterations': 50,
+                                  'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                                       'min': 0.5,
+                                                                       'type': 'suggest_uniform'},
+                                                 'colsample_bytree': {'max': 1.0,
+                                                                      'min': 0.5,
+                                                                      'type': 'suggest_uniform'},
+                                                 'gamma': {'max': 7.38905609893,
+                                                           'min': 1.12535175e-07,
+                                                           'type': 'suggest_loguniform'},
+                                                 'learning_rate': {'max': 1.0,
+                                                                   'min': 0.00091188196,
+                                                                   'type': 'suggest_loguniform'},
+                                                 'max_depth': {'max': 10,
+                                                               'min': 2,
+                                                               'step': 1,
+                                                               'type': 'suggest_int'},
+                                                 'min_child_weight': {'max': 148.413159103,
+                                                                      'min': 1.12535175e-07,
+                                                                      'type': 'suggest_loguniform'},
+                                                 'n_estimators': {'type': 'throw',
+                                                                  'value': 5000},
+                                                 'n_jobs': {'type': 'throw',
+                                                            'value': 16},
+                                                 'reg_alpha': {'max': 7.38905609893,
+                                                               'min': 1.12535175e-07,
+                                                               'type': 'suggest_loguniform'},
+                                                 'reg_lambda': {'max': 7.38905609893,
+                                                                'min': 1.12535175e-07,
+                                                                'type': 'suggest_loguniform'},
+                                                 'subsample': {'max': 1.0,
+                                                               'min': 0.5,
+                                                               'type': 'suggest_uniform'}},
+                                  'scoring': 'f1',
+                                  'stratify_shuffle': True}}}
+INFO: 2020-07-14 23:15:48 
+--- START BUILDING DATASET ---
+INFO: 2020-07-14 23:15:48 
+- DATASET -
+INFO: 2020-07-14 23:15:48 
+noaa_weather
+INFO: 2020-07-14 23:15:48 
+- CONFIG -
+INFO: 2020-07-14 23:15:48 
+'configuration/data/data_config_smote.yaml'
+INFO: 2020-07-14 23:15:48 
+--- FINISH BUILDING DATASET ---
+INFO: 2020-07-14 23:15:48 
+--- START BUILDING MODELS ---
+INFO: 2020-07-14 23:15:48 
+- MODELS -
+INFO: 2020-07-14 23:15:48 
+['xg_boost', 'light_boost']
+INFO: 2020-07-14 23:15:48 
+[START BUILDING MODEL 'xg_boost']
+INFO: 2020-07-14 23:15:48 
+- ARGUMENTS -
+INFO: 2020-07-14 23:15:48 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_2.5/tuned_models'},
+ 'tune_props': {'k_folds': 5,
+                'method': 'tpe',
+                'n_iterations': 50,
+                'param_grid': {'colsample_bylevel': {'max': 1.0,
+                                                     'min': 0.5,
+                                                     'type': 'suggest_uniform'},
+                               'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.5,
+                                                    'type': 'suggest_uniform'},
+                               'gamma': {'max': 7.38905609893,
+                                         'min': 1.12535175e-07,
+                                         'type': 'suggest_loguniform'},
+                               'learning_rate': {'max': 1.0,
+                                                 'min': 0.00091188196,
+                                                 'type': 'suggest_loguniform'},
+                               'max_depth': {'max': 10,
+                                             'min': 2,
+                                             'step': 1,
+                                             'type': 'suggest_int'},
+                               'min_child_weight': {'max': 148.413159103,
+                                                    'min': 1.12535175e-07,
+                                                    'type': 'suggest_loguniform'},
+                               'n_estimators': {'type': 'throw', 'value': 5000},
+                               'n_jobs': {'type': 'throw', 'value': 16},
+                               'reg_alpha': {'max': 7.38905609893,
+                                             'min': 1.12535175e-07,
+                                             'type': 'suggest_loguniform'},
+                               'reg_lambda': {'max': 7.38905609893,
+                                              'min': 1.12535175e-07,
+                                              'type': 'suggest_loguniform'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.5,
+                                             'type': 'suggest_uniform'}},
+                'scoring': 'f1',
+                'stratify_shuffle': True}}
+INFO: 2020-07-14 23:15:48 
+----> [START BUILDING 'xg_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-14 23:15:48 
+----> [FINISH BUILDING 'xg_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-14 23:15:48 
+[FINISH BUILDING MODEL 'xg_boost']
+INFO: 2020-07-14 23:15:48 
+[START BUILDING MODEL 'light_boost']
+INFO: 2020-07-14 23:15:48 
+- ARGUMENTS -
+INFO: 2020-07-14 23:15:48 
+{'persist_props': {'method': 'save',
+                   'save_path': 'persistence/experiment_2.5/tuned_models'},
+ 'tune_props': {'k_folds': 5,
+                'method': 'tpe',
+                'n_iterations': 50,
+                'param_grid': {'colsample_bytree': {'max': 1.0,
+                                                    'min': 0.5,
+                                                    'type': 'suggest_uniform'},
+                               'learning_rate': {'max': 1.0,
+                                                 'min': 0.00091188196,
+                                                 'type': 'suggest_loguniform'},
+                               'min_child_samples': {'max': 400,
+                                                     'min': 1,
+                                                     'type': 'suggest_int'},
+                               'min_child_weight': {'max': 148.413159103,
+                                                    'min': 1.12535175e-07,
+                                                    'type': 'suggest_loguniform'},
+                               'n_estimators': {'type': 'throw', 'value': 5000},
+                               'n_jobs': {'type': 'throw', 'value': 16},
+                               'num_leaves': {'max': 1000,
+                                              'min': 2,
+                                              'type': 'suggest_int'},
+                               'reg_alpha': {'max': 7.38905609893,
+                                             'min': 1.12535175e-07,
+                                             'type': 'suggest_loguniform'},
+                               'reg_lambda': {'max': 7.38905609893,
+                                              'min': 1.12535175e-07,
+                                              'type': 'suggest_loguniform'},
+                               'subsample': {'max': 1.0,
+                                             'min': 0.5,
+                                             'type': 'suggest_uniform'},
+                               'subsample_freq': {'type': 'fixed', 'value': 1}},
+                'scoring': 'f1',
+                'stratify_shuffle': True}}
+INFO: 2020-07-14 23:15:48 
+----> [START BUILDING 'light_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-14 23:15:48 
+----> [FINISH BUILDING 'light_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-14 23:15:48 
+[FINISH BUILDING MODEL 'light_boost']
+INFO: 2020-07-14 23:15:48 
+--- FINISH BUILDING MODELS ---
+INFO: 2020-07-14 23:15:48 
+--- START TRAINING ---
+INFO: 2020-07-14 23:15:48 
+[START TRAINING MODEL 'xg_boost']
+INFO: 2020-07-14 23:15:48 
+----> [START TRAINING 'xg_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 03:26:02 
+- MODEL PARAMS -
+INFO: 2020-07-15 03:26:02 
+{'base_score': 0.5,
+ 'booster': None,
+ 'colsample_bylevel': 0.7821187110195753,
+ 'colsample_bynode': 1,
+ 'colsample_bytree': 0.9023492619794203,
+ 'gamma': 0.002531642946263811,
+ 'gpu_id': -1,
+ 'importance_type': 'gain',
+ 'interaction_constraints': None,
+ 'learning_rate': 0.03896337896870269,
+ 'max_delta_step': 0,
+ 'max_depth': 10,
+ 'min_child_weight': 0.0009120440224687303,
+ 'missing': nan,
+ 'monotone_constraints': None,
+ 'n_estimators': 4664,
+ 'n_jobs': 0,
+ 'num_parallel_tree': 1,
+ 'objective': 'binary:logistic',
+ 'random_state': 0,
+ 'reg_alpha': 0.0004965315185823202,
+ 'reg_lambda': 0.006362939210948986,
+ 'scale_pos_weight': 1,
+ 'subsample': 0.6718701379701361,
+ 'tree_method': None,
+ 'validate_parameters': False,
+ 'verbosity': None}
+INFO: 2020-07-15 03:26:02 
+----> [FINISH TRAINING 'xg_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 03:26:02 
+[FINISH TRAINING MODEL 'xg_boost']
+INFO: 2020-07-15 03:26:02 
+[START TRAINING MODEL 'light_boost']
+INFO: 2020-07-15 03:26:02 
+----> [START TRAINING 'light_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 05:04:59 
+- MODEL PARAMS -
+INFO: 2020-07-15 05:04:59 
+{'boosting_type': 'gbdt',
+ 'class_weight': None,
+ 'colsample_bytree': 0.9798987810659789,
+ 'importance_type': 'split',
+ 'learning_rate': 0.018885526001721917,
+ 'max_depth': -1,
+ 'min_child_samples': 1,
+ 'min_child_weight': 0.000244933461981523,
+ 'min_split_gain': 0.0,
+ 'n_estimators': 3838,
+ 'n_jobs': -1,
+ 'num_leaves': 531,
+ 'objective': None,
+ 'random_state': None,
+ 'reg_alpha': 0.012506700853197978,
+ 'reg_lambda': 1.750875985194234e-06,
+ 'silent': True,
+ 'subsample': 0.6330725162984325,
+ 'subsample_for_bin': 200000,
+ 'subsample_freq': 1}
+INFO: 2020-07-15 05:04:59 
+----> [FINISH TRAINING 'light_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 05:04:59 
+[FINISH TRAINING MODEL 'light_boost']
+INFO: 2020-07-15 05:04:59 
+--- FINISH TRAINING ---
+INFO: 2020-07-15 05:04:59 
+--- START EVALUATION ---
+INFO: 2020-07-15 05:04:59 
+[START EVALUATING MODEL 'xg_boost']
+INFO: 2020-07-15 05:04:59 
+----> [START EVALUATING 'xg_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 05:05:00 
+- RESULTS -
+INFO: 2020-07-15 05:05:00 
+OrderedDict([('precision', 0.7061769616026711),
+             ('recall', 0.6534500514933058),
+             ('f1_micro', 0.779187350615922),
+             ('accuracy', 0.779187350615922),
+             ('auc', 0.7512317457924065),
+             ('confusion', array([[2969,  528],
+       [ 673, 1269]])),
+             ('f1', 0.6787911206204867)])
+INFO: 2020-07-15 05:05:00 
+----> [FINISH EVALUATING 'xg_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 05:05:00 
+[FINISH EVALUATING MODEL 'xg_boost']
+INFO: 2020-07-15 05:05:00 
+[START EVALUATING MODEL 'light_boost']
+INFO: 2020-07-15 05:05:00 
+----> [START EVALUATING 'light_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 05:05:00 
+- RESULTS -
+INFO: 2020-07-15 05:05:00 
+OrderedDict([('precision', 0.7041782729805014),
+             ('recall', 0.650875386199794),
+             ('f1_micro', 0.7777164920022063),
+             ('accuracy', 0.7777164920022063),
+             ('auc', 0.7495154740550014),
+             ('confusion', array([[2966,  531],
+       [ 678, 1264]])),
+             ('f1', 0.6764784586566764)])
+INFO: 2020-07-15 05:05:00 
+----> [FINISH EVALUATING 'light_boost' MODEL FOR 'ALL' FEATURE SET]
+INFO: 2020-07-15 05:05:00 
+[FINISH EVALUATING MODEL 'light_boost']
+INFO: 2020-07-15 05:05:00 
+--- FINISH EVALUATION ---
+INFO: 2020-07-15 05:05:00 
+-------- FINISH EXPERIMENT --------
