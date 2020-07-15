@@ -21,7 +21,7 @@ evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "conf
 xg_boost_args:
   persist_props:
     method: "save"
-    save_path: "persistence/experiment_2.5/tuned_models"
+    save_path: "persistence/experiment_2.6/tuned_models"
   tune_props:
       method: "tpe" 
       scoring: "f1"
@@ -79,7 +79,7 @@ xg_boost_args:
 light_boost_args:
   persist_props:
     method: "save"
-    save_path: "persistence/experiment_2.5/tuned_models"
+    save_path: "persistence/experiment_2.6/tuned_models"
   tune_props:
       method: "tpe" 
       scoring: "f1"
