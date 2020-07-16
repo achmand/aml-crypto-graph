@@ -14,7 +14,7 @@ results_file: "tuned_benchmark_results.pkl"
 models: 
   random_forest_ALL:
     model: "random_forest"
-    load_path: "persistence/experiment_2.4/tuned_models/AF/random_forest"
+    load_path: "persistence/experiment_2.4/tuned_models/ALL/random_forest"
     feat_set: ALL 
     iterations: 100
     params: 
