@@ -144,3 +144,6 @@ src/persistence/experiment_2.2/tuned_models/AF_NE/light_boost
 src/persistence/experiment_2.3/tuned_models/AF_NE/light_boost
 src/persistence/experiment_2.3/tuned_models/AF_NE/xg_boost
 src/persistence/experiment_1.2/tuned_models/ALL/random_forest
+src/persistence/experiment_2.4/tuned_models/ALL/random_forest
+src/persistence/experiment_2.5/tuned_models/ALL/random_forest
+src/persistence/experiment_2.6/tuned_models/ALL/random_forest
