@@ -9,24 +9,24 @@ log_path: "logs/"
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 time_indexed_evaluation: "f1"
 results_path: persistence/experiment_1.2/results
-results_file: "tuned_models_results.pkl"
+results_file: "tuned_models_iter_results.pkl"
 
 models: 
   xg_boost_ALL:
     model: "xg_boost"
     load_path: "persistence/experiment_1.2/tuned_models/ALL/xg_boost"
     feat_set: ALL 
-    iterations: 1
+    iterations: 100
   light_boost_ALL: 
     model: "light_boost"
     load_path: "persistence/experiment_1.2/tuned_models/ALL/light_boost"
     feat_set: ALL
-    iterations: 1
+    iterations: 100
   cat_boost_ALL: 
     model: "cat_boost"
     load_path: "persistence/experiment_1.2/tuned_models/ALL/cat_boost"
     feat_set: ALL 
-    iterations: 1
+    iterations: 100
   
   
     
