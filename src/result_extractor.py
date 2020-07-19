@@ -17,6 +17,7 @@ from cryptoaml.models import XgboostAlgo
 from cryptoaml.models import LightGbmAlgo
 from cryptoaml.models import CatBoostAlgo
 from cryptoaml.models import RandomForestAlgo
+from catboost import CatBoostClassifier
 
 ###### load dataset #######################################################
 def build_dataset(args):
@@ -162,8 +163,15 @@ def extract_results(args, models, dataset):
             results[model_key][feat_set]["time_indexed_iterations"] = []
             for i in range(iterations):
                 logger_exp.info("- CURRENT ITERATION ({}) -".format(i))
-                
-                # train model 
+                if model_key == "light_boost":
+                    model.set_params({"random_state": i})
+                elif model_key == "xg_boost":
+                    model.set_params(**{"random_state": i})
+                elif model_key == "cat_boost":
+                    tmp_cat = CatBoostClassifier(**model._model._init_params)
+                    tmp_cat.set_params(random_seed=i)
+                    model._model = tmp_cat
+                   
                 model.fit(train_X, train_y, tune=False)
 
                 # first iteration extract parameters 
@@ -172,7 +180,8 @@ def extract_results(args, models, dataset):
 
                 # evaluate model and extract metrics 
                 current_metrics = {}
-                current_metrics["iteration"] = i
+                current_metrics["iteration"] = i               
+                # print(model.evaluate(evaluation_metrics, test_X, test_y))
                 current_metrics = {**current_metrics, **model.evaluate(evaluation_metrics, test_X, test_y)}
                 results[model_key][feat_set]["metrics_iterations"].append(current_metrics)
 
