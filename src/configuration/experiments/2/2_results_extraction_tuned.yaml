@@ -18,32 +18,32 @@ models:
     model: "xg_boost"
     load_path: "persistence/experiment_2/tuned_models/AF/xg_boost"
     feat_set: AF 
-    iterations: 1
+    iterations: 100
   xg_boost_AF_NE:
     model: "xg_boost"
     load_path: "persistence/experiment_2/tuned_models/AF_NE/xg_boost"
     feat_set: AF_NE 
-    iterations: 1
+    iterations: 100
   light_boost_AF: 
     model: "light_boost"
     load_path: "persistence/experiment_2/tuned_models/AF/light_boost"
     feat_set: AF 
-    iterations: 1
+    iterations: 100
   light_boost_AF_NE: 
     model: "light_boost"
     load_path: "persistence/experiment_2/tuned_models/AF_NE/light_boost"
     feat_set: AF_NE
-    iterations: 1
-  cat_boost_AF: 
-    model: "cat_boost"
-    load_path: "persistence/experiment_2/tuned_models/AF/cat_boost"
-    feat_set: AF  
-    iterations: 1
-  cat_boost_AF_NE: 
-    model: "cat_boost"
-    load_path: "persistence/experiment_2/tuned_models/AF_NE/cat_boost"
-    feat_set: AF_NE 
-    iterations: 1
+    iterations: 100
+  # cat_boost_AF: 
+  #   model: "cat_boost"
+  #   load_path: "persistence/experiment_2/tuned_models/AF/cat_boost"
+  #   feat_set: AF  
+  #   iterations: 1
+  # cat_boost_AF_NE: 
+  #   model: "cat_boost"
+  #   load_path: "persistence/experiment_2/tuned_models/AF_NE/cat_boost"
+  #   feat_set: AF_NE 
+  #   iterations: 1
 
   
   
