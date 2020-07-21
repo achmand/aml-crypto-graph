@@ -164,10 +164,10 @@ def extract_results(args, models, dataset):
             for i in range(iterations):
                 logger_exp.info("- CURRENT ITERATION ({}) -".format(i))
                 if model_key == "light_boost":
-                    model.set_params(**{"random_state": i})
+                    model.set_params(**{"random_state": i, "n_jobs": 16})
                     print(model.get_params())
                 elif model_key == "xg_boost":
-                    model.set_params(**{"random_state": i})
+                    model.set_params(**{"random_state": i, "n_jobs": 16})
                     print(model.get_params())
                 elif model_key == "cat_boost":
                     tmp_cat = CatBoostClassifier(**model._model._init_params)
