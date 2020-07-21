@@ -11,7 +11,7 @@ log_path: "logs/"
 evaluation_metrics: ["precision", "recall", "f1_micro", "accuracy", "auc", "confusion", "f1"]
 time_indexed_evaluation: "f1"
 results_path: persistence/experiment_2/results
-results_file: "tuned_models_results.pkl"
+results_file: "tuned_models_iter_results.pkl"
 
 models: 
   xg_boost_AF:
