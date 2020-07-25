@@ -29,8 +29,11 @@ def plot_result_matrices(results, figsize, columns=2):
     confusion_matrices = []
     for model_key, model_value in results.items():
         for feature_set, feature_set_value in model_value.items():
-            plot_title = "'{}' on '{}' feature set".format(model_key,feature_set)
             confusion_matrix = feature_set_value["metrics"]["confusion"]
+            tn, fp, fn, tp = confusion_matrix.ravel()
+            tpr = tp / (tp+ fn)
+            tnr = tn / (tn + fp)
+            plot_title = "'{}' on '{}' feature set with \nTPR: {} \nTNR: {}".format(model_key,feature_set, round(tpr,4), round(tnr,4))
             confusion_matrices.append((plot_title, confusion_matrix))
         
     # display plots 
