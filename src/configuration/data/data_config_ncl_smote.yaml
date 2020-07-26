@@ -6,6 +6,7 @@ elliptic_dataset:
   classes_file: elliptic_ncr_smote/elliptic_txs_classes.csv
   feats_file: elliptic_ncr_smote/elliptic_txs_features.csv
   embs_file: elliptic_ncr_smote/elliptic_embs.csv
+  edges_file: elliptic/elliptic_txs_edgelist.csv
 
 noaa_weather_dataset:
   processed: true
