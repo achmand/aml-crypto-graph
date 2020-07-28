@@ -278,7 +278,7 @@ class AdaptiveStackedBoostClassifier():
         if n_rounds_eval_base_model > n_base_models or n_rounds_eval_base_model <= 0:
             raise ValueError("'n_rounds_eval_base_model' must be > 0 and <= to 'n_base_models'")
         self._n_rounds_eval_base_model = n_rounds_eval_base_model
-        self._meta_learner = xgb.XGBClassifier()
+        self._meta_learner = xgb.XGBClassifier(n_jobs=-1)
         self.meta_learner_train_ratio = meta_learner_train_ratio
         self._X_buffer = np.array([])
         self._y_buffer = np.array([])
@@ -324,7 +324,7 @@ class AdaptiveStackedBoostClassifier():
     def _train_new_base_model(self, X_base, y_base, X_meta, y_meta):
         
         # new base-level model  
-        new_base_model = xgb.XGBClassifier()
+        new_base_model = xgb.XGBClassifier(n_jobs=-1)
         # first train the base model on the base-level training set 
         new_base_model.fit(X_base, y_base)
         # then extract the predicted probabilities to be added as meta-level features
